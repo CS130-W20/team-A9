@@ -11,7 +11,8 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 2) enter the repo
 3) run $ virtualenv env
 4) run $ pip3 install -r requirements.txt
-5) run the app on localhost $ python3 manage.py runserver (ctrl-c to exit)
+5) set environment variable SECRET_KEY  
+6) run the app on localhost $ python3 manage.py runserver (ctrl-c to exit)
 
 ## Relevant Links 
 
