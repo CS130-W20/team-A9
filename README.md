@@ -2,9 +2,9 @@
 This webapp is a way to connect people experiencing homelessness, companies, and volunteers. Companies can post jobs for homeless people to see. Homeless people can request a ride to / from an interview. They are matched with volunteers to drive them.
 
 ## Directory Structure
-/homeyess - django project
-/homeyess/homeyess - project settings (database, urls, packages)
-/homeyess/website - code for the website including views, models
+/homeyess - django project  
+/homeyess/homeyess - project settings (database, urls, packages)  
+/homeyess/website - code for the website including views, models  
 
 ## Installation/Run instructions
 1) clone the repo
