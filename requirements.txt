@@ -38,7 +38,7 @@ python-rapidjson==0.7.2
 pytz==2018.4
 pyzmq==18.0.1
 reportlab==3.4.0
-requests==2.18.4
+requests==2.20.0
 rpcq==2.6.1
 ruamel.yaml==0.15.97
 scikit-learn==0.20.0
