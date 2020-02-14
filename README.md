@@ -16,4 +16,11 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 
 ## Relevant Links 
 
+## Generating documentation instructions
+1) cd docs
+2) make html
 
+## Writing documentation instructions
+1) vi docs/source/index.rst
+2) add directive
+3) write doc strings in the module

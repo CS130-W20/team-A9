@@ -5,6 +5,10 @@ import sys
 
 
 def main():
+    """blah blah blah
+
+    :meta private:
+    """
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'homeyess.settings')
     try:
         from django.core.management import execute_from_command_line
