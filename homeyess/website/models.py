@@ -17,9 +17,9 @@ class Profile(models.Model):
 	user_type = models.CharField(max_length=100, choices=[(tag, tag.value) for tag in UserType], default=UserType.Homeless)
 
 	# these should only be populated if user_type == UserType.Volunteer
-	car_plate = models.CharField(max_length=8, blank=False, null=True)
-	car_make = models.CharField(max_length=20, blank=False, null=True)
-	car_model = models.CharField(max_length=20, blank=False, null=True)
+	car_plate = models.CharField(max_length=8, blank=True, null=True)
+	car_make = models.CharField(max_length=20, blank=True, null=True)
+	car_model = models.CharField(max_length=20, blank=True, null=True)
 
 
 class Ride(models.Model):
