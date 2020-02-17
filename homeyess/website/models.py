@@ -20,7 +20,7 @@ class Profile(models.Model):
 	car_plate = models.CharField(max_length=8, blank=True, null=True)
 	car_make = models.CharField(max_length=20, blank=True, null=True)
 	car_model = models.CharField(max_length=20, blank=True, null=True)
-	total_volunteer_minutes = models.IntegerField()
+	total_volunteer_minutes = models.IntegerField(blank=True, null=True)
 
 
 class Ride(models.Model):
