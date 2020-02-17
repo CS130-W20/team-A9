@@ -20,6 +20,7 @@ class Profile(models.Model):
 	car_plate = models.CharField(max_length=8, blank=True, null=True)
 	car_make = models.CharField(max_length=20, blank=True, null=True)
 	car_model = models.CharField(max_length=20, blank=True, null=True)
+	total_volunteer_minutes = models.IntegerField()
 
 
 class Ride(models.Model):
@@ -29,8 +30,15 @@ class Ride(models.Model):
 	interview_duration = models.IntegerField()
 	volunteer_address = models.CharField(max_length=200, null=True)
 	pickup_address = models.CharField(max_length=200)
+	pickup_datetime = models.DateTimeField()
 	interview_address = models.CharField(max_length=200)
-
+	interview_company = models.CharField(max_length=100)
+	end_datetime = models.DateTimeField()
+	class RideStatus(Enum):
+		Unconfirmed = 'U'
+		Confirmed = "C"
+		Finished = "F"
+	ride_status = models.CharField(max_length=100, choices=[(tag, tag.value) for tag in RideStatus], default=RideStatus.Unconfirmed)
 
 class JobPost(models.Model):
 	company = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -41,7 +49,6 @@ class JobPost(models.Model):
 	job_title = models.CharField(max_length=100)
 	short_summary = models.CharField(max_length=200)
 	description = models.TextField()
-
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
