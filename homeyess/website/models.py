@@ -14,7 +14,7 @@ class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	# user contains email, first_name (or comapny name), last_name
 	phone = models.CharField(max_length=10, blank=True)
-	user_type = models.CharField(max_length=100, choices=[(tag, tag.value) for tag in UserType], default=UserType.Homeless)
+	user_type = models.CharField(max_length=100, choices=[(tag.value, tag.name) for tag in UserType], default=UserType.Homeless)
 
 	# these should only be populated if user_type == UserType.Volunteer
 	car_plate = models.CharField(max_length=8, blank=True, null=True)
