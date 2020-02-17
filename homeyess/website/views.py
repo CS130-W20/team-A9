@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from website.forms import SignUpForm
+from website.forms import SignUpForm, JobPostForm
 
 def index(request):
     return render(request, 'index.html')
@@ -24,4 +24,15 @@ def signup(request):
         form = SignUpForm()
 
     return render(request, 'registration/signup.html', {'form': form})
+
+def jobpost(request):
+    if request.method == 'POST':
+        form = JobPostForm(request.POST)
+        if form.is_valid():
+            # TODO: save to the database
+            return redirect('/')
+    else:
+        form = JobPostForm()
+
+    return render(request, 'registration/jobpost.html', {'form': form})
 
