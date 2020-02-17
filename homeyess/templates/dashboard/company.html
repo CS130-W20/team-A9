@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<div>
+		Name {{ user.first_name }}
+		Username {{ user.username }}
+		E-mail {{ user.email }}
+	</div>
+	<div>
+		<a href="/post_job">Post Job</a>
+		<a href="/logout">Logout</a>
+	</div>
+
+	<div>
+		<h1>Jobs Posted</h1>
+		<ul>
+		{% for job in job_posts %}
+		    <div>
+		    	<div>
+			    	Pickup Time: {{ ride.pickup_datetime }}
+			    	Pickup Address: {{ ride.pickup_address }}
+			    	License Plate: {{ ride.volunteer.car_plate }}
+			    	Car Make/Model: {{ ride.volunteer.car_make }} {{ ride.volunteer.car_model }}
+			    	Volunteer Name: {{ ride.volunteer.user.first_name }} {{ ride.volunteer.user.last_name }}
+		    	</div>
+		    	<a href="/job_post/{{ job.pk }}>">Open</a>
+		    </div>
+		{% endfor %}
+		</ul>
+	</div>
+
+
+
+{% block content %}{% endblock %}
+</body>
+</html>
