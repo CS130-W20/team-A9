@@ -1,0 +1,62 @@
+{% extends 'base_generic.html' %}
+{% block content %}
+{% load static %}
+<img src="{% static 'logo.png' %}" class="mx-auto d-block" />
+
+<style>
+.block {
+   text-align: center;
+   vertical-align: middle;
+}
+.circle {
+   background: #87CEFA;
+   border-radius: 200px;
+   color: white;
+   height: 250px;
+   font-weight: bold;
+   font-size: 20px;
+   width: 250px;
+   display: table;
+   margin: 20px auto;
+   padding: 30px;
+}
+.circle p {
+   vertical-align: middle;
+   display: table-cell;
+}
+
+</style>
+
+<div class="container">
+  <div class="col-md-12 block">
+    <p class="mx-auto d-block" style="font-weight: bold; font-size: 20px;">
+      A cohesive experience for Companies, Volunteers, and people experiencing
+      homelessness. Together we can ensure everyone has a home!
+    </p>
+    </div></div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-3 block">
+      <div class="circle">
+        <p>Post a job</p>
+      </div>
+    </div>
+    <div class="col-md-3 block">
+      <div class="circle">
+        <p>Search for jobs</p>
+      </div>
+    </div>
+    <div class="col-md-3 block">
+      <div class="circle">
+        <p>Request a ride to your interview</p>
+      </div>
+    </div>
+    <div class="col-md-3 block">
+      <div class="circle">
+        <p>Volunteer a ride to an interview</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
