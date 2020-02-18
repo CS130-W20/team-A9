@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+	<h1>Dashboard</h1>
 	<div>
 		Name {{ user.first_name }} {{ user.last_name }}
 		Username {{ user.username }}
@@ -13,12 +14,7 @@
 		Phone {{ user.profile.phone }}
 	</div>
 	<div>
-		<a href="/request_ride">Request Ride</a>
-		<a href="/logout">Logout</a>
-	</div>
-
-	<div>
-		<h1>Confirmed Rides</h1>
+		<h2>Confirmed Rides</h2>
 		<ul>
 		{% for ride in confirmed_rides %}
 		    <div>
@@ -29,14 +25,14 @@
 			    	Car Make/Model: {{ ride.volunteer.car_make }} {{ ride.volunteer.car_model }}
 			    	Volunteer Name: {{ ride.volunteer.user.first_name }} {{ ride.volunteer.user.last_name }}
 		    	</div>
-		    	<a href="/ride_request/{{ ride.pk }}>">Details</a>
+		    	<a href="#">Details</a>
 		    </div>
 		{% endfor %}
 		</ul>
 	</div>
 
 	<div>
-		<h1>Unonfirmed Rides</h1>
+		<h2>Unonfirmed Rides</h2>
 		<ul>
 		{% for ride in unconfirmed_rides %}
 		    <div>
@@ -45,7 +41,7 @@
 			    	Interview Time: {{ ride.interview_datetime }}
 			    	Pickup Address: {{ ride.pickup_address }}
 			    </div>
-			    <a href="/ride_request/{{ ride.pk }}>">Details</a>
+			    <a href="#">Details</a>
 		    </div>
 		{% endfor %}
 		</ul>

@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+{% extends 'base_generic.html' %}
+
+{% block content %}
 <head>
   <title>Dashboard</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+	<h1>Dashboard</h1>
 	<div>
 		Name {{ user.first_name }} {{ user.last_name }}
 		Username {{ user.username }}
@@ -13,14 +17,12 @@
 		Phone {{ user.profile.phone }}
 	</div>
 	<div>
-		<a href="/volunteer">Volunteer to Drive</a>
-		<a href="/logout">Logout</a>
 		Total time volunteered:
 		{{ user.total_volunteer_minutes }}
 	</div>
 
 	<div>
-		<h1>Upcoming Rides</h1>
+		<h2>Upcoming Rides</h2>
 		<ul>
 		{% for ride in confirmed_rides %}
 		    <div>
@@ -32,14 +34,14 @@
 			    	Company: {{ ride.interview_company }}
 			    	Candidate Name: {{ ride.homeless.user.first_name }} {{ ride.homeless.user.last_name }}
 		    	</div>
-		    	<a href="/ride_request/{{ ride.pk }}>">Details</a>
+		    	<a href="#">Details</a>
 		    </div>
 		{% endfor %}
 		</ul>
 	</div>
 
 	<div>
-		<h1>Past Rides</h1>
+		<h2>Past Rides</h2>
 		<ul>
 		{% for ride in finished_rides %}
 		    <div>
@@ -54,7 +56,6 @@
 		</ul>
 	</div>
 
-
-{% block content %}{% endblock %}
+{% endblock %}
 </body>
 </html>
