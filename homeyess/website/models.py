@@ -58,3 +58,16 @@ def update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
+
+class RideRequestPost(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    email = models.EmailField(max_length=254, help_text='Optional')
+    pickup_date = models.DateField()
+    interview_duration = models.CharField(max_length=30)
+    pickup_address = models.CharField(max_length=200)
+    interview_address = models.CharField(max_length=200)
+    
+    def get_absolute_url(self):
+        return '/'
+
