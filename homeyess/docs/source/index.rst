@@ -11,7 +11,6 @@ Welcome to homeyess's documentation!
    :caption: Contents:
 
 
-
 Indices and tables
 ==================
 
@@ -19,18 +18,16 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-.. automodule:: homeyess.manage
+Models
+======
+.. automodule:: website.models
+.. autoclass:: website.models.Profile
+   :members:
+.. autoclass:: website.models.Ride
+   :members:
+.. autoclass:: website.models.JobPost
 
-.. automodule:: homeyess.website.admin
-
-.. automodule:: homeyess.website.apps
-
-.. automodule:: homeyess.website.forms
-
-.. automodule:: homeyess.website.models
-
-.. automodule:: homeyess.website.urls
-
-.. automodule:: homeyess.website.views
-
-
+Views
+=====
+.. automodule:: website.views
+.. automethod:: website.views.index

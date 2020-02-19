@@ -10,6 +10,13 @@ from .models import Profile, Ride, JobPost
 import datetime
 
 def index(request):
+    '''Renders the index / home page
+
+    :param request: The http request containing user information or extra arguments
+    :type request: HttpRequest
+    :return: the rendered index page using the index.html template
+    :rtype: HttpResponse
+    '''
     return render(request, 'index.html')
 
 def signup(request):
