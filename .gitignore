@@ -110,4 +110,4 @@ dist
 docs/build/*
 
 # Pycache
-*.pyc
+.pyc
