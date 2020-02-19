@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base_generic.html' %}
+{% block content %}
+<style>
+.flex-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.flex-container-vertical {
+	display: flex;
+	flex-direction: column;
+}
+.gray-box {
+	background-color: lightgray;
+	margin-left: 15px;
+	margin-bottom: 10px;
+	margin-right: 15px;
+	padding:10px;
+}
+.detail-button {
+	background-color: blue;
+	border-radius: 10px;
+	color: black;
+	padding: 10px
+}
+.detail-text {
+	color: gray;
+	display: inline;
+}
+h1 {
+	color: blue;
+	padding-left: 15px;
+}
+h2 {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+</style>
+<head>
+  <title>Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<h1>Dashboard</h1>
+	<div></div>
+	<div class="gray-box" style="display: inline-block">
+		<div class="flex-container-vertical">
+			<div>Name <div class="detail-text">{{ user.user.first_name }} {{ user.user.last_name }}</div></div>
+			<div>Username <div class="detail-text">{{ user.user.username }}</div></div>
+			<div>E-mail <div class="detail-text">{{ user.user.email }}</div></div>
+			<div>Phone <div class="detail-text">{{ user.user.phone }}</div></div>
+		</div>
+	</div>
+
+	<div></div>
+	<div class="flex-container">
+		<div style="flex:1">
+			<h2>Confirmed Rides</h2>
+			<table style="width: 100%">
+				{% for ride in confirmed_rides %}
+				    <tr>
+				    	<td>
+				    		<div class="gray-box">
+				    			<div class="flex-container">
+				    				<div class="flex-container-vertical">
+								    	<div>Pickup Time: <div class="detail-text">{{ ride.pickup_datetime }}</div></div>
+								    	<div>Pickup Address: <div class="detail-text">{{ ride.pickup_address }}</div></div>
+								    	<div>License Plate: <div class="detail-text">{{ ride.volunteer.car_plate }}</div></div>
+								    	<div>Car Make/Model: <div class="detail-text">{{ ride.volunteer.car_make }} {{ ride.volunteer.car_model }}</div></div>
+								    	<div>Volunteer Name: <div class="detail-text">{{ ride.volunteer.user.first_name }} {{ ride.volunteer.user.last_name }}</div></div>
+								    </div>
+								    <div>
+										<a class="detail-button" href="#">Details</a>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+		<div style="flex:1">
+			<h2>Unconfirmed Rides</h2>
+			<table style="width: 100%">
+				{% for ride in unconfirmed_rides %}
+				    <tr>
+				    	<td>
+				    		<div class="gray-box">
+				    			<div class="flex-container">
+				    				<div class="flex-container-vertical">
+								    	<div>Company: <div class="detail-text">{{ ride.interview_company }}</div></div>
+								    	<div>Interview Time: <div class="detail-text">{{ ride.interview_datetime }}</div></div>
+								    	<div>Pickup Address: <div class="detail-text">{{ ride.pickup_address }}</div></div>
+								    </div>
+					    			<div>
+										<a class="detail-button" href="#">Details</a>
+									</div>
+					    		</div>
+					    	</div>
+					    </td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+</body>
+{% endblock %}
+</html>

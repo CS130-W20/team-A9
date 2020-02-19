@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base_generic.html' %}
+{% block content %}
+<style>
+.flex-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.flex-container-vertical {
+	display: flex;
+	flex-direction: column;
+}
+.gray-box {
+	background-color: lightgray;
+	margin-left: 15px;
+	margin-bottom: 10px;
+	margin-right: 15px;
+	padding: 10px;
+}
+.detail-button {
+	background-color: blue;
+	border-radius: 10px;
+	color: black;
+	padding: 10px
+}
+.detail-text {
+	color: gray;
+	display: inline;
+}
+h1 {
+	color: blue;
+	padding-left: 15px;
+}
+h2 {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+</style>
+<head>
+  <title>Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<h1>Dashboard</h1>
+	<div></div>
+	<div class="gray-box" style="display: inline-block">
+		<div class="flex-container-vertical">
+			<div>Name <div class="detail-text">{{ user.user.first_name }}</div></div>
+			<div>Username <div class="detail-text">{{ user.user.username }}</div></div>
+			<div>E-mail <div class="detail-text">{{ user.user.email }}</div></div>
+		</div>
+	</div>
+	<div></div>
+	<div>
+		<h2>Jobs Posted</h2>
+		<table style="width: 100%; margin: 15px;">
+			<tr style="color:lightblue">
+				<th></th>
+				<th>Date Created</th>
+				<th>Title</th>
+				<th>Wage</th>
+				<th>Description</th>
+			</tr>
+			{% for job in job_posts %}
+		   		<tr style="background-color: lightgray">
+		    		<td style="padding:15px"><a class="detail-button" href="#">Open</a></td>
+		    		<div class="detail-text">
+			    		<td>{{ job.created }}</td>
+			    		<td>{{ job.job_title }}</td>
+			    		<td>{{ job.wage }}</td>
+			    		<td>{{ job.short_summary }}</td>
+			    	</div>
+		    	</tr>
+			   {% endfor %}
+		</table>
+	</div>
+</body>
+{% endblock %}
+</html>
