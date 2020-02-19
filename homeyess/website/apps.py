@@ -1,3 +1,6 @@
+"""
+homeyess/website/apps.py
+"""
 from django.apps import AppConfig
 
 
