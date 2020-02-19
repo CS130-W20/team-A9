@@ -44,6 +44,7 @@ class Ride(models.Model):
 
 class JobPost(models.Model):
 	company = models.ForeignKey(Profile, on_delete=models.CASCADE)
+	job_id = models.AutoField(primary_key=True)
 	created = models.DateField(auto_now_add=True)
 	last_edited = models.DateField(auto_now=True)
 	location = models.CharField(max_length=100)
