@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from website.forms import SignUpForm
 from .models import Profile, Ride, JobPost
+import datetime
 
 def index(request):
     return render(request, 'index.html')
@@ -36,8 +37,8 @@ def dashboard(request, user_id):
         return company(request, user)
 
 def homeless(request, user):
-    unconfirmed_rides = Ride.objects.filter(homeless = user, ride_status = "U")
-    confirmed_rides = Ride.objects.filter(homeless = user, ride_status = "C")
+    unconfirmed_rides = Ride.objects.filter(homeless = user, volunteer = None, interview_datetime__gt = datetime.datetime.now())
+    confirmed_rides = Ride.objects.filter(homeless = user, interview_datetime__gt = datetime.datetime.now()).exclude(volunteer = None)
     context = {'user': user, 'unconfirmed_rides': unconfirmed_rides, 'confirmed_rides': confirmed_rides}
     return render(request, 'dashboard/homeless.html', context)
 
@@ -47,7 +48,7 @@ def company(request, user):
     return render(request, 'dashboard/company.html', context)
 
 def volunteer(request, user):
-    confirmed_rides = Ride.objects.filter(volunteer = user, ride_status = "C")
-    finished_rides = Ride.objects.filter(volunteer = user, ride_status = "F")
+    confirmed_rides = Ride.objects.filter(volunteer = user, interview_datetime__gt = datetime.datetime.now())
+    finished_rides = Ride.objects.filter(volunteer = user, interview_datetime__lte = datetime.datetime.now())
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides}
     return render(request, 'dashboard/volunteer.html', context)
