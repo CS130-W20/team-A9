@@ -1,8 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 {% extends 'base_generic.html' %}
-
 {% block content %}
+<style>
+.flex-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.flex-container-vertical {
+	display: flex;
+	flex-direction: column;
+}
+.gray-box {
+	background-color: lightgray;
+	margin-left: 15px;
+	margin-bottom: 10px;
+	margin-right: 15px;
+	padding: 10px;
+}
+.detail-button {
+	background-color: blue;
+	border-radius: 10px;
+	color: black;
+	padding: 10px
+}
+.detail-text {
+	color: gray;
+	display: inline;
+}
+h1 {
+	color: blue;
+	padding-left: 15px;
+}
+h2 {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+</style>
 <head>
   <title>Dashboard</title>
   <meta charset="utf-8">
@@ -10,52 +46,80 @@
 </head>
 <body>
 	<h1>Dashboard</h1>
-	<div>
-		Name {{ user.first_name }} {{ user.last_name }}
-		Username {{ user.username }}
-		E-mail {{ user.email }}
-		Phone {{ user.profile.phone }}
-	</div>
-	<div>
-		Total time volunteered:
-		{{ user.total_volunteer_minutes }}
-	</div>
+	<div></div>
 
-	<div>
-		<h2>Upcoming Rides</h2>
-		<ul>
-		{% for ride in confirmed_rides %}
-		    <div>
-		    	<div>
-			    	Pickup Time: {{ ride.pickup_datetime }}
-			    	Pickup Address: {{ ride.pickup_address }}
-			    	Interview Time: {{ ride.interview_datetime }}
-			    	Interview Address: {{ ride.interview_address }}
-			    	Company: {{ ride.interview_company }}
-			    	Candidate Name: {{ ride.homeless.user.first_name }} {{ ride.homeless.user.last_name }}
-		    	</div>
-		    	<a href="#">Details</a>
-		    </div>
-		{% endfor %}
-		</ul>
+	<div class="flex-container">
+		<div class="gray-box">
+			<div class="flex-container-vertical">
+				<div>Name <div class="detail-text">{{ user.user.first_name }} {{ user.user.last_name }}</div></div>
+				<div>Username <div class="detail-text">{{ user.user.username }}</div></div>
+				<div>E-mail <div class="detail-text">{{ user.user.email }}</div></div>
+				<div>Phone <div class="detail-text">{{ user.user.phone }}</div></div>
+			</div>
+		</div>
+		<h3 style="padding: 15px;">
+			Total time volunteered:
+			{% if user.total_volunteer_minutes %}
+			{{ user.total_volunteer_minutes }}
+			{% else %}
+			0
+			{% endif %}
+		</h3>
 	</div>
+	<div></div>
+	<div class="flex-container">
+		<div style="flex:1">
+			<h2>Upcoming Rides</h2>
+			<table style="width: 100%">
+			{% for ride in confirmed_rides %}
+			    <tr>
+			    	<td>
+			    		<div class="gray-box">
+			    			<div class="flex-container">
+			    				<div class="flex-container-vertical">
+									<div>Pickup Time: <div class="detail-text">{{ ride.pickup_datetime }}</div></div>
+								    <div>Pickup Address: <div class="detail-text">{{ ride.pickup_address }}</div></div>
+								    <div>Interview Time: <div class="detail-text">{{ ride.interview_datetime }}</div></div>
+								    <div>Interview Address: <div class="detail-text">{{ ride.interview_address }}</div></div>
+								    <div>Company: <div class="detail-text">{{ ride.interview_company }}</div></div>
+								    <div>Candidate Name: <div class="detail-text">{{ ride.homeless.user.first_name }} {{ ride.homeless.user.last_name }}</div></div>
+								</div>
+								<div>
+									<a class="detail-button" href="#">Details</a>
+								</div>
+							</div>
+					    </div>
+			    	</td>
+			    </tr>
+			{% endfor %}
+			</table>
+		</div>
 
-	<div>
-		<h2>Past Rides</h2>
-		<ul>
-		{% for ride in finished_rides %}
-		    <div>
-		    	<div>
-			    	Time: {{ ride.pickup_time }} - {{ ride.end_time }}
-			    	Pickup Address: {{ ride.pickup_address }}
-			    	Interview Address: {{ ride.interview_address }}
-			    </div>
-			    <a href="/ride_request/{{ ride.pk }}>">Details</a>
-		    </div>
-		{% endfor %}
-		</ul>
+		<div style="flex:1">
+			<h2>Past Rides</h2>
+			<table style="width: 100%">
+			{% for ride in finished_rides %}
+			    <tr>
+			    	<td>
+			    		<div class="gray-box">
+			    			<div class="flex-container">
+			    				<div class="flex-container-vertical">
+							    	<div>Time: <div class="detail-text">{{ ride.pickup_datetime }} - {{ ride.end_datetime }}</div></div>
+							    	<div>Pickup Address: <div class="detail-text">{{ ride.pickup_address }}</div></div>
+							    	<div>Interview Address: <div class="detail-text">{{ ride.interview_address }}</div></div>
+							    </div>
+							    <div>
+							    	<a class="detail-button" href="#">Details</a>
+							    </div>
+							</div>
+						</div>
+				    </td>
+			    </tr>
+			{% endfor %}
+			</table>
+		</div>
 	</div>
-
-{% endblock %}
 </body>
+{% endblock %}
 </html>
+
