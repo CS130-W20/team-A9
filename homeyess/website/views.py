@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from website.forms import SignUpForm
+from website.forms import SignUpForm, RideRequestForm
 from .models import Profile, Ride, JobPost
 import datetime
 
@@ -10,9 +10,12 @@ def index(request):
     return render(request, 'index.html')
 
 def signup(request):
+    print(request.method)
     if request.method == 'POST':
+        print(request.POST)
         form = SignUpForm(request.POST)
         if form.is_valid():
+            print("Hello")
             user = form.save()
             user.refresh_from_db()
             user.profile.phone = form.cleaned_data.get('phone')
@@ -52,3 +55,15 @@ def volunteer(request, user):
     finished_rides = Ride.objects.filter(volunteer = user, interview_datetime__lte = datetime.datetime.now())
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides}
     return render(request, 'dashboard/volunteer.html', context)
+
+def request_ride(request):
+    if request.method == 'POST':
+        print(request.POST)
+        form = RideRequestForm(request.POST)
+        if form.is_valid():
+            return redirect('/')
+    else:
+        form = RideRequestForm()
+        print(form)
+    return render(request, 'ride_request/request_ride.html', {'form': form})
+
