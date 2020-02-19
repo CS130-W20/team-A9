@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.timezone import now
 from enum import Enum
 
 
@@ -43,6 +44,7 @@ class Ride(models.Model):
 
 class JobPost(models.Model):
 	company = models.ForeignKey(Profile, on_delete=models.CASCADE)
+	created = models.DateField(auto_now_add=True)
 	last_edited = models.DateField(auto_now=True)
 	location = models.CharField(max_length=100)
 	wage = models.CharField(max_length=100)
