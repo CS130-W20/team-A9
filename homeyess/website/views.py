@@ -1,3 +1,6 @@
+"""
+homeyess/website/views.py
+"""
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
@@ -8,6 +11,13 @@ from django.views.generic.edit import CreateView
 import datetime
 
 def index(request):
+    '''Renders the index / home page
+
+    :param request: The http request containing user information or extra arguments
+    :type request: HttpRequest
+    :return: the rendered index page using the index.html template
+    :rtype: HttpResponse
+    '''
     return render(request, 'index.html')
 
 def signup(request):
@@ -53,17 +63,7 @@ def volunteer(request, user):
     finished_rides = Ride.objects.filter(volunteer = user, interview_datetime__lte = datetime.datetime.now())
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides}
     return render(request, 'dashboard/volunteer.html', context)
-
-#def request_ride(request):
-#    if request.method == 'POST':
-#        form = RideRequestForm(request.POST)
-#        if form.is_valid():
-#            form.save()
-#            return redirect('/')
-#    else:
-#        form = RideRequestForm()
-#    return render(request, 'ride_request/request_ride.html', {'form': form})
-
+  
 class RequestRideCreate(CreateView):
     template_name = 'ride_request/request_ride.html'
     form_class = RideRequestForm
