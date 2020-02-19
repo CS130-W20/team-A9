@@ -11,16 +11,16 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 2) enter the repo
 3) run $ virtualenv env
 4) run $ pip3 install -r requirements.txt
-5) set environment variable SECRET_KEY  
+5) set environment variables: SECRET_KEY, DB_NAME, DB_HOST, DB_PASSWORD, DB_USER, DB_PORT  
 6) run the app on localhost $ python3 manage.py runserver (ctrl-c to exit)
 
 ## Relevant Links 
 
 ## Generating documentation instructions
-1) cd docs
+1) cd homeyess/docs
 2) make html
 
 ## Writing documentation instructions
-1) vi docs/source/index.rst
+1) vi homeyess/docs/source/index.rst
 2) add directive
 3) write doc strings in the module
