@@ -24,8 +24,13 @@ class Profile(models.Model):
 
 
 class Ride(models.Model):
+	class RideStatus(Enum):
+		Unconfirmed = 'U'
+		Confirmed = "C"
+		Finished = "F"
+		
 	homeless = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='ride_homeless_set')
-	volunteer = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, related_name='ride_volunteer_set')
+	volunteer = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='ride_volunteer_set')
 	interview_datetime = models.DateTimeField()
 	interview_duration = models.IntegerField()
 	volunteer_address = models.CharField(max_length=200, null=True)
@@ -34,11 +39,7 @@ class Ride(models.Model):
 	interview_address = models.CharField(max_length=200)
 	interview_company = models.CharField(max_length=100)
 	end_datetime = models.DateTimeField()
-	class RideStatus(Enum):
-		Unconfirmed = 'U'
-		Confirmed = "C"
-		Finished = "F"
-	ride_status = models.CharField(max_length=100, choices=[(tag, tag.value) for tag in RideStatus], default=RideStatus.Unconfirmed)
+	ride_status = models.CharField(max_length=100, choices=[(tag.value, tag.name) for tag in RideStatus], default=RideStatus.Unconfirmed)
 
 class JobPost(models.Model):
 	company = models.ForeignKey(Profile, on_delete=models.CASCADE)
