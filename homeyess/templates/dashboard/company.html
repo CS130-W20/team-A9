@@ -67,11 +67,7 @@ h2 {
 			</tr>
 			{% for job in job_posts %}
 		   		<tr style="background-color: lightgray">
-<<<<<<< HEAD
 		    		<td style="padding:15px"><a class="detail-button" href="{% url 'editjob' user.profile.pk job.job_id %}">Open</a></td>
-=======
-		    		<td style="padding:15px"><a class="detail-button" href="{% url 'edit_job' user.profile.pk job %}">Open</a></td>
->>>>>>> aee87a54ec4434ea8ef992c8562c52c40588857a
 		    		<div class="detail-text">
 			    		<td>{{ job.created }}</td>
 			    		<td>{{ job.job_title }}</td>

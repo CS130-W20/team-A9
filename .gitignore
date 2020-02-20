@@ -2,7 +2,7 @@
 env
 
 #vscode stuff
-.vscode/
+.vscode/*
 
 # Logs
 logs
