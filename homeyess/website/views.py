@@ -26,6 +26,11 @@ def signup(request):
             user = form.save()
             user.refresh_from_db()
             user.profile.phone = form.cleaned_data.get('phone')
+            user.profile.user_type = form.cleaned_data.get('user_type')
+            user.profile.car_plate = form.cleaned_data.get('car_plate')
+            user.profile.car_make = form.cleaned_data.get('car_make')
+            user.profile.car_model = form.cleaned_data.get('car_model')
+            user.profile.total_volunteer_minutes = 0
             user.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
