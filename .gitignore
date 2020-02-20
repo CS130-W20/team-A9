@@ -1,6 +1,9 @@
 # virtualenv
 env
 
+# vscode
+.vscode
+
 # Logs
 logs
 *.log

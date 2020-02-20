@@ -4,7 +4,7 @@ homeyess/website/forms.py
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from website.models import Profile
+from website.models import Profile, JobPost
 from django.forms import ModelForm
 from django.db import models
 from .models import RideRequestPost
@@ -50,4 +50,15 @@ class RideRequestForm(ModelForm):
     pickup_address = forms.CharField(max_length=200, required=True)
     interview_address = forms.CharField(max_length=200, required=True)
     
-    
+class PostJobForm(ModelForm):
+
+    location = forms.CharField(max_length=100, required=True, help_text='Location of job itself, not interview.')
+    wage = forms.CharField(max_length=100, required=True)
+    hours = forms.CharField(max_length=100, required=True)
+    job_title = forms.CharField(max_length=100, required=True)
+    short_summary = forms.CharField(max_length=200, required=True, help_text='First description seen by potential applicants.')
+    description = forms.CharField(widget=forms.Textarea, required=True, help_text='Detail job responsibilities and roles, desired skills and experiences, and means of getting into contact with you.')
+
+    class Meta:
+        model = JobPost
+        fields = ['location', 'wage', 'hours', 'job_title', 'short_summary', 'description']
