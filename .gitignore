@@ -110,4 +110,4 @@ dist
 .tern-port
 
 # Pycache
-.pyc
+*.pyc
