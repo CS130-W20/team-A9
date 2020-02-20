@@ -69,5 +69,8 @@ class RideRequestPost(models.Model):
     interview_address = models.CharField(max_length=200)
     
     def get_absolute_url(self):
-        return '/'
+        return '/ViewRideForm/' + str(self.id)
+
+    def __str__(self):
+        return self.pickup_address
 

@@ -1,10 +1,10 @@
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from website.forms import SignUpForm, RideRequestForm
 from .models import Profile, Ride, JobPost, RideRequestPost
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 import datetime
 
 def index(request):
@@ -54,18 +54,23 @@ def volunteer(request, user):
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides}
     return render(request, 'dashboard/volunteer.html', context)
 
-#def request_ride(request):
-#    if request.method == 'POST':
-#        form = RideRequestForm(request.POST)
-#        if form.is_valid():
-#            form.save()
-#            return redirect('/')
-#    else:
-#        form = RideRequestForm()
-#    return render(request, 'ride_request/request_ride.html', {'form': form})
-
 class RequestRideCreate(CreateView):
     template_name = 'ride_request/request_ride.html'
     form_class = RideRequestForm
     queryset = RideRequestPost.objects.all()
 
+def ViewRideForm(request, post_id):
+    form_set = RideRequestPost.objects.filter(id=post_id)
+    form = form_set[0]
+    context = {'form': form}
+    return render(request, 'ride_request/ViewRideForm.html', context)
+
+class RequestRideEdit(UpdateView):
+    template_name = 'ride_request/request_ride.html'
+    form_class = RideRequestForm
+    queryset = RideRequestPost.objects.all()
+
+    def get_object(self):
+        id_ = self.kwargs.get("post_id")
+        print(id_)
+        return get_object_or_404(RideRequestPost, id=id_)
