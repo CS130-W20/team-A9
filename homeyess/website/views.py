@@ -82,6 +82,17 @@ class RequestRideCreate(CreateView):
     queryset = RideRequestPost.objects.all()
 
 def editjob(request, user_id, job_id):
+    '''Renders the editjob form on GET; processes the editjob form on POST
+
+    :param request: The http request containing user information or extra arguments
+    :type request: HttpRequest
+    :param user_id: The primary key used to index the user that owns the job
+    :type request: string
+    :param job_d: The primary key used to index the specific job we are editing
+    :type request: int
+    :return: the rendered JobForm or a redirect to the company's dashboard
+    :rtype: HttpResponse
+    '''
     job_post = JobPost.objects.get(pk=job_id)
     if request.method == 'POST':
         form = PostJobForm(request.POST, instance=job_post)
@@ -97,6 +108,15 @@ def editjob(request, user_id, job_id):
     return render(request, 'jobs/editjob.html', {'form': form})
 
 def postjob(request, user_id):
+    '''Renders the postjob form on GET; processes the postjob form on POST
+
+    :param request: The http request containing user information or extra arguments
+    :type request: HttpRequest
+    :param user_id: The primary key used to index the user that owns the job
+    :type request: string
+    :return: the rendered JobForm or a redirect to the company's dashboard
+    :rtype: HttpResponse
+    '''
     if request.method == 'POST':
         form = PostJobForm(request.POST)
         if form.is_valid():
