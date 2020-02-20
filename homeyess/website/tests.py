@@ -1,6 +1,6 @@
 from django.test import TestCase
-from website.forms import SignUpForm
-from website.models import Profile
+from website.forms import SignUpForm, JobPostForm
+from website.models import Profile, JobPost
 # Create your tests here.
 
 class SignUpFormTest(TestCase):
@@ -31,4 +31,30 @@ class SignUpFormTest(TestCase):
         d['car_model'] = ''
         d['user_type'] = 'H'
         form = SignUpForm(d)
+        self.assertTrue(form.is_valid())
+
+class PostEditJobFormTest(TestCase):
+
+    data = {
+        'location': '124 Test Dr.',
+        'wage': '20 usd/hr',
+        'hours': '10 hr/wk',
+        'job_title': 'Janitor',
+        'short_summary': 'This is a short summary',
+        'description': 'This is a longer summary',
+        }
+
+    def test_post_job_success(self):
+        form = JobPostForm(self.data.copy())
+        self.assertTrue(form.is_valid())
+
+    def test_post_job_failure(self):
+        bad_data = self.data.copy()
+        bad_data['location'] = ''
+        form = JobPostForm(bad_data)
+        self.assertFalse(form.is_valid())
+
+    def test_edit_job_success(self):
+        job_post = JobPost(self.data.copy())
+        form = JobPostForm(instance=job_post)
         self.assertTrue(form.is_valid())
