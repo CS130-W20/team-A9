@@ -5,6 +5,7 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 /homeyess - django project  
 /homeyess/homeyess - project settings (database, urls, packages)  
 /homeyess/website - code for the website including views, models  
+/homeyess/website/tests - unit tests, etc.
 /homeyess/templates - html templates
 /homeyess/docs/source - documentation (sphinx) settings
 /homeyess/docs/build/html - contains docstrings rendered in html
