@@ -31,5 +31,5 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 3) write doc strings in the module
 
 ## View Documentation
-1) make sure the documentation is up to date by running `make html`
+1) make sure the documentation is up to date by running `make html` in /homeyess/docs
 2) visit https://github.com/CS130-W20/team-A9/blob/master/homeyess/docs/build/html/index.html (or /homeyess/docs/build/index.html) to see the rendered docs
