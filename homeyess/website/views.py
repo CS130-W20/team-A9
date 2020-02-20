@@ -5,8 +5,9 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from website.forms import SignUpForm
-from .models import Profile, Ride, JobPost
+from website.forms import SignUpForm, RideRequestForm
+from .models import Profile, Ride, JobPost, RideRequestPost
+from django.views.generic.edit import CreateView
 import datetime
 
 def index(request):
@@ -26,6 +27,11 @@ def signup(request):
             user = form.save()
             user.refresh_from_db()
             user.profile.phone = form.cleaned_data.get('phone')
+            user.profile.user_type = form.cleaned_data.get('user_type')
+            user.profile.car_plate = form.cleaned_data.get('car_plate')
+            user.profile.car_make = form.cleaned_data.get('car_make')
+            user.profile.car_model = form.cleaned_data.get('car_model')
+            user.profile.total_volunteer_minutes = 0
             user.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
@@ -62,3 +68,9 @@ def volunteer(request, user):
     finished_rides = Ride.objects.filter(volunteer = user, interview_datetime__lte = datetime.datetime.now())
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides}
     return render(request, 'dashboard/volunteer.html', context)
+  
+class RequestRideCreate(CreateView):
+    template_name = 'ride_request/request_ride.html'
+    form_class = RideRequestForm
+    queryset = RideRequestPost.objects.all()
+
