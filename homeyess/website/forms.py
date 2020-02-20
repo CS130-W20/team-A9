@@ -52,7 +52,8 @@ class RideRequestForm(ModelForm):
     interview_address = forms.CharField(max_length=200, required=True)
     
 class PostJobForm(ModelForm):
-
+    '''PostJobForm for companies to post and edit jobs
+    '''
     location = forms.CharField(max_length=100, required=True, help_text='Location of job itself, not interview.')
     wage = forms.CharField(max_length=100, required=True)
     hours = forms.CharField(max_length=100, required=True)
