@@ -18,7 +18,7 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'phone')
-
+        
 class RideRequestForm(ModelForm):
     class Meta:
         model = RideRequestPost
@@ -34,3 +34,16 @@ class RideRequestForm(ModelForm):
     pickup_address = forms.CharField(max_length=200, required=True)
     interview_address = forms.CharField(max_length=200, required=True)
     
+'''
+class JobForm(forms.ModelForm):
+    location = forms.CharField(max_length=100, required=True)
+    wage = forms.CharField(max_length=100, required=True)
+    hours = forms.CharField(max_length=100, required=True)
+    job_title = forms.CharField(max_length=100, required=True)
+    short_summary = forms.CharField(max_length=200, required=True)
+    description = forms.CharField(widget=forms.Textarea, required=True)
+
+    class Meta:
+        model = JobPost
+        fields = ('location', 'wage', 'hours', 'job_title', 'short_summary', 'description')
+'''

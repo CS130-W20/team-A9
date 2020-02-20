@@ -50,7 +50,11 @@
 
       {% if user.is_authenticated and user.profile.user_type == 'C' %}
       <li class="nav-item">
+<<<<<<< HEAD
         <a class="nav-link" href="#">Post Job</a>
+=======
+        <a class="nav-link" href="{% url 'postjob' user.profile.pk %}">Post Job</a>
+>>>>>>> small changes
       </li>
       {% endif %}
 

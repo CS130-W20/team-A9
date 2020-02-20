@@ -7,6 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.timezone import now
 from enum import Enum
+import uuid
 
 
 class Profile(models.Model):
@@ -93,6 +94,7 @@ class Ride(models.Model):
 	ride_status = models.CharField(max_length=100, choices=[(tag.value, tag.name) for tag in RideStatus], default=RideStatus.Unconfirmed)
 
 class JobPost(models.Model):
+	
 	'''Model to store information about a job post
 
 	:param company: the company that made the post
@@ -114,6 +116,7 @@ class JobPost(models.Model):
 	:param description: the job description (should include instruction to apply)
 	:type description: Text / string
 	'''
+	job_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
 	company = models.ForeignKey(Profile, on_delete=models.CASCADE)
 	created = models.DateField(auto_now_add=True)
 	last_edited = models.DateField(auto_now=True)

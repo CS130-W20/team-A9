@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from website.forms import SignUpForm, RideRequestForm
 from .models import Profile, Ride, JobPost, RideRequestPost
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 import datetime
 
 def index(request):
@@ -69,3 +69,16 @@ class RequestRideCreate(CreateView):
     form_class = RideRequestForm
     queryset = RideRequestPost.objects.all()
 
+class EditJob(UpdateView):
+    form_class = JobPost
+    template_name = 'job/editjob.html'
+
+class PostJob(CreateView):
+    model = JobPost
+    template_name = 'job/postjob.html'
+
+    def form_valid(self, form):
+        form.instance.company = self.request.user
+        return super(PostJob, self).form_valid(form)
+
+    
