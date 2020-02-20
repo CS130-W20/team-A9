@@ -48,13 +48,17 @@
       </li>
       {% endif %}
 
-      {% if user.is_authenticated and user.profile.user_type == 'C' %}
+      {% if user.is_authenticated and user.profile.user_type == 'V' %}
       <li class="nav-item">
+<<<<<<< HEAD
 <<<<<<< HEAD
         <a class="nav-link" href="#">Post Job</a>
 =======
         <a class="nav-link" href="{% url 'postjob' user.profile.pk %}">Post Job</a>
 >>>>>>> small changes
+=======
+        <a class="nav-link" href="{% url 'post_job' user.profile.pk %}">Post Job</a>
+>>>>>>> aee87a54ec4434ea8ef992c8562c52c40588857a
       </li>
       {% endif %}
 

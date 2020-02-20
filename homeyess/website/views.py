@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from website.forms import SignUpForm, RideRequestForm
+from website.forms import SignUpForm, RideRequestForm, JobForm
 from .models import Profile, Ride, JobPost, RideRequestPost
 from django.views.generic.edit import CreateView, UpdateView
 import datetime
@@ -40,11 +40,11 @@ def signup(request):
 
 def dashboard(request, user_id):
     user = Profile.objects.get(pk=user_id)
-    if user.user_type == "V":
+    if user.user_type == "C": #"V":
         return volunteer(request, user)
-    elif user.user_type == "H":
+    elif user.user_type == "C": #"H":
         return homeless(request, user)
-    elif user.user_type == "C":
+    elif user.user_type == "V":
         return company(request, user)
 
 def homeless(request, user):
