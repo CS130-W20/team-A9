@@ -21,6 +21,13 @@ def index(request):
     return render(request, 'index.html')
 
 def signup(request):
+    '''Renders the signup form on GET; processes the signup form on POST
+
+    :param request: The http request containing user information or extra arguments
+    :type request: HttpRequest
+    :return: the rendered SignUpForm or a redirect to homepage
+    :rtype: HttpResponse
+    '''
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():

@@ -11,6 +11,8 @@ from .models import RideRequestPost
 from django.urls import reverse
 
 class SignUpForm(UserCreationForm):
+    '''SignUpForm for users, companies, and volunteers
+    '''
     first_name = forms.CharField(max_length=30, required=True, help_text="Required.", label="First Name / Company Name")
     last_name = forms.CharField(max_length=30, required=False, help_text="Companies need not fill this out.")
     email = forms.EmailField(max_length=254, required=False, help_text='Optional.')
