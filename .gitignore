@@ -106,8 +106,5 @@ dist
 # TernJS port file
 .tern-port
 
-# Docs
-docs/build/*
-
 # Pycache
 .pyc
