@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from website.forms import SignUpForm, RideRequestForm
+from website.forms import SignUpForm, RideRequestForm, PostJobForm
 from .models import Profile, Ride, JobPost, RideRequestPost
 from django.views.generic.edit import CreateView
 import datetime
@@ -74,3 +74,32 @@ class RequestRideCreate(CreateView):
     form_class = RideRequestForm
     queryset = RideRequestPost.objects.all()
 
+def editjob(request, user_id, job_id):
+    job_post = JobPost.objects.get(pk=job_id)
+    if request.method == 'POST':
+        form = PostJobForm(request.POST, instance=job_post)
+        if form.is_valid():
+            form.save()
+            user = Profile.objects.get(pk=user_id)
+            job_posts = JobPost.objects.filter(company=user)
+            context = {'user': user, 'job_posts': job_posts}
+            return render(request, 'dashboard/company.html', context)
+    else:
+        form = PostJobForm(instance=job_post)
+
+    return render(request, 'jobs/editjob.html', {'form': form})
+
+def postjob(request, user_id):
+    if request.method == 'POST':
+        form = PostJobForm(request.POST)
+        if form.is_valid():
+            user = Profile.objects.get(pk=user_id)
+            job_post = JobPost(company=user, **form.cleaned_data)
+            job_post.save()
+            job_posts = JobPost.objects.filter(company=user)
+            context = {'user': user, 'job_posts': job_posts}
+            return render(request, 'dashboard/company.html', context)
+    else:
+        form = PostJobForm(initial={'wage': '15.50 usd/hr', 'hours': '40 hr/wk'})
+
+    return render(request, 'jobs/postjob.html', {'form': form})

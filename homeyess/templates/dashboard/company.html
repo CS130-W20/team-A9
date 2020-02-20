@@ -67,7 +67,7 @@ h2 {
 			</tr>
 			{% for job in job_posts %}
 		   		<tr style="background-color: lightgray">
-		    		<td style="padding:15px"><a class="detail-button" href="#">Open</a></td>
+		    		<td style="padding:15px"><a class="detail-button" href="{% url 'editjob' user.id job.id %}">Edit</a></td>
 		    		<div class="detail-text">
 			    		<td>{{ job.created }}</td>
 			    		<td>{{ job.job_title }}</td>
