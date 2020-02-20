@@ -40,11 +40,11 @@ def signup(request):
 
 def dashboard(request, user_id):
     user = Profile.objects.get(pk=user_id)
-    if user.user_type == "C": #"V":
+    if user.user_type == "V":
         return volunteer(request, user)
-    elif user.user_type == "C": #"H":
+    elif user.user_type == "H":
         return homeless(request, user)
-    elif user.user_type == "V":
+    elif user.user_type == "C":
         return company(request, user)
 
 def homeless(request, user):
