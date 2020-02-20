@@ -31,3 +31,7 @@ Views
 =====
 .. automodule:: website.views
 .. automethod:: website.views.index
+.. automethod:: website.views.dashboard
+.. automethod:: website.views.homeless
+.. automethod:: website.views.company
+.. automethod:: website.views.volunteer
