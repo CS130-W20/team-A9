@@ -13,13 +13,15 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../..'))
-sys.setrecursionlimit(1500)
+os.environ['DJANGO_SETTINGS_MODULE'] = 'homeyess.settings'
+import django
+django.setup()
 
 # -- Project information -----------------------------------------------------
 
-project = 'Homeyess'
-copyright = '2020, A9'
-author = 'A9'
+project = 'homeyess'
+copyright = '2020, team-a9'
+author = 'team-a9'
 
 # The full version, including alpha/beta/rc tags
 release = '0.0.1'
