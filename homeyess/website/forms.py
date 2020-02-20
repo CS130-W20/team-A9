@@ -11,18 +11,18 @@ from .models import RideRequestPost
 from django.urls import reverse
 
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30, required=True)
-    last_name = forms.CharField(max_length=30, required=False)
-    email = forms.EmailField(max_length=254, required=False, help_text='Optional')
-    phone = forms.RegexField(regex='\d{3}-\d{3}-\d{4}', required=False, help_text='###-###-####. Optional')
+    first_name = forms.CharField(max_length=30, required=True, help_text="Required.", label="First Name / Company Name")
+    last_name = forms.CharField(max_length=30, required=False, help_text="Companies need not fill this out.")
+    email = forms.EmailField(max_length=254, required=False, help_text='Optional.')
+    phone = forms.RegexField(regex='\d{3}-\d{3}-\d{4}', required=False, help_text='Optional.', label="Phone Number (###-###-####)")
     user_type = forms.ChoiceField(choices=[(tag.value, tag.name) for tag in Profile.UserType], initial=Profile.UserType.Homeless)
-    car_plate = forms.CharField(max_length=8, required=False)
-    car_make = forms.CharField(max_length=20, required=False)
-    car_model = forms.CharField(max_length=20, required=False)
+    car_plate = forms.CharField(max_length=8, required=False, label="License Plate Number", help_text="Required for volunteers.")
+    car_make = forms.CharField(max_length=20, required=False, label="Make of Car", help_text="Required for volunteers.")
+    car_model = forms.CharField(max_length=20, required=False, label="Model of Car", help_text="Required for volunteers.")
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'phone')
+        fields = ('first_name', 'last_name', 'email', 'phone', 'username', 'password1', 'password2')
 
     def clean(self):
         cleaned_data = super().clean()
