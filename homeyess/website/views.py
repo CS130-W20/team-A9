@@ -4,10 +4,12 @@ homeyess/website/views.py
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Profile, Ride, JobPost, RideRequestPost
+from django.views.generic.edit import CreateView, UpdateView
+
 from website.forms import SignUpForm, RideRequestForm, PostJobForm
 from .models import Profile, Ride, JobPost, RideRequestPost
-from django.views.generic.edit import CreateView
 import datetime
 
 def index(request):
@@ -75,11 +77,27 @@ def volunteer(request, user):
     finished_rides = Ride.objects.filter(volunteer = user, interview_datetime__lte = datetime.datetime.now())
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides}
     return render(request, 'dashboard/volunteer.html', context)
-  
+
 class RequestRideCreate(CreateView):
     template_name = 'ride_request/request_ride.html'
     form_class = RideRequestForm
     queryset = RideRequestPost.objects.all()
+
+def ViewRideForm(request, post_id):
+    form_set = RideRequestPost.objects.filter(id=post_id)
+    form = form_set[0]
+    context = {'form': form}
+    return render(request, 'ride_request/ViewRideForm.html', context)
+
+class RequestRideEdit(UpdateView):
+    template_name = 'ride_request/request_ride.html'
+    form_class = RideRequestForm
+    queryset = RideRequestPost.objects.all()
+
+    def get_object(self):
+        id_ = self.kwargs.get("post_id")
+        print(id_)
+        return get_object_or_404(RideRequestPost, id=id_)
 
 def editjob(request, user_id, job_id):
     job_post = JobPost.objects.get(pk=job_id)
