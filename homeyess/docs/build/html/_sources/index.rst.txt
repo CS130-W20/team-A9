@@ -39,3 +39,13 @@ Views
 .. automethod:: website.views.homeless
 .. automethod:: website.views.company
 .. automethod:: website.views.volunteer
+
+Forms
+=====
+.. automodule:: website.forms
+.. autoclass:: webiste.forms.SignUpForm
+   :members:
+.. autoclass:: website.forms.PostJobForm
+   :members:
+.. autoclass:: website.forms.RideRequestForm
+   :members:
