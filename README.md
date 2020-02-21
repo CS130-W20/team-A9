@@ -23,10 +23,14 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 Tests can be run with the command `python3 manage.py run test website.tests.<filename>`
 The tests automatically create a test database within rds
 
+When running Selenium tests for a certain browser, make sure that your browser's WebDriver is installed. FireFox
+should have it built in, but for another browser like Chrome (found [here](https://sites.google.com/a/chromium.org/chromedriver/downloads)), make sure to install it.
+
 website/tests/form_tests.py - test signup form validation, test post / edit jobs 
 website/tests/volunteer_dashboard_tests.py - test volunteer dashboard view is returned and has correct data for upcoming and finished rides
 website/tests/homeless_dashboard_tests.py - test homeless dashboard view is returned and has correct data for unconfirmed and confirmed rides
 website/tests/company_dashboard_tests.py - test company dashboard view is returned and has correct data for job posts
+website/tests/selenium_tests.py - test user interface for signing up (as a Company) and posting a job
 
 ## Generating Documentation
 1) cd homeyess/docs
