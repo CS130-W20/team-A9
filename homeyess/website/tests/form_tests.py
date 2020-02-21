@@ -57,4 +57,3 @@ class PostEditJobFormTest(TestCase):
         job_post = JobPost(self.data.copy())
         form = PostJobForm(instance=job_post)
         self.assertTrue(form.is_valid())
-
