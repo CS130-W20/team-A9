@@ -23,10 +23,10 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 Tests can be run with the command `python3 manage.py run test website.tests.<filename>`
 The tests automatically create a test database within rds
 
-website/tests/form_tests.py - test signup form validation, test post / edit jobs  
-website/tests/volunteer_dashboard_tests.py - test volunteer dashboard view is returned and has correct data for upcoming and finished rides   
-website/tests/homeless_dashboard_tests.py - test homeless dashboard view is returned and has correct data for unconfirmed and confirmed rides  
-website/tests/company_dashboard_tests.py - test company dashboard view is returned and has correct data for job posts
+/website/tests/form_tests.py - test signup form validation, test post / edit jobs  
+/website/tests/volunteer_dashboard_tests.py - test volunteer dashboard view is returned and has correct data for upcoming and finished rides   
+/website/tests/homeless_dashboard_tests.py - test homeless dashboard view is returned and has correct data for unconfirmed and confirmed rides  
+/website/tests/company_dashboard_tests.py - test company dashboard view is returned and has correct data for job posts
 
 ## Generating Documentation
 1) cd homeyess/docs
@@ -38,5 +38,4 @@ website/tests/company_dashboard_tests.py - test company dashboard view is return
 3) write doc strings in the module
 
 ## View Documentation
-1) make sure the documentation is up to date by running `make html` in /homeyess/docs
-2) visit https://github.com/CS130-W20/team-A9/blob/master/homeyess/docs/build/html/index.html (or /homeyess/docs/build/index.html) to see the rendered docs
+View the docs at https://cs130-w20.github.io/team-A9/homeyess/docs/build/html/
