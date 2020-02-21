@@ -142,6 +142,27 @@ Note that the object should be created when a ride request is made and altered w
 </dl>
 </dd></dl>
 
+<dl class="class">
+<dt id="website.models.RideRequestPost">
+<em class="property">class </em><code class="sig-prename descclassname">website.models.</code><code class="sig-name descname">RideRequestPost</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.models.RideRequestPost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model to store information about ride requests</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>first_name</strong> (<em>CharField / string</em>) – the first name of the requester</p></li>
+<li><p><strong>last_name</strong> (<em>CharField / string</em>) – the last name of the requester</p></li>
+<li><p><strong>email</strong> (<em>Email</em>) – the email of the requester</p></li>
+<li><p><strong>phone_number</strong> (<em>CharField / string</em>) – the phone number of the requester</p></li>
+<li><p><strong>pickup_date</strong> (<em>Date</em>) – the date that the requester wants to be picked up</p></li>
+<li><p><strong>pickup_time</strong> (<em>CharField / string</em>) – the time the requester would like to be picked up</p></li>
+<li><p><strong>interview_duration</strong> (<em>CharField / string</em>) – the duration, in minutes, of the interview</p></li>
+<li><p><strong>pickup_address</strong> (<em>CharField / string</em>) – the address where the requester would like to be picked up</p></li>
+<li><p><strong>interview_address</strong> (<em>CharField / string</em>) – the address where the interview is taking place</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-website.views">
 <span id="views"></span><h1>Views<a class="headerlink" href="#module-website.views" title="Permalink to this headline">¶</a></h1>
@@ -156,6 +177,23 @@ Note that the object should be created when a ride request is made and altered w
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the rendered index page using the index.html template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="website.views.signup">
+<code class="sig-prename descclassname">views.</code><code class="sig-name descname">signup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#website.views.signup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the signup form on GET; processes the signup form on POST</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered SignUpForm or a redirect to homepage</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>HttpResponse</p>
@@ -241,6 +279,148 @@ Note that the object should be created when a ride request is made and altered w
 <dd class="field-odd"><p>HttpResponse</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="website.views.RequestRideCreate">
+<em class="property">class </em><code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">RequestRideCreate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideCreate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object used to render the ride request creation view</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>template_name</strong> (<em>string</em>) – the name of the template used to render the view</p></li>
+<li><p><strong>form_class</strong> (<em>ModelFormMetaclass</em>) – the form that specifies what data needs to be input</p></li>
+<li><p><strong>queryset</strong> (<em>QuerySet</em>) – the queryable attributes of the form</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="website.views.RequestRideCreate.form_class">
+<code class="sig-name descname">form_class</code><a class="headerlink" href="#website.views.RequestRideCreate.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#website.forms.RideRequestForm" title="website.forms.RideRequestForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">website.forms.RideRequestForm</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="website.views.ViewRideForm">
+<code class="sig-prename descclassname">views.</code><code class="sig-name descname">ViewRideForm</code><span class="sig-paren">(</span><em class="sig-param">post_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.ViewRideForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the view that allows people experiencing homelessness to view a specific ride request 
+he/she filled out, so that they can review and potentially edit the form</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>post_id</strong> (<em>int</em>) – The ride request post’s idea</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="website.views.RequestRideEdit">
+<em class="property">class </em><code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">RequestRideEdit</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideEdit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object used to render the request form’s update view</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>template_name</strong> (<em>string</em>) – the name of the template used to render the view</p></li>
+<li><p><strong>form_class</strong> (<em>ModelFormMetaclass</em>) – the form that specifies what data needs to be input</p></li>
+<li><p><strong>queryset</strong> (<em>QuerySet</em>) – the queryable attributes of the form</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="website.views.RequestRideEdit.form_class">
+<code class="sig-name descname">form_class</code><a class="headerlink" href="#website.views.RequestRideEdit.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#website.forms.RideRequestForm" title="website.forms.RideRequestForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">website.forms.RideRequestForm</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="website.views.RequestRideEdit.get_object">
+<code class="sig-name descname">get_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideEdit.get_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the object the view is displaying.</p>
+<p>Require <cite>self.queryset</cite> and a <cite>pk</cite> or <cite>slug</cite> argument in the URLconf.
+Subclasses can override this to return any object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="website.views.editjob">
+<code class="sig-prename descclassname">views.</code><code class="sig-name descname">editjob</code><span class="sig-paren">(</span><em class="sig-param">user_id</em>, <em class="sig-param">job_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.editjob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the editjob form on GET; processes the editjob form on POST</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>int</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user_id</strong> – The primary key used to index the user that owns the job</p></li>
+<li><p><strong>job_d</strong> – The primary key used to index the specific job we are editing</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered JobForm or a redirect to the company’s dashboard</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="website.views.postjob">
+<code class="sig-prename descclassname">views.</code><code class="sig-name descname">postjob</code><span class="sig-paren">(</span><em class="sig-param">user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.postjob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the postjob form on GET; processes the postjob form on POST</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>string</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user_id</strong> – The primary key used to index the user that owns the job</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered JobForm or a redirect to the company’s dashboard</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-website.forms">
+<span id="forms"></span><h1>Forms<a class="headerlink" href="#module-website.forms" title="Permalink to this headline">¶</a></h1>
+<p>homeyess/website/forms.py</p>
+<dl class="class">
+<dt id="website.forms.SignUpForm">
+<em class="property">class </em><code class="sig-prename descclassname">website.forms.</code><code class="sig-name descname">SignUpForm</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.forms.SignUpForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>SignUpForm for users, companies, and volunteers</p>
+<dl class="method">
+<dt id="website.forms.SignUpForm.clean">
+<code class="sig-name descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#website.forms.SignUpForm.clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook for doing any extra form-wide cleaning after Field.clean() has been
+called on every field. Any ValidationError raised by this method will
+not be associated with a particular field; it will have a special-case
+association with the field named ‘__all__’.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="website.forms.PostJobForm">
+<em class="property">class </em><code class="sig-prename descclassname">website.forms.</code><code class="sig-name descname">PostJobForm</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">instance=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#website.forms.PostJobForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>PostJobForm for companies to post and edit jobs</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="website.forms.RideRequestForm">
+<em class="property">class </em><code class="sig-prename descclassname">website.forms.</code><code class="sig-name descname">RideRequestForm</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">instance=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#website.forms.RideRequestForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ride Request Form for people experiencing homelessness to request a ride to their interview</p>
+<dl class="class">
+<dt id="website.forms.RideRequestForm.DateInput">
+<em class="property">class </em><code class="sig-name descname">DateInput</code><span class="sig-paren">(</span><em class="sig-param">attrs=None</em>, <em class="sig-param">format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#website.forms.RideRequestForm.DateInput" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>

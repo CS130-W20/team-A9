@@ -13,6 +13,7 @@ from django.urls import reverse
 
 class SignUpForm(UserCreationForm):
     '''SignUpForm for users, companies, and volunteers
+
     '''
     first_name = forms.CharField(max_length=30, required=True, help_text="Required.", label="First Name / Company Name")
     last_name = forms.CharField(max_length=30, required=False, help_text="Companies need not fill this out.")
@@ -36,23 +37,9 @@ class SignUpForm(UserCreationForm):
         if user_type == 'V' and (car_make == '' or car_make == None or car_model == None or car_plate == None or car_model == '' or car_plate == ''):
             raise forms.ValidationError("Volunteers must fill out car information")
         
-class RideRequestForm(ModelForm):
-    class Meta:
-        model = RideRequestPost
-        fields = ['first_name', 'last_name', 'email', 'pickup_date', 'interview_duration', 'pickup_address', 'interview_address']
-
-    class DateInput(forms.DateInput):
-        input_type = 'date'
-    first_name = forms.CharField(max_length=30, required=True)
-    last_name = forms.CharField(max_length=30, required=True)
-    email = forms.EmailField(max_length=254, required=False, help_text='Optional')
-    pickup_date = forms.DateField(widget=DateInput, required=True)
-    interview_duration = forms.CharField(max_length=30, required=True)
-    pickup_address = forms.CharField(max_length=200, required=True)
-    interview_address = forms.CharField(max_length=200, required=True)
-    
 class PostJobForm(ModelForm):
     '''PostJobForm for companies to post and edit jobs
+
     '''
     location = forms.CharField(max_length=100, required=True, help_text='Location of job itself, not interview.')
     wage = forms.CharField(max_length=100, required=True)
@@ -66,17 +53,22 @@ class PostJobForm(ModelForm):
         fields = ['location', 'wage', 'hours', 'job_title', 'short_summary', 'description']
 
 class RideRequestForm(ModelForm):
-    class Meta:
-        model = RideRequestPost
-        fields = ['first_name', 'last_name', 'email', 'pickup_date', 'interview_duration', 'pickup_address', 'interview_address']
+	'''Ride Request Form for people experiencing homelessness to request a ride to their interview
+    
+	'''
+	class Meta:
+		model = RideRequestPost
+		fields = ['first_name', 'last_name', 'email', 'phone_number', 'pickup_date', 'pickup_time', 'interview_duration', 'pickup_address', 'interview_address']
 
-    class DateInput(forms.DateInput):
-        input_type = 'date'
-    first_name = forms.CharField(max_length=30, required=True)
-    last_name = forms.CharField(max_length=30, required=True)
-    email = forms.EmailField(max_length=254, required=False, help_text='Optional')
-    pickup_date = forms.DateField(widget=DateInput, required=True)
-    interview_duration = forms.CharField(max_length=30, required=True)
-    pickup_address = forms.CharField(max_length=200, required=True)
-    interview_address = forms.CharField(max_length=200, required=True)
+	class DateInput(forms.DateInput):
+		input_type = 'date'
+	first_name = forms.CharField(max_length=30, required=True)
+	last_name = forms.CharField(max_length=30, required=True)
+	email = forms.EmailField(max_length=254, required=False, help_text='Optional')
+	phone_number = forms.CharField(max_length=14, help_text='Optional', required=False)
+	pickup_date = forms.DateField(widget=DateInput, required=True)
+	pickup_time = forms.CharField(max_length=20, required=True)
+	interview_duration = forms.CharField(max_length=30, required=True, help_text=' (in minutes)')
+	pickup_address = forms.CharField(max_length=200, required=True)
+	interview_address = forms.CharField(max_length=200, required=True)
     

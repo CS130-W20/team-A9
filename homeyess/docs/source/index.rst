@@ -1,8 +1,3 @@
-.. homeyess documentation master file, created by
-   sphinx-quickstart on Tue Feb 18 21:47:18 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to homeyess's documentation!
 ====================================
 
@@ -22,16 +17,36 @@ Models
 ======
 .. automodule:: website.models
 .. autoclass:: website.models.Profile
-   :members:
+  :members:
 .. autoclass:: website.models.Ride
-   :members:
+  :members:
 .. autoclass:: website.models.JobPost
+.. autoclass:: website.models.RideRequestPost
 
 Views
 =====
 .. automodule:: website.views
 .. automethod:: website.views.index
+.. automethod:: website.views.signup
 .. automethod:: website.views.dashboard
 .. automethod:: website.views.homeless
 .. automethod:: website.views.company
 .. automethod:: website.views.volunteer
+.. autoclass:: website.views.RequestRideCreate
+  :members:
+.. automethod:: website.views.ViewRideForm
+.. autoclass:: website.views.RequestRideEdit
+  :members:
+.. automethod:: website.views.editjob
+.. automethod:: website.views.postjob
+
+Forms
+=====
+.. automodule:: website.forms
+.. autoclass:: website.forms.SignUpForm
+  :members:
+.. autoclass:: website.forms.PostJobForm
+  :members:
+.. autoclass:: website.forms.RideRequestForm
+  :members:
+

@@ -20,7 +20,7 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 7) run the app on localhost $ python3 manage.py runserver (ctrl-c to exit)
 
 ## Testing
-Tests can be run with the command `python3 manage.py run test website.tests.<filename>`
+Tests can be run with the command `python3 manage.py test website.tests.<filename>`
 The tests automatically create a test database within rds
 
 When running Selenium tests for a certain browser, make sure that your browser's WebDriver is installed. FireFox
@@ -42,5 +42,4 @@ website/tests/selenium_tests.py - test user interface for signing up (as a Compa
 3) write doc strings in the module
 
 ## View Documentation
-1) make sure the documentation is up to date by running `make html` in /homeyess/docs
-2) visit https://github.com/CS130-W20/team-A9/blob/master/homeyess/docs/build/html/index.html (or /homeyess/docs/build/index.html) to see the rendered docs
+View the docs at https://cs130-w20.github.io/team-A9/homeyess/docs/build/html/
