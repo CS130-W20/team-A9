@@ -14,28 +14,43 @@
 }
 .gray-box {
 	background-color: lightgray;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	border-radius: 10px;
 	margin-left: 15px;
 	margin-bottom: 10px;
 	margin-right: 15px;
-	padding: 10px;
-}
-.detail-button {
-	background-color: blue;
-	border-radius: 10px;
-	color: black;
-	padding: 10px
+	margin-top: 15px;
+	padding:10px;
 }
 .detail-text {
-	color: gray;
 	display: inline;
 }
-h1 {
-	color: blue;
-	padding-left: 15px;
+.table-container {
+	background-color: #f2f0f0; 
+	border-radius: 10px;
+	margin-left: 15px;
+	margin-right: 15px;
 }
-h2 {
+.row {
+	background-color: lightgray;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.btn-primary {
+	border-radius: 10px;
+	color: black;
+	padding-top: 10px;
+	padding-bottom: 10px;
 	padding-left: 15px;
 	padding-right: 15px;
+}
+h1 {
+	text-align: center;
+	font-family: "Raleway", "Times New Roman", Times, serif;
+	font-size: 75px;
+	margin: 25px;
+}
+h2 {
+	padding: 15px;
 }
 
 </style>
@@ -45,16 +60,15 @@ h2 {
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<h1>Dashboard</h1>
-	<div></div>
-	<div class="gray-box" style="display: inline-block">
-		<div class="flex-container-vertical">
-			<div>Name <div class="detail-text">{{ user.first_name }}</div></div>
-			<div>Username <div class="detail-text">{{ user.username }}</div></div>
-			<div>E-mail <div class="detail-text">{{ user.email }}</div></div>
-			<div>Phone <div class="detail-text">{{ user.profile.phone }}</div></div>
-		</div>
-	</div>
+	<h1>
+		{% if user.first_name %}
+			{{ user.first_name }}
+		{% elif user.username %}
+			{{ user.username }}
+		{% else %}
+			Dashboard
+		{% endif %}
+	</h1>
 	<div></div>
 	<div>
 		<h2>Jobs Posted</h2>
@@ -64,7 +78,7 @@ h2 {
 				</div>
 		{% else %}
 			<table style="width: 100%; margin: 15px;">
-				<tr style="color:lightblue">
+				<tr style="color:#4285F4">
 					<th></th>
 					<th>Date Created</th>
 					<th>Title</th>
@@ -72,14 +86,12 @@ h2 {
 					<th>Description</th>
 				</tr>
 				{% for job in job_posts %}
-			   		<tr style="background-color: lightgray">
-			    		<td style="padding:15px"><a class="detail-button" href="#">Open</a></td>
-			    		<div class="detail-text">
-				    		<td>{{ job.created }}</td>
-				    		<td>{{ job.job_title }}</td>
-				    		<td>{{ job.wage }}</td>
-				    		<td>{{ job.short_summary }}</td>
-				    	</div>
+			   		<tr class="gray-box">
+						<td style="padding:15px"><a class="btn-primary" href="#">Open</a></td>
+						<td>{{ job.created }}</td>
+						<td>{{ job.job_title }}</td>
+						<td>{{ job.wage }}</td>
+						<td>{{ job.short_summary }}</td>
 			    	</tr>
 				   {% endfor %}
 			</table>
