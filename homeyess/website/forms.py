@@ -13,6 +13,7 @@ from django.urls import reverse
 
 class SignUpForm(UserCreationForm):
     '''SignUpForm for users, companies, and volunteers
+
     '''
     first_name = forms.CharField(max_length=30, required=True, help_text="Required.", label="First Name / Company Name")
     last_name = forms.CharField(max_length=30, required=False, help_text="Companies need not fill this out.")
@@ -38,6 +39,7 @@ class SignUpForm(UserCreationForm):
         
 class PostJobForm(ModelForm):
     '''PostJobForm for companies to post and edit jobs
+
     '''
     location = forms.CharField(max_length=100, required=True, help_text='Location of job itself, not interview.')
     wage = forms.CharField(max_length=100, required=True)
@@ -52,6 +54,7 @@ class PostJobForm(ModelForm):
 
 class RideRequestForm(ModelForm):
 	'''Ride Request Form for people experiencing homelessness to request a ride to their interview
+    
 	'''
 	class Meta:
 		model = RideRequestPost
