@@ -51,16 +51,16 @@ h2 {
 	<div class="flex-container">
 		<div class="gray-box">
 			<div class="flex-container-vertical">
-				<div>Name <div class="detail-text">{{ user.user.first_name }} {{ user.user.last_name }}</div></div>
-				<div>Username <div class="detail-text">{{ user.user.username }}</div></div>
-				<div>E-mail <div class="detail-text">{{ user.user.email }}</div></div>
-				<div>Phone <div class="detail-text">{{ user.user.phone }}</div></div>
+				<div>Name <div class="detail-text">{{ user.first_name }} {{ user.last_name }}</div></div>
+				<div>Username <div class="detail-text">{{ user.username }}</div></div>
+				<div>E-mail <div class="detail-text">{{ user.email }}</div></div>
+				<div>Phone <div class="detail-text">{{ user.profile.phone }}</div></div>
 			</div>
 		</div>
 		<h3 style="padding: 15px;">
 			Total time volunteered:
-			{% if user.total_volunteer_minutes %}
-			{{ user.total_volunteer_minutes }}
+			{% if user.profile.total_volunteer_minutes %}
+			{{ user.profile.total_volunteer_minutes }}
 			{% else %}
 			0
 			{% endif %}
@@ -70,6 +70,11 @@ h2 {
 	<div class="flex-container">
 		<div style="flex:1">
 			<h2>Upcoming Rides</h2>
+			{% if not confirmed_rides %}
+				<div style="padding:20px">
+					No upcoming rides yet. Volunteer to drive!
+				</div>
+			{% endif %}
 			<table style="width: 100%">
 			{% for ride in confirmed_rides %}
 			    <tr>
@@ -97,6 +102,11 @@ h2 {
 
 		<div style="flex:1">
 			<h2>Past Rides</h2>
+			{% if not confirmed_rides %}
+				<div style="padding:20px">
+					No past rides yet.
+				</div>
+			{% endif %}
 			<table style="width: 100%">
 			{% for ride in finished_rides %}
 			    <tr>

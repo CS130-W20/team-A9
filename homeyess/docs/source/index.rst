@@ -35,4 +35,7 @@ Views
 .. automethod:: website.views.RequestRideCreate
 .. automethod:: website.views.ViewRideForm
 .. automethod:: website.views.RequestRideEdit
-
+.. automethod:: website.views.dashboard
+.. automethod:: website.views.homeless
+.. automethod:: website.views.company
+.. automethod:: website.views.volunteer
