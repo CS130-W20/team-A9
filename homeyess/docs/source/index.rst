@@ -26,8 +26,13 @@ Models
 .. autoclass:: website.models.Ride
    :members:
 .. autoclass:: website.models.JobPost
+.. autoclass:: website.models.RideRequestPost
 
 Views
 =====
 .. automodule:: website.views
 .. automethod:: website.views.index
+.. automethod:: website.views.RequestRideCreate
+.. automethod:: website.views.ViewRideForm
+.. automethod:: website.views.RequestRideEdit
+
