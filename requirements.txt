@@ -65,3 +65,4 @@ virtualenv==16.0.0
 wrapt==1.11.2
 yarl==1.4.2
 djangorestframework==3.11.0
+selenium
