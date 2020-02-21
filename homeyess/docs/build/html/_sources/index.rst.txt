@@ -34,7 +34,7 @@ Views
 .. automethod:: website.views.volunteer
 .. autoclass:: website.views.RequestRideCreate
   :members:
-.. automethod:: website.views.ViewRideForm
+.. automethod:: website.views.viewrideform
 .. autoclass:: website.views.RequestRideEdit
   :members:
 .. automethod:: website.views.editjob
