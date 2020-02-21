@@ -142,27 +142,6 @@ Note that the object should be created when a ride request is made and altered w
 </dl>
 </dd></dl>
 
-<dl class="class">
-<dt id="website.models.RideRequestPost">
-<em class="property">class </em><code class="sig-prename descclassname">website.models.</code><code class="sig-name descname">RideRequestPost</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.models.RideRequestPost" title="Permalink to this definition">¶</a></dt>
-<dd><p>Model to store information about ride requests</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>first_name</strong> (<em>CharField / string</em>) – the first name of the requester</p></li>
-<li><p><strong>last_name</strong> (<em>CharField / string</em>) – the last name of the requester</p></li>
-<li><p><strong>email</strong> (<em>Email</em>) – the email of the requester</p></li>
-<li><p><strong>phone_number</strong> (<em>CharField / string</em>) – the phone number of the requester</p></li>
-<li><p><strong>pickup_date</strong> (<em>Date</em>) – the date that the requester wants to be picked up</p></li>
-<li><p><strong>pickup_time</strong> (<em>CharField / string</em>) – the time the requester would like to be picked up</p></li>
-<li><p><strong>interview_duration</strong> (<em>CharField / string</em>) – the duration, in minutes, of the interview</p></li>
-<li><p><strong>pickup_address</strong> (<em>CharField / string</em>) – the address where the requester would like to be picked up</p></li>
-<li><p><strong>interview_address</strong> (<em>CharField / string</em>) – the address where the interview is taking place</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 <div class="section" id="module-website.views">
 <span id="views"></span><h1>Views<a class="headerlink" href="#module-website.views" title="Permalink to this headline">¶</a></h1>
@@ -185,46 +164,81 @@ Note that the object should be created when a ride request is made and altered w
 </dd></dl>
 
 <dl class="method">
-<dt id="website.views.RequestRideCreate">
-<code class="sig-prename descclassname">views.</code><code class="sig-name descname">RequestRideCreate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideCreate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Object used to render the ride request creation view</p>
+<dt id="website.views.dashboard">
+<code class="sig-prename descclassname">views.</code><code class="sig-name descname">dashboard</code><span class="sig-paren">(</span><em class="sig-param">user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.dashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the dashboard page for all users</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>template_name</strong> (<em>string</em>) – the name of the template used to render the view</p></li>
-<li><p><strong>form_class</strong> (<em>ModelFormMetaclass</em>) – the form that specifies what data needs to be input</p></li>
-<li><p><strong>queryset</strong> (<em>QuerySet</em>) – the queryable attributes of the form</p></li>
+<li><p><strong>request</strong> (<em>String</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user_id</strong> – The id of the user whose dashboard should be rendered</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered dashboard page for the user using the homeless.html, company.html, or volunteer.html template which matches the type of the requesting user</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="website.views.ViewRideForm">
-<code class="sig-prename descclassname">views.</code><code class="sig-name descname">ViewRideForm</code><span class="sig-paren">(</span><em class="sig-param">post_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.ViewRideForm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the view that allows people experiencing homelessness to view a specific ride request 
-he/she filled out, so that they can review and potentially edit the form</p>
+<dt id="website.views.homeless">
+<code class="sig-prename descclassname">views.</code><code class="sig-name descname">homeless</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.homeless" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the dashboard page for homeless users</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p></li>
-<li><p><strong>post_id</strong> (<em>int</em>) – The ride request post’s idea</p></li>
+<li><p><strong>request</strong> (<em>String</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user_id</strong> – The id of the user whose dashboard should be rendered</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered dashboard page for the user using the homeless.html template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="website.views.RequestRideEdit">
-<code class="sig-prename descclassname">views.</code><code class="sig-name descname">RequestRideEdit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideEdit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Object used to render the request form’s update view</p>
+<dt id="website.views.company">
+<code class="sig-prename descclassname">views.</code><code class="sig-name descname">company</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.company" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the dashboard page for company users</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>template_name</strong> (<em>string</em>) – the name of the template used to render the view</p></li>
-<li><p><strong>form_class</strong> (<em>ModelFormMetaclass</em>) – the form that specifies what data needs to be input</p></li>
-<li><p><strong>queryset</strong> (<em>QuerySet</em>) – the queryable attributes of the form</p></li>
+<li><p><strong>request</strong> (<em>String</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user_id</strong> – The id of the user whose dashboard should be rendered</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered dashboard page for the user using the company.html template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="website.views.volunteer">
+<code class="sig-prename descclassname">views.</code><code class="sig-name descname">volunteer</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.volunteer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the dashboard page for volunteer users</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>String</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user_id</strong> – The id of the user whose dashboard should be rendered</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered dashboard page for the user using the volunteer.html template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
 </dd>
 </dl>
 </dd></dl>
@@ -282,7 +296,7 @@ he/she filled out, so that they can review and potentially edit the form</p>
       &copy;2020, team-a9.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
