@@ -52,8 +52,3 @@ class PostEditJobFormTest(TestCase):
         bad_data['location'] = ''
         form = PostJobForm(bad_data)
         self.assertFalse(form.is_valid())
-
-    def test_edit_job_success(self):
-        job_post = JobPost(self.data.copy())
-        form = PostJobForm(instance=job_post)
-        self.assertTrue(form.is_valid())
