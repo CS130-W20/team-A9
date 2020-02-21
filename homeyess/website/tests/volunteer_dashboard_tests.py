@@ -35,7 +35,7 @@ class VolunteerDashboardTest(TestCase):
 
 		##rides
 
-		#uncofirmed
+		#unconfirmed
 		interview_time = timezone.now() + datetime.timedelta(days=5)
 		pickup_time = timezone.now() + datetime.timedelta(days=5)
 		end_time = timezone.now() + datetime.timedelta(days=5)
