@@ -73,12 +73,12 @@ h3 {
 	</h1>
 
 	<h3>
-		Total time volunteered:
-		{% if user.profile.total_volunteer_minutes %}
+		Total time volunteered: {{ total_time }} hours
+<!-- 		{% if user.profile.total_volunteer_minutes %}
 		{{ user.profile.total_volunteer_minutes }}
 		{% else %}
 		0
-		{% endif %}
+		{% endif %} -->
 	</h3>
 
 	<div></div>

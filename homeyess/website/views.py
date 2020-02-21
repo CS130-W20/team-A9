@@ -14,6 +14,8 @@ import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+import math
+
 def index(request):
     '''Renders the index / home page
 
@@ -114,7 +116,14 @@ def volunteer(request, user):
     '''
     confirmed_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__gt = timezone.now())
     finished_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__lte = timezone.now())
-    context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides}
+    total_time = 0
+    for ride in finished_rides:
+        time = ride.end_datetime - ride.pickup_datetime
+        hours = time.seconds/60/60
+        total_time+=hours
+
+    total_time = math.floor(total_time)
+    context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides, 'total_time': total_time}
     return render(request, 'dashboard/volunteer.html', context)
 
 class RequestRideCreate(CreateView):
