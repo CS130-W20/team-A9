@@ -20,7 +20,7 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 7) run the app on localhost $ python3 manage.py runserver (ctrl-c to exit)
 
 ## Testing
-Tests can be run with the command `python3 manage.py run test website.tests.<filename>`
+Tests can be run with the command `python3 manage.py test website.tests.<filename>`
 The tests automatically create a test database within rds
 
 /website/tests/form_tests.py - test signup form validation, test post / edit jobs  
