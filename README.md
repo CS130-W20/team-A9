@@ -20,6 +20,7 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 7) run the app on localhost $ python3 manage.py runserver (ctrl-c to exit)
 
 ## Testing
+website/tests/form_tests - test signup form validation, test post / edit jobs 
 
 ## Generating Documentation
 1) cd homeyess/docs
