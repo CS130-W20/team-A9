@@ -1,6 +1,9 @@
 # virtualenv
 env
 
+# vscode
+.vscode
+
 # Logs
 logs
 *.log
@@ -106,8 +109,5 @@ dist
 # TernJS port file
 .tern-port
 
-# Docs
-docs/build/*
-
 # Pycache
-.pyc
+*.pyc
