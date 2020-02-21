@@ -10,6 +10,7 @@ from .models import Profile, Ride, JobPost, RideRequestPost
 from django.views.generic.edit import CreateView
 import datetime
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 def index(request):
     '''Renders the index / home page
@@ -54,12 +55,12 @@ def dashboard(request, user_id):
     :return: the rendered dashboard page for the user using the homeless.html, company.html, or volunteer.html template which matches the type of the requesting user
     :rtype: HttpResponse
     '''
-    user = Profile.objects.get(pk=user_id)
-    if user.user_type == "V":
+    user = User.objects.get(pk=user_id)
+    if user.profile.user_type == "V":
         return volunteer(request, user)
-    elif user.user_type == "H":
+    elif user.profile.user_type == "H":
         return homeless(request, user)
-    elif user.user_type == "C":
+    elif user.profile.user_type == "C":
         return company(request, user)
     return HttpResponse(status=404)
 
@@ -73,8 +74,8 @@ def homeless(request, user):
     :return: the rendered dashboard page for the user using the homeless.html template 
     :rtype: HttpResponse
     '''
-    unconfirmed_rides = Ride.objects.filter(homeless = user, volunteer = None, interview_datetime__gt = timezone.now())
-    confirmed_rides = Ride.objects.filter(homeless = user, interview_datetime__gt = timezone.now()).exclude(volunteer = None)
+    unconfirmed_rides = Ride.objects.filter(homeless = user.profile, volunteer = None, interview_datetime__gt = timezone.now())
+    confirmed_rides = Ride.objects.filter(homeless = user.profile, interview_datetime__gt = timezone.now()).exclude(volunteer = None)
     context = {'user': user, 'unconfirmed_rides': unconfirmed_rides, 'confirmed_rides': confirmed_rides}
     return render(request, 'dashboard/homeless.html', context)
 
@@ -88,7 +89,7 @@ def company(request, user):
     :return: the rendered dashboard page for the user using the company.html template 
     :rtype: HttpResponse
     '''
-    job_posts = JobPost.objects.filter(company=user)
+    job_posts = JobPost.objects.filter(company=user.profile)
     context = {'user': user, 'job_posts': job_posts}
     return render(request, 'dashboard/company.html', context)
 
@@ -102,8 +103,8 @@ def volunteer(request, user):
     :return: the rendered dashboard page for the user using the volunteer.html template 
     :rtype: HttpResponse
     '''
-    confirmed_rides = Ride.objects.filter(volunteer = user, interview_datetime__gt = timezone.now())
-    finished_rides = Ride.objects.filter(volunteer = user, interview_datetime__lte = timezone.now())
+    confirmed_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__gt = timezone.now())
+    finished_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__lte = timezone.now())
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides}
     return render(request, 'dashboard/volunteer.html', context)
   
