@@ -118,25 +118,50 @@ def volunteer(request, user):
     return render(request, 'dashboard/volunteer.html', context)
 
 class RequestRideCreate(CreateView):
-    template_name = 'ride_request/request_ride.html'
-    form_class = RideRequestForm
-    queryset = RideRequestPost.objects.all()
+	'''Object used to render the ride request creation view
+
+	:param template_name: the name of the template used to render the view
+	:type template_name: string
+	:param form_class: the form that specifies what data needs to be input
+	:type form_class: ModelFormMetaclass
+	:param queryset: the queryable attributes of the form
+	:type queryset: QuerySet
+	'''	
+	template_name = 'ride_request/request_ride.html'
+	form_class = RideRequestForm
+	queryset = RideRequestPost.objects.all()
 
 def ViewRideForm(request, post_id):
-    form_set = RideRequestPost.objects.filter(id=post_id)
-    form = form_set[0]
-    context = {'form': form}
-    return render(request, 'ride_request/ViewRideForm.html', context)
+	'''Renders the view that allows people experiencing homelessness to view a specific ride request 
+	he/she filled out, so that they can review and potentially edit the form
+
+	:param request: The http request containing user information or extra arguments
+	:type request: HttpRequest
+	:param post_id: The ride request post's idea
+	:type post_id: int
+	'''
+	form_set = RideRequestPost.objects.filter(id=post_id)
+	form = form_set[0]
+	context = {'form': form}
+	return render(request, 'ride_request/ViewRideForm.html', context)
 
 class RequestRideEdit(UpdateView):
-    template_name = 'ride_request/request_ride.html'
-    form_class = RideRequestForm
-    queryset = RideRequestPost.objects.all()
+	'''Object used to render the request form's update view
 
-    def get_object(self):
-        id_ = self.kwargs.get("post_id")
-        print(id_)
-        return get_object_or_404(RideRequestPost, id=id_)
+	:param template_name: the name of the template used to render the view
+	:type template_name: string
+	:param form_class: the form that specifies what data needs to be input
+	:type form_class: ModelFormMetaclass 
+	:param queryset: the queryable attributes of the form
+	:type queryset: QuerySet
+	'''
+	template_name = 'ride_request/request_ride.html'
+	form_class = RideRequestForm
+	queryset = RideRequestPost.objects.all()
+
+	def get_object(self):
+		id_ = self.kwargs.get("post_id")
+		return get_object_or_404(RideRequestPost, id=id_)
 
 def editjob(request, user_id, job_id):
     '''Renders the editjob form on GET; processes the editjob form on POST
