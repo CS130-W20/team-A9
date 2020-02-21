@@ -24,6 +24,9 @@ Tests can be run with the command `python3 manage.py run test website.tests.<fil
 The tests automatically create a test database within rds
 
 website/tests/form_tests.py - test signup form validation, test post / edit jobs 
+website/tests/volunteer_dashboard_tests.py - test volunteer dashboard view is returned and has correct data for upcoming and finished rides
+website/tests/homeless_dashboard_tests.py - test homeless dashboard view is returned and has correct data for unconfirmed and confirmed rides
+website/tests/company_dashboard_tests.py - test company dashboard view is returned and has correct data for job posts
 
 ## Generating Documentation
 1) cd homeyess/docs
