@@ -134,8 +134,10 @@ class RideRequestPost(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     email = models.EmailField(max_length=254, help_text='Optional')
+    phone_number = models.CharField(max_length=20, help_text='Optional', blank=True)
     pickup_date = models.DateField()
-    interview_duration = models.CharField(max_length=30)
+    pickup_time = models.CharField(max_length=20, blank=True)
+    interview_duration = models.CharField(max_length=20, help_text='in minutes')
     pickup_address = models.CharField(max_length=200)
     interview_address = models.CharField(max_length=200)
     

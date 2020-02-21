@@ -1,19 +1,71 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
-{% if form %}
-<h1><a href="/ViewRideForm/{{ form.id }}/Update">Click to edit form </a></h1>
-    <ul style="list-style-type:none;">
-	<li>Post ID: {{form.id}}</li>
-	<li>First Name: {{form.first_name}}</li>
-	<li>Last Name: {{form.last_name}}</li>
-	<li>Email: {{form.email}}</li>
-	<li>Pick-Up Date: {{form.pickup_date}}</li>
-	<li>Interview Duration: {{form.interview_duration}}</li>
-	<li>Pickup Address: {{form.pickup_address}}</li>
-	<li>Interview Address: {{form.interview_address}}</li>
-    </ul>
-{% else %}
-    <p>No forms are available.</p>
-{% endif %}
+	{% if form %}
+
+		<div class="container" style="padding=40px;">
+		<div class="row justify-content-center">
+		<h1><a href="/ViewRideForm/{{ form.id }}/Update">Click Here to Edit Ride Request </a></h1>
+	</div></div>
+		<div class="container" style="padding=40px;">
+		<div class="row justify-content-center">
+
+		<table style="width:30%">
+			<tr>
+				<td>Post ID</td>
+				<td>{{form.id}}</td>
+			</tr>
+			<tr>
+				<td>First Name</td>
+				<td>{{form.first_name}}</td>
+			</tr>
+			<tr>
+				<td>Last Name</td>
+				<td>{{form.last_name}}</td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				{% if form.email %}
+					<td>{{form.email}}</td>
+				{% else %}
+					<td><i>(None Provided)</i></td>
+					{% endif %}
+			</tr>
+			</tr>
+			<tr>
+				<td>Phone Number</td>
+				{% if form.phone_number %}
+					<td>{{form.phone_number}}</td>
+				{% else %}
+					<td><i>(None Provided)</i></td>
+				{% endif %}
+			</tr>
+			<tr>
+				<td>Pick-Up Date</td>
+				<td>{{form.pickup_date}}</td>
+			</tr>
+			<tr>
+				<td>Pick-Up Time</td>
+				<td>{{form.pickup_time}}</td>
+			</tr>
+			<tr>
+				<td>Interview Duration</td>
+				<td>{{form.interview_duration}}</td>
+			</tr>
+			<tr>
+				<td>Pickup Address</td>
+				<td>{{form.pickup_address}}</td>
+			</tr>
+			<tr>
+				<td>Interview Address</td>
+				<td>{{form.interview_address}}</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+
+	{% else %}
+    	<p>No forms are available.</p>
+	{% endif %}
 {% endblock %}

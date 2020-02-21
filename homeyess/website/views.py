@@ -96,7 +96,6 @@ class RequestRideEdit(UpdateView):
 
     def get_object(self):
         id_ = self.kwargs.get("post_id")
-        print(id_)
         return get_object_or_404(RideRequestPost, id=id_)
 
 def editjob(request, user_id, job_id):
