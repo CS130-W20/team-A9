@@ -163,6 +163,86 @@ Note that the object should be created when a ride request is made and altered w
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="website.views.dashboard">
+<code class="sig-prename descclassname">views.</code><code class="sig-name descname">dashboard</code><span class="sig-paren">(</span><em class="sig-param">user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.dashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the dashboard page for all users</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>String</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user_id</strong> – The id of the user whose dashboard should be rendered</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered dashboard page for the user using the homeless.html, company.html, or volunteer.html template which matches the type of the requesting user</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="website.views.homeless">
+<code class="sig-prename descclassname">views.</code><code class="sig-name descname">homeless</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.homeless" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the dashboard page for homeless users</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>String</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user_id</strong> – The id of the user whose dashboard should be rendered</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered dashboard page for the user using the homeless.html template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="website.views.company">
+<code class="sig-prename descclassname">views.</code><code class="sig-name descname">company</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.company" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the dashboard page for company users</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>String</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user_id</strong> – The id of the user whose dashboard should be rendered</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered dashboard page for the user using the company.html template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="website.views.volunteer">
+<code class="sig-prename descclassname">views.</code><code class="sig-name descname">volunteer</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.volunteer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the dashboard page for volunteer users</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>String</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user_id</strong> – The id of the user whose dashboard should be rendered</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered dashboard page for the user using the volunteer.html template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 

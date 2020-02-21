@@ -1,8 +1,6 @@
 from django.test import TestCase, LiveServerTestCase
 from website.forms import SignUpForm, PostJobForm
 from website.models import Profile, JobPost
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 
 class SignUpFormTest(TestCase):
 
@@ -134,3 +132,4 @@ class SeleniumTests(LiveServerTestCase):
         correct_summary = bool('<td>Need someone to clean</td>' in self.selenium.page_source)
 
         self.assertTrue(correct_job_name and correct_wage and correct_summary)
+

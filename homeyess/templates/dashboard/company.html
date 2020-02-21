@@ -49,34 +49,41 @@ h2 {
 	<div></div>
 	<div class="gray-box" style="display: inline-block">
 		<div class="flex-container-vertical">
-			<div>Name <div class="detail-text">{{ user.user.first_name }}</div></div>
-			<div>Username <div class="detail-text">{{ user.user.username }}</div></div>
-			<div>E-mail <div class="detail-text">{{ user.user.email }}</div></div>
+			<div>Name <div class="detail-text">{{ user.first_name }}</div></div>
+			<div>Username <div class="detail-text">{{ user.username }}</div></div>
+			<div>E-mail <div class="detail-text">{{ user.email }}</div></div>
+			<div>Phone <div class="detail-text">{{ user.profile.phone }}</div></div>
 		</div>
 	</div>
 	<div></div>
 	<div>
 		<h2>Jobs Posted</h2>
-		<table style="width: 100%; margin: 15px;">
-			<tr style="color:lightblue">
-				<th></th>
-				<th>Date Created</th>
-				<th>Title</th>
-				<th>Wage</th>
-				<th>Description</th>
-			</tr>
-			{% for job in job_posts %}
-		   		<tr style="background-color: lightgray">
-		    		<td style="padding:15px"><a class="detail-button" href="{% url 'editjob' user.id job.id %}">Edit</a></td>
-		    		<div class="detail-text">
-			    		<td>{{ job.created }}</td>
-			    		<td>{{ job.job_title }}</td>
-			    		<td>{{ job.wage }}</td>
-			    		<td>{{ job.short_summary }}</td>
-			    	</div>
-		    	</tr>
-			   {% endfor %}
-		</table>
+		{% if not job_posts %}
+				<div style="padding:20px">
+					No jobs posts yet. Post a job now!
+				</div>
+		{% else %}
+			<table style="width: 100%; margin: 15px;">
+				<tr style="color:lightblue">
+					<th></th>
+					<th>Date Created</th>
+					<th>Title</th>
+					<th>Wage</th>
+					<th>Description</th>
+				</tr>
+				{% for job in job_posts %}
+			   		<tr style="background-color: lightgray">
+			    		<td style="padding:15px"><a class="detail-button" href="#">Open</a></td>
+			    		<div class="detail-text">
+				    		<td>{{ job.created }}</td>
+				    		<td>{{ job.job_title }}</td>
+				    		<td>{{ job.wage }}</td>
+				    		<td>{{ job.short_summary }}</td>
+				    	</div>
+			    	</tr>
+				   {% endfor %}
+			</table>
+		{% endif %}
 	</div>
 </body>
 {% endblock %}
