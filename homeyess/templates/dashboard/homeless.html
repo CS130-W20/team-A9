@@ -47,6 +47,22 @@ h1 {
 h2 {
 	padding: 15px;
 }
+table {
+  border-collapse: collapse;
+}
+tr:first-child {
+  border-top: none;
+}
+tr:last-child {
+  border-bottom: none;
+}
+tr { 
+  border: solid;
+  border-width: 1px 0;
+}
+td {
+	padding: 15px;
+}
 </style>
 <head>
   <title>Dashboard</title>
@@ -67,7 +83,7 @@ h2 {
 		{% endif %}
 	</h1>
 
-	<div class="flex-container">
+	<div class="flex-container" style="margin-left: 100px; margin-right: 100px;">
 		<div style="flex:1">
 			<h2>Confirmed Rides</h2>
 			{% if not confirmed_rides %}
@@ -79,7 +95,7 @@ h2 {
 				{% for ride in confirmed_rides %}
 				    <tr>
 				    	<td>
-				    		<div class="gray-box">
+				    		<div>
 				    			<div class="flex-container">
 				    				<div class="flex-container-vertical">
 				    					<h5>{{ ride.interview_company }} - {{ ride.interview_datetime }}</h5>
@@ -100,7 +116,7 @@ h2 {
 				{% endfor %}
 			</table>
 		</div>
-		<div style="flex:1">
+		<div style="flex:1; padding-left: 25px">
 			<h2>Unconfirmed Rides</h2>
 			{% if not unconfirmed_rides %}
 				<div style="padding:20px">
@@ -111,12 +127,14 @@ h2 {
 				{% for ride in unconfirmed_rides %}
 				    <tr>
 				    	<td>
-				    		<div class="gray-box">
+				    		<div>
 				    			<div class="flex-container">
 				    				<div class="flex-container-vertical">
 								    	<h5>{{ ride.interview_company }} - {{ ride.interview_datetime }}</h5>
 								    	<div>Pickup Address: {{ ride.pickup_address }}</div>
 								    	<div>Company Address: {{ ride.interview_address }}</div>
+								    	<br>
+								    	<br>
 								    </div>
 					    			<div>
 										<a href="#">Details</a>

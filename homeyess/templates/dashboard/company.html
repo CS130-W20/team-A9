@@ -52,7 +52,20 @@ h1 {
 h2 {
 	padding: 15px;
 }
-
+table {
+  border-collapse: collapse;
+}
+tr:first-child {
+  border-top: none;
+  border-bottom: none;
+}
+tr:last-child {
+  border-bottom: none;
+}
+tr { 
+  border: solid;
+  border-width: 1px 0;
+}
 </style>
 <head>
   <title>Dashboard</title>
@@ -81,14 +94,14 @@ h2 {
 			<table style="width: 100%; margin: 15px;">
 				<tr style="color:#4285F4">
 					<th></th>
-					<th>Date Created</th>
-					<th>Title</th>
-					<th>Wage</th>
-					<th>Description</th>
+					<th style="padding-bottom: 5px;">Date Created</th>
+					<th style="padding-bottom: 5px;">Title</th>
+					<th style="padding-bottom: 5px;">Wage</th>
+					<th style="padding-bottom: 5px;">Description</th>
 				</tr>
 				{% for job in job_posts %}
-			   		<tr class="gray-box">
-						<td style="padding:15px"><a class="btn-primary" href="#">Open</a></td>
+			   		<tr>
+						<td style="padding:15px"><a href="#">Open</a></td>
 						<td>{{ job.created }}</td>
 						<td>{{ job.job_title }}</td>
 						<td>{{ job.wage }}</td>

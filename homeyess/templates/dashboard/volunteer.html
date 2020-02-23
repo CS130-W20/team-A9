@@ -52,6 +52,22 @@ h3 {
 	font-family: "Raleway", "Times New Roman", Times, serif;
 	margin-bottom: 25px;
 }
+tr:first-child {
+  border-top: none;
+}
+tr:last-child {
+  border-bottom: none;
+}
+table {
+  border-collapse: collapse;
+}
+tr { 
+  border: solid;
+  border-width: 1px 0;
+}
+td {
+	padding: 15px;
+}
 </style>
 <head>
   <title>Dashboard</title>
@@ -74,29 +90,26 @@ h3 {
 
 	<h3>
 		Total time volunteered: {{ total_time }} hours
-<!-- 		{% if user.profile.total_volunteer_minutes %}
-		{{ user.profile.total_volunteer_minutes }}
-		{% else %}
-		0
-		{% endif %} -->
 	</h3>
 
 	<div></div>
-	<div class="flex-container">
+	<div class="flex-container" style="margin-left: 100px; margin-right: 100px;">
 		<div style="flex:1">
-			<h2>Upcoming Rides</h2>
-			{% if not confirmed_rides %}
-				<div style="padding:20px">
-					No upcoming rides yet. Volunteer to drive!
-				</div>
-			{% endif %}
+			<div style="margin-left:0px">
+				<h2>Upcoming Rides</h2>
+				{% if not confirmed_rides %}
+					<div style="padding:20px">
+						No upcoming rides yet. Volunteer to drive!
+					</div>
+				{% endif %}
+			</div>
 			<table style="width: 100%">
 			{% for ride in confirmed_rides %}
 			    <tr>
 			    	<td>
-			    		<div class="gray-box">
+			    		<div>
 			    			<div class="flex-container">
-			    				<div class="flex-container-vertical">
+			    				<div class="flex-container-vertical" style="margin-left:0px">
 									<h5>Pickup Time: {{ ride.pickup_datetime }}</h5>
 								    <div>Pickup Address: {{ ride.pickup_address }}</div>
 								    <div>Interview Time: {{ ride.interview_datetime }}</div>
@@ -105,7 +118,7 @@ h3 {
 								    <div>Candidate Name: {{ ride.homeless.user.first_name }} {{ ride.homeless.user.last_name }}</div>
 								</div>
 								<div>
-									<a class="detail-button" href="#">Details</a>
+									<a href="#">Details</a>
 								</div>
 							</div>
 					    </div>
@@ -115,7 +128,7 @@ h3 {
 			</table>
 		</div>
 
-		<div style="flex:1">
+		<div style="flex:1; padding-left: 25px">
 			<h2>Past Rides</h2>
 			{% if not confirmed_rides %}
 				<div style="padding:20px">
@@ -126,7 +139,7 @@ h3 {
 			{% for ride in finished_rides %}
 			    <tr>
 			    	<td>
-			    		<div class="gray-box">
+			    		<div>
 			    			<div class="flex-container">
 			    				<div class="flex-container-vertical">
 							    	<h5>Time: {{ ride.pickup_datetime }} - {{ ride.end_datetime }}</h5>
@@ -137,7 +150,7 @@ h3 {
 								    <div>Candidate Name: {{ ride.homeless.user.first_name }} {{ ride.homeless.user.last_name }}</div>
 							    </div>
 							    <div>
-							    	<a class="detail-button" href="#">Details</a>
+							    	<a href="#">Details</a>
 							    </div>
 							</div>
 						</div>
