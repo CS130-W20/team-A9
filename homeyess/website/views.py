@@ -130,10 +130,26 @@ def volunteer(request, user):
     return render(request, 'dashboard/volunteer.html', context)
 
 def job_board(request):
+    '''Renders the job board page for homeless users to view jobs
+
+    :param request: The http request containing user information or extra arguments
+    :type request: HttpRequest
+    :return: the rendered job board page using the job_board.html template 
+    :rtype: HttpResponse
+    '''
     job_posts = JobPost.objects.all().order_by('-created')
     return render(request, 'job_board/job_board.html', {'job_posts': job_posts})
 
 def job_detail(request, job_id):
+    '''Renders the job detail page to see more information on a job from the job board
+
+    :param request: The http request containing user information or extra arguments
+    :type request: HttpRequest
+    :param user_id: The id of the job to be viewed
+    :type request: String
+    :return: the rendered job detail page using the job_detail.html template 
+    :rtype: HttpResponse
+    '''
     job = JobPost.objects.filter(pk=job_id).first()
     if not job:
         return HttpResponse(status=404)
