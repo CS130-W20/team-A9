@@ -66,7 +66,10 @@ def dashboard(request, user_id):
     :return: the rendered dashboard page for the user using the homeless.html, company.html, or volunteer.html template which matches the type of the requesting user
     :rtype: HttpResponse
     '''
-    user = User.objects.get(pk=user_id)
+    user = User.objects.filter(pk=user_id).first()
+    if not user:
+        return HttpResponse(status=404)
+
     if user.profile.user_type == "V":
         return volunteer(request, user)
     elif user.profile.user_type == "H":
@@ -125,6 +128,16 @@ def volunteer(request, user):
     total_time = math.floor(total_time)
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides, 'total_time': total_time}
     return render(request, 'dashboard/volunteer.html', context)
+
+def job_board(request):
+    job_posts = JobPost.objects.all().order_by('-created')
+    return render(request, 'job_board/job_board.html', {'job_posts': job_posts})
+
+def job_detail(request, job_id):
+    job = JobPost.objects.filter(pk=job_id).first()
+    if not job:
+        return HttpResponse(status=404)
+    return render(request, 'job_board/job_detail.html', {'job': job})
 
 class RequestRideCreate(CreateView):
 	'''Object used to render the ride request creation view

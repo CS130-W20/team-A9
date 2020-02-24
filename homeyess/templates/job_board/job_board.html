@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base_generic.html' %}
+{% block content %}
+<style>
+.flex-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.flex-container-vertical {
+	display: flex;
+	flex-direction: column;
+}
+.gray-box {
+	background-color: lightgray;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	border-radius: 10px;
+	margin-left: 15px;
+	margin-bottom: 10px;
+	margin-right: 15px;
+	margin-top: 15px;
+	padding:10px;
+}
+.detail-text {
+	display: inline;
+}
+.table-container {
+	background-color: #f2f0f0; 
+	border-radius: 10px;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+.row {
+	background-color: lightgray;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.btn-primary {
+	border-radius: 10px;
+	color: black;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+h1 {
+	text-align: center;
+	font-family: "Raleway", "Times New Roman", Times, serif;
+	font-size: 75px;
+	margin: 25px;
+}
+h2 {
+	padding: 15px;
+}
+table {
+  border-collapse: collapse;
+}
+tr:first-child {
+  border-top: none;
+  border-bottom: none;
+}
+tr:last-child {
+  border-bottom: none;
+}
+tr { 
+  border: solid;
+  border-width: 1px 0;
+}
+</style>
+<head>
+  <title>Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<h1>
+		Jobs
+	</h1>
+	<div></div>
+	<div>
+		{% if not job_posts %}
+				<div style="padding:20px">
+					No jobs posts yet!
+				</div>
+		{% else %}
+			<table style="width: 100%; margin: 15px;">
+				<tr style="color:#4285F4">
+					<th></th>
+					<th style="padding-bottom: 5px;">Posted</th>
+					<th style="padding-bottom: 5px;">Title</th>
+					<th style="padding-bottom: 5px;">Company</th>
+					<th style="padding-bottom: 5px;">Location</th>
+					<th style="padding-bottom: 5px;">Wage</th>
+					<th style="padding-bottom: 5px;">Description</th>
+				</tr>
+				{% for job in job_posts %}
+			   		<tr>
+						<td style="padding:15px"><a href="{% url 'job_detail' job.pk %}">Details</a></td>
+						<td>{{ job.created }}</td>
+						<td>{{ job.job_title }}</td>
+						<td>{{ job.company.user.first_name }}</td>
+						<td>{{ job.location }}</td>
+						<td>{{ job.wage }}</td>
+						<td>{{ job.short_summary }}</td>
+			    	</tr>
+				   {% endfor %}
+			</table>
+		{% endif %}
+	</div>
+</body>
+{% endblock %}
+</html>
