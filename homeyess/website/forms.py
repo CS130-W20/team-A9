@@ -58,17 +58,13 @@ class RideRequestForm(ModelForm):
 	'''
 	class Meta:
 		model = RideRequestPost
-		fields = ['first_name', 'last_name', 'email', 'phone_number', 'pickup_date', 'pickup_time', 'interview_duration', 'pickup_address', 'interview_address']
+		fields = ['pickup_date', 'interview_duration', 'pickup_address', 'interview_address', 'company_name']
 
 	class DateInput(forms.DateInput):
 		input_type = 'date'
-	first_name = forms.CharField(max_length=30, required=True)
-	last_name = forms.CharField(max_length=30, required=True)
-	email = forms.EmailField(max_length=254, required=False, help_text='Optional')
-	phone_number = forms.CharField(max_length=14, help_text='Optional', required=False)
 	pickup_date = forms.DateField(widget=DateInput, required=True)
-	pickup_time = forms.CharField(max_length=20, required=True)
 	interview_duration = forms.CharField(max_length=30, required=True, help_text=' (in minutes)')
 	pickup_address = forms.CharField(max_length=200, required=True)
 	interview_address = forms.CharField(max_length=200, required=True)
+	company_name = forms.CharField(max_length=200, required=True)
     
