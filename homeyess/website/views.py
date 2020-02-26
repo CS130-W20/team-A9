@@ -43,6 +43,7 @@ def signup(request):
             user.profile.car_make = form.cleaned_data.get('car_make')
             user.profile.car_model = form.cleaned_data.get('car_model')
             user.profile.total_volunteer_minutes = 0
+            user.profile.home_address = form.cleaned_data.get('home_address')
             user.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')

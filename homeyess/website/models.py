@@ -26,6 +26,8 @@ class Profile(models.Model):
 	:type car_model: (optional) CharField / string
 	:param total_volunteer_minutes: the total amount of time a volunteer has volunteered
 	:type total_volunteer_minutes: int
+	:param home_address: home address (only required for volunteer)
+	:type home_address: CharField / string
 	'''
 	class UserType(Enum):
 		'''Enum to represent types of users: Volunteer, Homeless, Company
@@ -44,6 +46,7 @@ class Profile(models.Model):
 	car_make = models.CharField(max_length=20, blank=True, null=True)
 	car_model = models.CharField(max_length=20, blank=True, null=True)
 	total_volunteer_minutes = models.IntegerField(blank=True, null=True)
+	home_address = models.CharField(max_length=200, blank=True, null=True)
 
 
 class Ride(models.Model):
