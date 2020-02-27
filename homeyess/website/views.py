@@ -155,6 +155,9 @@ def job_detail(request, job_id):
         return HttpResponse(status=404)
     return render(request, 'job_board/job_detail.html', {'job': job})
 
+def map(request):
+    return render(request, 'map.html')
+
 class RequestRideCreate(CreateView):
 	'''Object used to render the ride request creation view
 

@@ -142,6 +142,27 @@ Note that the object should be created when a ride request is made and altered w
 </dl>
 </dd></dl>
 
+<dl class="class">
+<dt id="website.models.RideRequestPost">
+<em class="property">class </em><code class="sig-prename descclassname">website.models.</code><code class="sig-name descname">RideRequestPost</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.models.RideRequestPost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model to store information about ride requests</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>first_name</strong> (<em>CharField / string</em>) – the first name of the requester</p></li>
+<li><p><strong>last_name</strong> (<em>CharField / string</em>) – the last name of the requester</p></li>
+<li><p><strong>email</strong> (<em>Email</em>) – the email of the requester</p></li>
+<li><p><strong>phone_number</strong> (<em>CharField / string</em>) – the phone number of the requester</p></li>
+<li><p><strong>pickup_date</strong> (<em>Date</em>) – the date that the requester wants to be picked up</p></li>
+<li><p><strong>pickup_time</strong> (<em>CharField / string</em>) – the time the requester would like to be picked up</p></li>
+<li><p><strong>interview_duration</strong> (<em>CharField / string</em>) – the duration, in minutes, of the interview</p></li>
+<li><p><strong>pickup_address</strong> (<em>CharField / string</em>) – the address where the requester would like to be picked up</p></li>
+<li><p><strong>interview_address</strong> (<em>CharField / string</em>) – the address where the interview is taking place</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-website.views">
 <span id="views"></span><h1>Views<a class="headerlink" href="#module-website.views" title="Permalink to this headline">¶</a></h1>
@@ -164,8 +185,6 @@ Note that the object should be created when a ride request is made and altered w
 </dd></dl>
 
 <dl class="method">
-<<<<<<< HEAD
-=======
 <dt id="website.views.signup">
 <code class="sig-prename descclassname">views.</code><code class="sig-name descname">signup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#website.views.signup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders the signup form on GET; processes the signup form on POST</p>
@@ -183,7 +202,6 @@ Note that the object should be created when a ride request is made and altered w
 </dd></dl>
 
 <dl class="method">
->>>>>>> af6571da7affc138eadb0db5d5c82b70c5cf881d
 <dt id="website.views.dashboard">
 <code class="sig-prename descclassname">views.</code><code class="sig-name descname">dashboard</code><span class="sig-paren">(</span><em class="sig-param">user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.dashboard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders the dashboard page for all users</p>
@@ -285,8 +303,8 @@ Note that the object should be created when a ride request is made and altered w
 </dd></dl>
 
 <dl class="method">
-<dt id="website.views.ViewRideForm">
-<code class="sig-prename descclassname">views.</code><code class="sig-name descname">ViewRideForm</code><span class="sig-paren">(</span><em class="sig-param">post_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.ViewRideForm" title="Permalink to this definition">¶</a></dt>
+<dt id="website.views.viewrideform">
+<code class="sig-prename descclassname">views.</code><code class="sig-name descname">viewrideform</code><span class="sig-paren">(</span><em class="sig-param">post_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.viewrideform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders the view that allows people experiencing homelessness to view a specific ride request 
 he/she filled out, so that they can review and potentially edit the form</p>
 <dl class="field-list simple">
@@ -370,8 +388,6 @@ Subclasses can override this to return any object.</p>
 </dd></dl>
 
 </div>
-<<<<<<< HEAD
-=======
 <div class="section" id="module-website.forms">
 <span id="forms"></span><h1>Forms<a class="headerlink" href="#module-website.forms" title="Permalink to this headline">¶</a></h1>
 <p>homeyess/website/forms.py</p>
@@ -408,7 +424,6 @@ association with the field named ‘__all__’.</p>
 </dd></dl>
 
 </div>
->>>>>>> af6571da7affc138eadb0db5d5c82b70c5cf881d
 
 
           </div>

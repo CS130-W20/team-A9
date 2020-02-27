@@ -21,22 +21,20 @@ Models
 .. autoclass:: website.models.Ride
   :members:
 .. autoclass:: website.models.JobPost
+.. autoclass:: website.models.RideRequestPost
 
 Views
 =====
 .. automodule:: website.views
 .. automethod:: website.views.index
-<<<<<<< HEAD
-=======
 .. automethod:: website.views.signup
->>>>>>> af6571da7affc138eadb0db5d5c82b70c5cf881d
 .. automethod:: website.views.dashboard
 .. automethod:: website.views.homeless
 .. automethod:: website.views.company
 .. automethod:: website.views.volunteer
 .. autoclass:: website.views.RequestRideCreate
   :members:
-.. automethod:: website.views.ViewRideForm
+.. automethod:: website.views.viewrideform
 .. autoclass:: website.views.RequestRideEdit
   :members:
 .. automethod:: website.views.editjob

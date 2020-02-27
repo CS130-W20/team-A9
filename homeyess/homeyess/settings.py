@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_google_maps',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +130,5 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+GOOGLE_MAPS_API_KEY = 'AIzaSyBcjdofWqzDtZE-gfPHh3-pYnFQ_zXr2No'
