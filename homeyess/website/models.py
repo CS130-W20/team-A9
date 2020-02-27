@@ -7,6 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.timezone import now
 from enum import Enum
+from datetime import time
 
 
 class Profile(models.Model):
@@ -133,14 +134,6 @@ def update_user_profile(sender, instance, created, **kwargs):
 class RideRequestPost(models.Model):
 	'''Model to store information about ride requests
 
-	:param first_name: the first name of the requester
-	:type first_name: CharField / string
-	:param last_name: the last name of the requester
-	:type last_name: CharField / string
-	:param email: the email of the requester
-	:type email: Email
-	:param phone_number: the phone number of the requester
-	:type phone_number: CharField / string
 	:param pickup_date: the date that the requester wants to be picked up
 	:type pickup_date: Date
 	:param pickup_time: the time the requester would like to be picked up
@@ -151,17 +144,16 @@ class RideRequestPost(models.Model):
 	:type pickup_address: CharField / string
 	:param interview_address: the address where the interview is taking place
 	:type interview_address: CharField / string
+	:param campany_name: the name of the company the requester is applying for
+	:type company_name: CharField / string
 	'''
 
-	first_name = models.CharField(max_length=30)
-	last_name = models.CharField(max_length=30)
-	email = models.EmailField(max_length=254, help_text='Optional')
-	phone_number = models.CharField(max_length=20, help_text='Optional', blank=True)
 	pickup_date = models.DateField()
-	pickup_time = models.CharField(max_length=20, blank=True)
+	pickup_time = models.CharField(max_length=20, default="0:00")
 	interview_duration = models.CharField(max_length=20, help_text='in minutes')
 	pickup_address = models.CharField(max_length=200)
 	interview_address = models.CharField(max_length=200)
+	company_name = models.CharField(max_length=100, default='')
     
 	def get_absolute_url(self):
 		return '/ViewRideForm/' + str(self.id)

@@ -172,7 +172,7 @@ class RequestRideCreate(CreateView):
 	form_class = RideRequestForm
 	queryset = RideRequestPost.objects.all()
 
-def ViewRideForm(request, post_id):
+def viewrideform(request, post_id):
 	'''Renders the view that allows people experiencing homelessness to view a specific ride request 
 	he/she filled out, so that they can review and potentially edit the form
 
