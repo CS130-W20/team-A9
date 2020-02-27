@@ -37,7 +37,7 @@ class SignUpForm(UserCreationForm):
         car_plate = cleaned_data.get("car_plate")
         last_name = cleaned_data.get("last_name")
         home_address = cleaned_data.get("home_address")
-        if user_type == 'V' and (car_make == '' or car_make == None or car_model == None or car_plate == None or car_model == '' or car_plate == '' or home_address == ''):
+        if user_type == 'V' and (car_make == '' or car_make == None or car_model == None or car_plate == None or car_model == '' or car_plate == '' or home_address == '' or home_address == None):
             raise forms.ValidationError("Volunteers must fill out car information and home address")
         if user_type != 'C' and last_name == '':
             raise forms.ValidationError("Volunteers and Users must fill out last name")
