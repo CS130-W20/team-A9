@@ -62,22 +62,23 @@ class PostJobForm(ModelForm):
         fields = ['location', 'wage', 'hours', 'job_title', 'short_summary', 'description']
 
 class RideRequestForm(ModelForm):
-	'''Ride Request Form for people experiencing homelessness to request a ride to their interview
+    '''Ride Request Form for people experiencing homelessness to request a ride to their interview
 
-	'''
-	class Meta:
-		model = RideRequestPost
-		fields = ['pickup_date', 'interview_duration', 'pickup_address', 'interview_address', 'company_name']
+    '''
+    class Meta:
+        model = RideRequestPost
+        fields = ['pickup_date', 'interview_duration', 'pickup_address', 'interview_address', 'company_name']
 
-	class DateInput(forms.DateInput):
-		input_type = 'date'
-	pickup_date = forms.DateField(widget=DateInput, required=True)
-	interview_duration = forms.CharField(max_length=30, required=True, help_text=' (in minutes)')
-	pickup_address = forms.CharField(max_length=200, required=True)
-	interview_address = forms.CharField(max_length=200, required=True)
+    class DateInput(forms.DateInput):
+        input_type = 'date'
+
+    pickup_date = forms.DateField(widget=DateInput, required=True)
+    interview_duration = forms.CharField(max_length=30, required=True, help_text=' (in minutes)')
+    pickup_address = forms.CharField(max_length=200, required=True)
+    interview_address = forms.CharField(max_length=200, required=True)
     company_name = forms.CharField(max_length=200, required=True)
 
-def FilterForm(Form):
+class FilterForm(Form):
     start_datetime = forms.DateTimeField(required=False)
     end_datetime = forms.DateTimeField(required=False)
     max_range = forms.IntegerField(required=False)
