@@ -77,24 +77,16 @@ class Ride(models.Model):
 	:param ride_status: the status of the ride
 	:type ride_status: RideStatus
 	'''
-	class RideStatus(Enum):
-		'''Enum to represent the status of a ride: Unconfirmed (requested by homeless), Confirmed (matched with volunteer), Finished (already happened)
-		'''
-		Unconfirmed = 'U'
-		Confirmed = "C"
-		Finished = "F"
 
 	homeless = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='ride_homeless_set')
 	volunteer = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='ride_volunteer_set')
 	interview_datetime = models.DateTimeField()
 	interview_duration = models.IntegerField()
-	volunteer_address = models.CharField(max_length=200, null=True)
 	pickup_address = models.CharField(max_length=200)
 	pickup_datetime = models.DateTimeField()
 	interview_address = models.CharField(max_length=200)
 	interview_company = models.CharField(max_length=100)
 	end_datetime = models.DateTimeField()
-	ride_status = models.CharField(max_length=100, choices=[(tag.value, tag.name) for tag in RideStatus], default=RideStatus.Unconfirmed)
 	start_datetime = models.DateTimeField()
 
 
