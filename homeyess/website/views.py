@@ -13,6 +13,9 @@ from .models import Profile, Ride, JobPost, RideRequestPost
 import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import user_passes_test
+from django.utils.decorators import method_decorator
+from .decorators import is_homeless, is_volunteer, is_company
 
 def index(request):
     '''Renders the index / home page
@@ -81,7 +84,7 @@ def homeless(request, user):
     :type request: HttpRequest
     :param user_id: The id of the user whose dashboard should be rendered
     :type request: String
-    :return: the rendered dashboard page for the user using the homeless.html template 
+    :return: the rendered dashboard page for the user using the homeless.html template
     :rtype: HttpResponse
     '''
     unconfirmed_rides = Ride.objects.filter(homeless = user.profile, volunteer = None, interview_datetime__gt = timezone.now())
@@ -96,7 +99,7 @@ def company(request, user):
     :type request: HttpRequest
     :param user_id: The id of the user whose dashboard should be rendered
     :type request: String
-    :return: the rendered dashboard page for the user using the company.html template 
+    :return: the rendered dashboard page for the user using the company.html template
     :rtype: HttpResponse
     '''
     job_posts = JobPost.objects.filter(company=user.profile)
@@ -110,7 +113,7 @@ def volunteer(request, user):
     :type request: HttpRequest
     :param user_id: The id of the user whose dashboard should be rendered
     :type request: String
-    :return: the rendered dashboard page for the user using the volunteer.html template 
+    :return: the rendered dashboard page for the user using the volunteer.html template
     :rtype: HttpResponse
     '''
     confirmed_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__gt = timezone.now())
@@ -118,6 +121,7 @@ def volunteer(request, user):
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides}
     return render(request, 'dashboard/volunteer.html', context)
 
+@method_decorator(user_passes_test(is_homeless, login_url='/'), name='dispatch')
 class RequestRideCreate(CreateView):
 	'''Object used to render the ride request creation view
 
@@ -127,13 +131,14 @@ class RequestRideCreate(CreateView):
 	:type form_class: ModelFormMetaclass
 	:param queryset: the queryable attributes of the form
 	:type queryset: QuerySet
-	'''	
+	'''
 	template_name = 'ride_request/request_ride.html'
 	form_class = RideRequestForm
 	queryset = RideRequestPost.objects.all()
 
+
 def viewrideform(request, post_id):
-	'''Renders the view that allows people experiencing homelessness to view a specific ride request 
+	'''Renders the view that allows people experiencing homelessness to view a specific ride request
 	he/she filled out, so that they can review and potentially edit the form
 
 	:param request: The http request containing user information or extra arguments
@@ -152,7 +157,7 @@ class RequestRideEdit(UpdateView):
 	:param template_name: the name of the template used to render the view
 	:type template_name: string
 	:param form_class: the form that specifies what data needs to be input
-	:type form_class: ModelFormMetaclass 
+	:type form_class: ModelFormMetaclass
 	:param queryset: the queryable attributes of the form
 	:type queryset: QuerySet
 	'''
