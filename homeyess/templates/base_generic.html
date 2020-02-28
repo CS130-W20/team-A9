@@ -38,19 +38,19 @@
         <a class="nav-link" href="#">Search Jobs</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Request Ride</a>
+        <a class="nav-link" href="{% url 'request_ride' %}">Request Ride</a>
       </li>
       {% endif %}
 
       {% if user.is_authenticated and user.profile.user_type == 'V' %}
       <li class="nav-item">
-        <a class="nav-link" href="#">Volunteer Ride</a>
+        <a class="nav-link" href="#">Volunteer to drive</a>
       </li>
       {% endif %}
 
       {% if user.is_authenticated and user.profile.user_type == 'C' %}
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'postjob' user.profile.pk %}">Post Job</a>
+        <a class="nav-link" href="{% url 'post_job' user.profile.pk %}">Post Job</a>
       </li>
       {% endif %}
 

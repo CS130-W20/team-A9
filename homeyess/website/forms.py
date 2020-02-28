@@ -23,6 +23,7 @@ class SignUpForm(UserCreationForm):
     car_plate = forms.CharField(max_length=8, required=False, label="License Plate Number", help_text="Required for volunteers.")
     car_make = forms.CharField(max_length=20, required=False, label="Make of Car", help_text="Required for volunteers.")
     car_model = forms.CharField(max_length=20, required=False, label="Model of Car", help_text="Required for volunteers.")
+    home_address = forms.CharField(max_length=200, required=False, label="Home Address", help_text="Required for volunteers.")
 
     class Meta:
         model = User
@@ -34,9 +35,17 @@ class SignUpForm(UserCreationForm):
         car_make = cleaned_data.get("car_make")
         car_model = cleaned_data.get("car_model")
         car_plate = cleaned_data.get("car_plate")
+        last_name = cleaned_data.get("last_name")
+        home_address = cleaned_data.get("home_address")
         if user_type == 'V' and (car_make == '' or car_make == None or car_model == None or car_plate == None or car_model == '' or car_plate == ''):
             raise forms.ValidationError("Volunteers must fill out car information")
-
+        if user_type == 'V' and (car_make == '' or car_make == None or car_model == None or car_plate == None or car_model == '' or car_plate == '' or home_address == '' or home_address == None):
+            raise forms.ValidationError("Volunteers must fill out car information and home address")
+        if user_type != 'C' and last_name == '':
+            raise forms.ValidationError("Volunteers and Users must fill out last name")
+        if user_type == 'C' and last_name != '':
+            raise forms.ValidationError("Companies should not fill out last name")
+        
 class PostJobForm(ModelForm):
     '''PostJobForm for companies to post and edit jobs
 
@@ -58,19 +67,15 @@ class RideRequestForm(ModelForm):
 	'''
 	class Meta:
 		model = RideRequestPost
-		fields = ['first_name', 'last_name', 'email', 'phone_number', 'pickup_date', 'pickup_time', 'interview_duration', 'pickup_address', 'interview_address']
+		fields = ['pickup_date', 'interview_duration', 'pickup_address', 'interview_address', 'company_name']
 
 	class DateInput(forms.DateInput):
 		input_type = 'date'
-	first_name = forms.CharField(max_length=30, required=True)
-	last_name = forms.CharField(max_length=30, required=True)
-	email = forms.EmailField(max_length=254, required=False, help_text='Optional')
-	phone_number = forms.CharField(max_length=14, help_text='Optional', required=False)
 	pickup_date = forms.DateField(widget=DateInput, required=True)
-	pickup_time = forms.CharField(max_length=20, required=True)
 	interview_duration = forms.CharField(max_length=30, required=True, help_text=' (in minutes)')
 	pickup_address = forms.CharField(max_length=200, required=True)
 	interview_address = forms.CharField(max_length=200, required=True)
+    company_name = forms.CharField(max_length=200, required=True)
 
 def FilterForm(Form):
     date = forms.DateField(required=False)
