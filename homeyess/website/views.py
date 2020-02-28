@@ -227,12 +227,14 @@ class RideRequestListView(ListView):
         start_datetime = self.request.GET['start_datetime']
         end_datetime = self.request.GET['end_datetime']
         max_range = self.request.GET['max_range']
-        start_address = self.request.GET['start_address']
 
         for ride in rides:
-            if not start_address:
-                start_address = self.request.user.home_address
-            td_vec = getTimeDistanceVector(ride.homeless.pickup_address, start_address, ride.interview_address, ride.interview_duration)
+            td_vec = getTimeDistanceVector(
+                ride.homeless.pickup_address,
+                self.request.user.home_address,
+                ride.interview_address,
+                ride.interview_duration
+            )
             if td_vec == None:
                 ride.d = None
                 ride.sd = None
@@ -251,6 +253,16 @@ class RideRequestListView(ListView):
 
         return rides
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['form'] = FilterForm(initial={
+            'start_time': self.request.GET['start_datetime'],
+            'end_time': self.request.GET['end_datetime'],
+            'max_range': self.request.GET['max_range'],
+            'start_address': self.request.GET['start_address'],
+        })
+        return context
+
 def confirmRide(request, ride_id):
     ride = Ride.objects.get(pk=ride_id)
     ride.volunteer = request.user
@@ -266,16 +278,6 @@ def confirmRide(request, ride_id):
 
     return redirect('search_rides')
 
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context['form'] = FilterForm(initial={
-            'start_time': self.request.GET['start_datetime'],
-            'end_time': self.request.GET['end_datetime'],
-            'max_range': self.request.GET['max_range'],
-            'start_address': self.request.GET['start_address'],
-        })
-        return context
 
 def getTimeDistanceVector(v_start, hp_start, interview_location, interview_duration):
     URL = 'https://maps.googleapis.com/maps/api/distancematrix/json'

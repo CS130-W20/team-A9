@@ -81,4 +81,3 @@ def FilterForm(Form):
     start_datetime = forms.DateTimeField(required=False)
     end_datetime = forms.DateTimeField(required=False)
     max_range = forms.IntegerField(required=False)
-    start_address = forms.CharField(max_length=200, required=False)
