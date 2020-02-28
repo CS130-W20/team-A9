@@ -121,7 +121,7 @@ def volunteer(request, user):
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides}
     return render(request, 'dashboard/volunteer.html', context)
 
-@method_decorator(user_passes_test(is_homeless, login_url='/'), name='dispatch')
+@method_decorator(user_passes_test(is_homeless, login_url='accounts/login/'), name='dispatch')
 class RequestRideCreate(CreateView):
 	'''Object used to render the ride request creation view
 
