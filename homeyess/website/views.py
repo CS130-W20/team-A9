@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profile, Ride, JobPost, RideRequestPost
 from django.views.generic.edit import CreateView, UpdateView, ListView
 
-from website.forms import SignUpForm, RideRequestForm, PostJobForm
+from website.forms import SignUpForm, RideRequestForm, PostJobForm, FilterForm
 from .models import Profile, Ride, JobPost, RideRequestPost
 import datetime
 from django.utils import timezone
@@ -216,28 +216,36 @@ def postjob(request, user_id):
 
     return render(request, 'jobs/postjob.html', {'form': form})
 
-def map(request):
-    return render(request, 'map.html')
-
 class RideRequestView(ListView):
     model = Ride
     template_name = 'map.html'
 
     def get_queryset(self):
-        pass
+        rides = Ride.objects.filter(volunteer=None)
+        date = self.request.GET['date']
+        if date:
+            rides = rides.filter(interview_datetime__date=date)
+        for ride in rides:
+            td_vec = getTimeDistanceVector(ride.homeless.pickup_address, self.request.user.home_address)
+        start_time = self.request.GET['start_time']
+        end_time = self.request.GET['end_time']
+        max_range self.request.GET['max_range']
+        start_address = self.request.GET['start_address']
+
+        return rides
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['form'] = FilterForm(initial={
-            'date': self.request.GET.get('date', ''),
-            'start_time': self.request.GET.get('start_time', ''),
-            'end_time': self.request.GET.get('end_time', ''),
-            'max_range': self.request.GET.get('max_range', ''),
-            'start_address': self.request.GET.get('start_address'),
+            'date': self.request.GET['date'],
+            'start_time': self.request.GET['start_time'],
+            'end_time': self.request.GET['end_time'],
+            'max_range': self.request.GET['max_range'],
+            'start_address': self.request.GET['start_address'],
         })
         return context
 
-def distanceTimeVector(v_start, hp_start, interview_location, interview_duration):
+def getTimeDistanceVector(v_start, hp_start, interview_location, interview_duration):
     URL = 'https://maps.googleapis.com/maps/api/distancematrix/json'
     PARAMS = {
         'key': GOOGLE_MAPS_API_KEY,
@@ -267,8 +275,17 @@ def distanceTimeVector(v_start, hp_start, interview_location, interview_duration
         distance_in_miles = 0.000621371 * distance_in_meters
         time_in_minutes = time_in_seconds / 60
 
-        time_distance_vector.append((time_in_seconds, distance_in_miles))
+        time_distance_vector.append((time_in_minutes, distance_in_miles))
 
     # insert the interview in between the driving
     time_distance_vector.insert(2, (interview_duration, 0))
     return time_distance_vector
+
+def getDistance(vec):
+    return functools.reduce(lambda a, b: a[1] + b[1], vec)
+
+def getTimes(vec, interview_datetime):
+    start_datetime = interview_datetime - datetime.timedelta(minutes=vec[0][0]) - datetime.timedelta(minutes=vec[1][0])
+    total_time = functools.reduce(lambda a, b: a[0] + b[0], vec)
+    end_datetime = start_datetime + datetime.timedelta(minutes=total_time)
+    return start_datetime, end_datetime
