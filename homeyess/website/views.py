@@ -6,7 +6,8 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profile, Ride, JobPost, RideRequestPost
-from django.views.generic.edit import CreateView, UpdateView, ListView
+from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic import ListView
 
 from website.forms import SignUpForm, RideRequestForm, PostJobForm, FilterForm
 from .models import Profile, Ride, JobPost, RideRequestPost
@@ -217,30 +218,60 @@ def postjob(request, user_id):
 
     return render(request, 'jobs/postjob.html', {'form': form})
 
-class RideRequestView(ListView):
+class RideRequestListView(ListView):
     model = Ride
     template_name = 'map.html'
 
     def get_queryset(self):
         rides = Ride.objects.filter(volunteer=None)
-        date = self.request.GET['date']
-        if date:
-            rides = rides.filter(interview_datetime__date=date)
-        for ride in rides:
-            td_vec = getTimeDistanceVector(ride.homeless.pickup_address, self.request.user.home_address)
-        start_time = self.request.GET['start_time']
-        end_time = self.request.GET['end_time']
-        max_range self.request.GET['max_range']
+        start_datetime = self.request.GET['start_datetime']
+        end_datetime = self.request.GET['end_datetime']
+        max_range = self.request.GET['max_range']
         start_address = self.request.GET['start_address']
 
+        for ride in rides:
+            if not start_address:
+                start_address = self.request.user.home_address
+            td_vec = getTimeDistanceVector(ride.homeless.pickup_address, start_address, ride.interview_address, ride.interview_duration)
+            if td_vec == None:
+                ride.d = None
+                ride.sd = None
+                ride.ed = None
+            else:
+                ride.d = getDistance(td_vec)
+                ride.sd, _, ride.ed = getTimes(td_vec, self.request.user.interview_datetime)
+
+        rides = [ride for ride in rides if ride.distance != None]
+        if start_datetime:
+            rides = [ride for ride in rides if ride.sd >= start_datetime]
+        if end_datetime:
+            rides = [ride for ride in rides if ride.ed <= end_datetime]
+        if max_range:
+            rides = [ride for ride in rides if ride.d <= max_range]
+
         return rides
+
+def confirmRide(request, ride_id):
+    ride = Ride.objects.get(pk=ride_id)
+    ride.volunteer = request.user
+    td_vec = getTimeDistanceVector(
+        ride.homeless.pickup_address,
+        request.user.home_address,
+        ride.interview_address,
+        ride.interview_duration
+    )
+    ride.distance = getDistance(td_vec)
+    ride.start_datetime, ride.pickup_datetime, ride.end_datetime = getTimes(td_vec, ride.interview_datetime)
+    ride.save()
+
+    return redirect('search_rides')
+
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['form'] = FilterForm(initial={
-            'date': self.request.GET['date'],
-            'start_time': self.request.GET['start_time'],
-            'end_time': self.request.GET['end_time'],
+            'start_time': self.request.GET['start_datetime'],
+            'end_time': self.request.GET['end_datetime'],
             'max_range': self.request.GET['max_range'],
             'start_address': self.request.GET['start_address'],
         })
@@ -286,7 +317,8 @@ def getDistance(vec):
     return functools.reduce(lambda a, b: a[1] + b[1], vec)
 
 def getTimes(vec, interview_datetime):
-    start_datetime = interview_datetime - datetime.timedelta(minutes=vec[0][0]) - datetime.timedelta(minutes=vec[1][0])
+    pickup_datetime = interview_datetime - datetime.timedelta(minutes=vec[1][0])
+    start_datetime = pickup_datetime - datetime.timedelta(minutes=vec[0][0])
     total_time = functools.reduce(lambda a, b: a[0] + b[0], vec)
     end_datetime = start_datetime + datetime.timedelta(minutes=total_time)
-    return start_datetime, end_datetime
+    return start_datetime, pickup_datetime, end_datetime

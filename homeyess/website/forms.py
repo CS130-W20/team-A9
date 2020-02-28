@@ -45,7 +45,7 @@ class SignUpForm(UserCreationForm):
             raise forms.ValidationError("Volunteers and Users must fill out last name")
         if user_type == 'C' and last_name != '':
             raise forms.ValidationError("Companies should not fill out last name")
-        
+
 class PostJobForm(ModelForm):
     '''PostJobForm for companies to post and edit jobs
 
@@ -78,8 +78,7 @@ class RideRequestForm(ModelForm):
     company_name = forms.CharField(max_length=200, required=True)
 
 def FilterForm(Form):
-    date = forms.DateField(required=False)
-    start_time = forms.TimeField(required=False)
-    end_time = forms.TimeField(required=False)
+    start_datetime = forms.DateTimeField(required=False)
+    end_datetime = forms.DateTimeField(required=False)
     max_range = forms.IntegerField(required=False)
     start_address = forms.CharField(max_length=200, required=False)

@@ -12,7 +12,7 @@ from datetime import time
 
 class Profile(models.Model):
 	'''Model to store information about a user
-	
+
 	:param user: the authentication object containing username, password, email (optional), first / last name
 	:type user: User
 	:param phone: the user's phone number
@@ -53,7 +53,7 @@ class Profile(models.Model):
 class Ride(models.Model):
 	'''Model to store information about a ride request. Contains start / end time and location, the homeless person, and a volunteer if the ride has already been confirmed.
 	Note that the object should be created when a ride request is made and altered when the request is updated (by homeless) or confirmed (by user).
-	
+
 	:param homeless: the user who requested the ride
 	:type homeless: User
 	:param volunteer: the user who volunteered to give the ride
@@ -83,7 +83,7 @@ class Ride(models.Model):
 		Unconfirmed = 'U'
 		Confirmed = "C"
 		Finished = "F"
-		
+
 	homeless = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='ride_homeless_set')
 	volunteer = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='ride_volunteer_set')
 	interview_datetime = models.DateTimeField()
@@ -95,6 +95,8 @@ class Ride(models.Model):
 	interview_company = models.CharField(max_length=100)
 	end_datetime = models.DateTimeField()
 	ride_status = models.CharField(max_length=100, choices=[(tag.value, tag.name) for tag in RideStatus], default=RideStatus.Unconfirmed)
+	start_datetime = models.DateTimeField()
+
 
 class JobPost(models.Model):
 	'''Model to store information about a job post
@@ -157,10 +159,9 @@ class RideRequestPost(models.Model):
 	pickup_address = models.CharField(max_length=200)
 	interview_address = models.CharField(max_length=200)
 	company_name = models.CharField(max_length=100, default='')
-    
+
 	def get_absolute_url(self):
 		return '/ViewRideForm/' + str(self.id)
 
 	def __str__(self):
 		return self.pickup_address
-
