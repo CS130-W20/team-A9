@@ -272,6 +272,8 @@ def confirmRide(request, ride_id):
         ride.interview_address,
         ride.interview_duration
     )
+    if td_vec == None:
+        return redirect('search_rides')
     ride.distance = getDistance(td_vec)
     ride.start_datetime, ride.pickup_datetime, ride.end_datetime = getTimes(td_vec, ride.interview_datetime)
     ride.save()
