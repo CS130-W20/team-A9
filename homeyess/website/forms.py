@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 from website.models import Profile, JobPost
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 from django.db import models
 from .models import RideRequestPost
 from django.urls import reverse
@@ -36,7 +36,7 @@ class SignUpForm(UserCreationForm):
         car_plate = cleaned_data.get("car_plate")
         if user_type == 'V' and (car_make == '' or car_make == None or car_model == None or car_plate == None or car_model == '' or car_plate == ''):
             raise forms.ValidationError("Volunteers must fill out car information")
-        
+
 class PostJobForm(ModelForm):
     '''PostJobForm for companies to post and edit jobs
 
@@ -54,7 +54,7 @@ class PostJobForm(ModelForm):
 
 class RideRequestForm(ModelForm):
 	'''Ride Request Form for people experiencing homelessness to request a ride to their interview
-    
+
 	'''
 	class Meta:
 		model = RideRequestPost
@@ -71,4 +71,10 @@ class RideRequestForm(ModelForm):
 	interview_duration = forms.CharField(max_length=30, required=True, help_text=' (in minutes)')
 	pickup_address = forms.CharField(max_length=200, required=True)
 	interview_address = forms.CharField(max_length=200, required=True)
-    
+
+def FilterForm(Form):
+    date = forms.DateField(required=False)
+    start_time = forms.TimeField(required=False)
+    end_time = forms.TimeField(required=False)
+    max_range = forms.IntegerField(required=False)
+    start_address = forms.CharField(max_length=200, required=False)
