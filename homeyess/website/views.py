@@ -5,11 +5,10 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Profile, Ride, JobPost, RideRequestPost
-from django.views.generic.edit import CreateView, UpdateView
+from .models import Profile, Ride, JobPost
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from website.forms import SignUpForm, RideRequestForm, PostJobForm
-from .models import Profile, Ride, JobPost, RideRequestPost
 import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -151,7 +150,10 @@ def viewrideform(request, post_id):
     :type post_id: int
     '''
     form_set = Ride.objects.filter(id=post_id)
-    form = form_set[0]
+    if form_set:
+        form = form_set[0]
+    else:
+        form = []
     context = {'form': form}
     return render(request, 'ride_request/ViewRideForm.html', context)
 
@@ -172,6 +174,20 @@ class RequestRideEdit(UpdateView):
 	def get_object(self):
 		id_ = self.kwargs.get("post_id")
 		return get_object_or_404(Ride, id=id_)
+
+class RequestRideDelete(DeleteView):
+    model = Ride
+    template_name = 'ride_request/DeleteRideRequest.html'
+    form_class = RideRequestForm
+    queryset = Ride.objects.all()
+
+    def get_object(self):
+        id_ = self.kwargs.get("post_id")
+        print(self.request.__dict__.keys())
+        return get_object_or_404(Ride, id=id_)
+    success_url = '/'
+   # def get_success_url(self):
+   #     return '/dashboard/' + str(self.request.user)
 
 def editjob(request, user_id, job_id):
     '''Renders the editjob form on GET; processes the editjob form on POST

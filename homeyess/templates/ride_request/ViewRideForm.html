@@ -5,11 +5,12 @@
 
 		<div class="container" style="padding=40px;">
 		<div class="row justify-content-center">
-		<h1><a href="/ViewRideForm/{{ form.id }}/Update">Click Here to Edit Ride Request </a></h1>
-	</div></div>
+			<h1><a href="/ViewRideForm/{{ form.id }}/Update">Click Here to Edit Ride Request </a></h1>
+
+		</div></div>
+
 		<div class="container" style="padding=40px;">
 		<div class="row justify-content-center">
-
 		<table style="width:40%">
 			{% for attribute, value in form.get_fields %}
 				<tr>
@@ -18,8 +19,14 @@
 				</tr>
 			{% endfor %}
 		</table>
-	</div>
-</div>
+		</div>
+		</div>
+
+		<div class="container" style="padding=40px;">
+		<div class="row justify-content-center">
+			<h1><a href="/ViewRideForm/{{ form.id }}/Delete"> Click Here to Delete Ride Request </a></h1>
+		</div></div>
+
 
 
 	{% else %}

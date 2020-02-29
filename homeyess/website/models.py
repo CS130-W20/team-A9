@@ -140,33 +140,5 @@ def update_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
     instance.profile.save()
 
-class RideRequestPost(models.Model):
-	'''Model to store information about ride requests
 
-	:param pickup_date: the date that the requester wants to be picked up
-	:type pickup_date: Date
-	:param pickup_time: the time the requester would like to be picked up
-	:type pickup_time: CharField / string
-	:param interview_duration: the duration, in minutes, of the interview
-	:type interview_duration: CharField / string
-	:param pickup_address: the address where the requester would like to be picked up
-	:type pickup_address: CharField / string
-	:param interview_address: the address where the interview is taking place
-	:type interview_address: CharField / string
-	:param campany_name: the name of the company the requester is applying for
-	:type company_name: CharField / string
-	'''
-
-	pickup_date = models.DateField()
-	pickup_time = models.CharField(max_length=20, default="0:00")
-	interview_duration = models.CharField(max_length=20, help_text='in minutes')
-	pickup_address = models.CharField(max_length=200)
-	interview_address = models.CharField(max_length=200)
-	company_name = models.CharField(max_length=100, default='')
-    
-	def get_absolute_url(self):
-		return '/ViewRideForm/' + str(self.id)
-
-	def __str__(self):
-		return self.pickup_address
 
