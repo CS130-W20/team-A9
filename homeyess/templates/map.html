@@ -1,8 +1,17 @@
-<html >
-<body onLoad="initialize()">
+<html>
+<body>
                   <div class="col-sm-offset-1" id="map_canvas" style="height:100%; width:100%;"></div>
                   <br>    
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcjdofWqzDtZE-gfPHh3-pYnFQ_zXr2No&callback=initMap" async defer></script>    
+<script>
+function loadScript() {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = "https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}&callback=initialize"; 
+  document.body.appendChild(script);
+}
+
+window.onload = loadScript;
+</script>    
 <style>
   body{
     text-align:center;
@@ -51,9 +60,6 @@
 
             });
 }
-
-
-  // google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 
 </body>

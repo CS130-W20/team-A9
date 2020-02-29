@@ -17,4 +17,4 @@ urlpatterns = [
     path('job-board/', views.job_board, name="job_board"),
     path('job-detail/<int:job_id>/', views.job_detail, name="job_detail"),
     path('map/', views.map, name="map"),
-
+]

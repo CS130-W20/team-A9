@@ -13,6 +13,7 @@ from .models import Profile, Ride, JobPost, RideRequestPost
 import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.conf import settings
 
 import math
 
@@ -156,7 +157,8 @@ def job_detail(request, job_id):
     return render(request, 'job_board/job_detail.html', {'job': job})
 
 def map(request):
-    return render(request, 'map.html')
+    GOOGLE_MAPS_API_KEY = settings.GOOGLE_MAPS_API_KEY
+    return render(request, 'map.html', {'GOOGLE_MAPS_API_KEY': GOOGLE_MAPS_API_KEY})
 
 class RequestRideCreate(CreateView):
 	'''Object used to render the ride request creation view
