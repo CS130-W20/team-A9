@@ -83,7 +83,13 @@ class Ride(models.Model):
 		Unconfirmed = 'U'
 		Confirmed = "C"
 		Finished = "F"
-		
+	
+	def get_absolute_url(self):
+		return '/ViewRideForm/' + str(self.id)
+
+	def get_fields(self):
+		return [(field.name, field.value_to_string(self)) for field in Ride._meta.fields]
+
 	homeless = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='ride_homeless_set')
 	volunteer = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='ride_volunteer_set')
 	interview_datetime = models.DateTimeField()

@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from website.models import Profile, JobPost
 from django.forms import ModelForm
 from django.db import models
-from .models import RideRequestPost
+from .models import Ride
 from django.urls import reverse
 
 class SignUpForm(UserCreationForm):
@@ -60,18 +60,19 @@ class PostJobForm(ModelForm):
         fields = ['location', 'wage', 'hours', 'job_title', 'short_summary', 'description']
 
 class RideRequestForm(ModelForm):
-	'''Ride Request Form for people experiencing homelessness to request a ride to their interview
-    
-	'''
-	class Meta:
-		model = RideRequestPost
-		fields = ['pickup_date', 'interview_duration', 'pickup_address', 'interview_address', 'company_name']
+    '''Ride Request Form for people experiencing homelessness to request a ride to their interview
+    '''
+    class Meta:
+        model = Ride
+        fields = ['interview_datetime', 'interview_duration', 'pickup_address', 'interview_address', 'interview_company']
 
-	class DateInput(forms.DateInput):
-		input_type = 'date'
-	pickup_date = forms.DateField(widget=DateInput, required=True)
-	interview_duration = forms.CharField(max_length=30, required=True, help_text=' (in minutes)')
-	pickup_address = forms.CharField(max_length=200, required=True)
-	interview_address = forms.CharField(max_length=200, required=True)
-	company_name = forms.CharField(max_length=200, required=True)
+    class DateInput(forms.DateInput):
+        input_type = 'date'
+    pickup_datetime = forms.DateTimeField(required=False, widget=forms.HiddenInput)
+    end_datetime = forms.DateTimeField(required=False, widget=forms.HiddenInput)
+    interview_datetime = forms.DateTimeField(required=True, widget=forms.DateTimeInput)
+    interview_duration = forms.IntegerField(required=True, help_text=' (in minutes)')
+    pickup_address = forms.CharField(max_length=200, required=True)
+    interview_address = forms.CharField(max_length=200, required=True)
+    interview_company = forms.CharField(max_length=100, required=True)
     
