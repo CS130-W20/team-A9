@@ -14,9 +14,15 @@ from .models import Profile, Ride, JobPost, RideRequestPost
 import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User
+
+from django.contrib.auth.decorators import user_passes_test
+from django.utils.decorators import method_decorator
+from .decorators import is_homeless, is_volunteer, is_company
+
 import requests
 from homeyess.settings import GOOGLE_MAPS_API_KEY
 import functools
+
 from django.conf import settings
 import math
 
@@ -134,6 +140,7 @@ def volunteer(request, user):
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides, 'total_time': total_time}
     return render(request, 'dashboard/volunteer.html', context)
 
+@method_decorator(user_passes_test(is_homeless, login_url='accounts/login/'), name='dispatch')
 def job_board(request):
     '''Renders the job board page for homeless users to view jobs
 
@@ -177,6 +184,7 @@ class RequestRideCreate(CreateView):
 	template_name = 'ride_request/request_ride.html'
 	form_class = RideRequestForm
 	queryset = RideRequestPost.objects.all()
+
 
 def viewrideform(request, post_id):
 	'''Renders the view that allows people experiencing homelessness to view a specific ride request
