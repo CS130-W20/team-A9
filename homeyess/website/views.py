@@ -328,7 +328,7 @@ def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
             ride.ed = None
         else:
             ride.d = getDistance(td_vec)
-            ride.sd, _, ride.ed = getTimes(td_vec, ride.interview_datetime)
+            ride.sd, _, ride.ed, ride.total_time = getTimes(td_vec, ride.interview_datetime)
 
         #set pickup lat/long
         # pickup_info = self.gmaps.geocode(ride.homeless.home_address)
@@ -336,7 +336,6 @@ def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
         #     location = pickup_info[0]['geometry']['location']
         #     ride.pickup_location = (location['lat'], location['lng'])
 
-    #return rides 
     rides = [ride for ride in rides if ride.d != None]
     if start_datetime:
         rides = [ride for ride in rides if ride.sd >= start_datetime]
@@ -390,12 +389,26 @@ def getResponseJson(url, params):
 
 def getDistance(vec):
     distances = [distance for (_, distance) in vec]
-    return functools.reduce(lambda a, b: a + b, distances)
+    dist = functools.reduce(lambda a, b: a + b, distances)
+    dist = int(dist)
+    return dist
 
 def getTimes(vec, interview_datetime):
     pickup_datetime = interview_datetime - datetime.timedelta(minutes=vec[1][0])
     start_datetime = pickup_datetime - datetime.timedelta(minutes=vec[0][0])
     times = [time for (time, _) in vec]
     total_time = functools.reduce(lambda a, b: a + b, times)
+    total_time_string = getTimeString(int(total_time))
     end_datetime = start_datetime + datetime.timedelta(minutes=total_time)
-    return start_datetime, pickup_datetime, end_datetime
+    return start_datetime, pickup_datetime, end_datetime, total_time_string
+
+def getTimeString(mins):
+    s = ""
+    hours = mins//60
+    m = mins%60
+    if hours > 0:
+        s += str(hours) + ' hrs '
+    if m > 0:
+        s += str(m) + ' min'
+    return s
+
