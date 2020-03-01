@@ -1,4 +1,4 @@
-from django.test import TestCase, LiveServerTestCase
+from django.test import TestCase
 from website.forms import SignUpForm, PostJobForm
 from website.models import Profile, JobPost
 
@@ -50,7 +50,7 @@ class SignUpFormTest(TestCase):
         d['car_make'] = ''
         form = SignUpForm(d)
         self.assertFalse(form.is_valid())
-        
+
     def test_homeless_success(self):
         d = self.homeless_data.copy()
         form = SignUpForm(d)

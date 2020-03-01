@@ -228,30 +228,13 @@ class RideRequestListView(ListView):
         end_datetime = self.request.GET['end_datetime']
         max_range = self.request.GET['max_range']
 
-        for ride in rides:
-            td_vec = getTimeDistanceVector(
-                ride.homeless.pickup_address,
-                self.request.user.home_address,
-                ride.interview_address,
-                ride.interview_duration
-            )
-            if td_vec == None:
-                ride.d = None
-                ride.sd = None
-                ride.ed = None
-            else:
-                ride.d = getDistance(td_vec)
-                ride.sd, _, ride.ed = getTimes(td_vec, self.request.user.interview_datetime)
-
-        rides = [ride for ride in rides if ride.distance != None]
-        if start_datetime:
-            rides = [ride for ride in rides if ride.sd >= start_datetime]
-        if end_datetime:
-            rides = [ride for ride in rides if ride.ed <= end_datetime]
-        if max_range:
-            rides = [ride for ride in rides if ride.d <= max_range]
-
-        return rides
+        return filterQuerySet(
+            rides,
+            start_datetime,
+            end_datetime,
+            max_range,
+            ride.homeless.pickup_address,
+            self.request.user.home_address)
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -280,6 +263,31 @@ def confirmRide(request, ride_id):
 
     return redirect('search_rides')
 
+def filterQuerySet(rides, start_datetime, end_datetime, max_range, hp_start, v_start):
+    for ride in rides:
+        td_vec = getTimeDistanceVector(
+            hp_start,
+            v_start,
+            ride.interview_address,
+            ride.interview_duration
+        )
+        if td_vec == None:
+            ride.d = None
+            ride.sd = None
+            ride.ed = None
+        else:
+            ride.d = getDistance(td_vec)
+            ride.sd, _, ride.ed = getTimes(td_vec, ride.interview_datetime)
+
+    rides = [ride for ride in rides if ride.d != None]
+    if start_datetime:
+        rides = [ride for ride in rides if ride.sd >= start_datetime]
+    if end_datetime:
+        rides = [ride for ride in rides if ride.ed <= end_datetime]
+    if max_range:
+        rides = [ride for ride in rides if ride.d <= max_range]
+
+    return rides
 
 def getTimeDistanceVector(v_start, hp_start, interview_location, interview_duration):
     URL = 'https://maps.googleapis.com/maps/api/distancematrix/json'
@@ -288,8 +296,8 @@ def getTimeDistanceVector(v_start, hp_start, interview_location, interview_durat
         'origins': v_start + '|' + hp_start + '|' + interview_location,
         'destinations': v_start + '|' + hp_start + '|' + interview_location,
     }
-    r = requests.get(url=URL, params=PARAMS)
-    data = r.json()
+
+    data = getResponseJson(URL, PARAMS)
 
     if data['status'] != 'OK':
         return None
@@ -317,12 +325,19 @@ def getTimeDistanceVector(v_start, hp_start, interview_location, interview_durat
     time_distance_vector.insert(2, (interview_duration, 0))
     return time_distance_vector
 
+def getResponseJson(url, params):
+    r = requests.get(url=url, params=params)
+    return r.json()
+
+
 def getDistance(vec):
-    return functools.reduce(lambda a, b: a[1] + b[1], vec)
+    distances = [distance for (_, distance) in vec]
+    return functools.reduce(lambda a, b: a + b, distances)
 
 def getTimes(vec, interview_datetime):
     pickup_datetime = interview_datetime - datetime.timedelta(minutes=vec[1][0])
     start_datetime = pickup_datetime - datetime.timedelta(minutes=vec[0][0])
-    total_time = functools.reduce(lambda a, b: a[0] + b[0], vec)
+    times = [time for (time, _) in vec]
+    total_time = functools.reduce(lambda a, b: a + b, times)
     end_datetime = start_datetime + datetime.timedelta(minutes=total_time)
     return start_datetime, pickup_datetime, end_datetime
