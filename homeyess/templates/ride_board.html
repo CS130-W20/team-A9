@@ -25,7 +25,7 @@
 	display: inline;
 }
 .table-container {
-	background-color: #f2f0f0; 
+	background-color: #f2f0f0;
 	border-radius: 10px;
 	margin-left: 15px;
 	margin-right: 15px;
@@ -61,7 +61,7 @@ tr:last-child {
 table {
   border-collapse: collapse;
 }
-tr { 
+tr {
   border: solid;
   border-width: 1px 0;
 }
@@ -69,8 +69,63 @@ td {
 	padding: 15px;
 }
 </style>
+<script>
+window.onload = loadScript;
+
+function loadScript() {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = "https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}&callback=initialize";
+  document.body.appendChild(script);
+}
+
+
+var map;
+function initialize() {
+	var mapDiv = document.getElementById('map_canvas');
+	map = new google.maps.Map(mapDiv, {
+	  center: new google.maps.LatLng({{ home.lat }}, {{ home.lng }}),
+	  zoom: 12,
+	  mapTypeId: google.maps.MapTypeId.ROADMAP
+	});
+
+	google.maps.event.addListenerOnce(map, 'tilesloaded', addMarkers);
+}
+function addMarkers() {
+    // var i;
+    // var rides = {{ ride_list }}:
+    // for (i=0; i<rides.length; i++) {
+    //   addRideMarker(rides[i]);
+    // }
+ }
+function addRideMarker(ride) {
+	return
+  var point = new google.maps.LatLng(ride.pickup_location);
+  var marker = new google.maps.Marker({
+        position: point,
+        map: map,
+        url: 'http://172.16.0.101:8882/zone/1',
+       title: 'test_title',
+    });
+         marker['infowindow']  = new google.maps.InfoWindow({
+                 content: "testing content",
+    });
+    google.maps.event.addListener(marker, 'click', function() {
+        //window.location.href = this.url;
+         this['infowindow'].open(map, this);
+    });
+   google.maps.event.addListener(marker, 'mouseover', function() {
+        // this['infowindow'].open(map, this);
+            });
+   google.maps.event.addListener(marker, 'mouseout', function() {
+        // this['infowindow'].close(map, this);
+
+    });
+}
+</script>
+
 <head>
-  <title>Dashboard</title>
+  <title>Search Rides</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -78,30 +133,33 @@ td {
 	<h1>
 		Volunteer To Drive
 	</h1>
-
-	<div></div>
-	<div class="flex-container" style="margin-left: 100px; margin-right: 100px;">
-		<div style="flex:1">
+	<form method="get" style="text-align: center">
+    	{{ form }}
+    	<button type="submit">Apply Filters</button>
+  	</form>
+  	<br>
+	<div class="flex-container" style="margin-left: 100px; margin-right: 100px; min-height: 400px;">
+		<div style="flex:1;">
 			<div>
-				{% if not ride_requests %}
+				{% if not rides %}
 					<div style="padding:20px">
 						No rides requests yet. Check back later!
 					</div>
 				{% endif %}
 			</div>
 			<table style="width: 100%">
-			{% for ride in ride_requests %}
+			{% for ride in rides %}
 			    <tr>
 			    	<td>
 			    		<div>
 			    			<div class="flex-container">
 			    				<div class="flex-container-vertical" style="margin-left:0px">
-			    					<h5>Time: {{ ride.leave_time }} - {{ ride.return_time }} ({{ ride.total_time }})
-			    					<div>Distance: {{ ride.distance }} miles</div>
+			    					<h5>Time: {{ ride.sd }} - {{ ride.ed }} ({{ ride.total_time }})
+			    					<div>Distance: {{ ride.d }} miles</div>
 									<div>Pickup Time: {{ ride.pickup_datetime }}</div>
-								    <div>Pickup Address: {{ ride.pickup_address }}</div>
+								    <div>Pickup Address: {{ ride.homeless.home_address }}</div>
 								    <div>Interview Time: {{ ride.interview_datetime }}</div>
-								    <div>Interview Duration: {{ ride.interview_duration }}</div>
+								    <div>Interview Duration: {{ ride.interview_duration }} minutes</div>
 								    <div>Interview Address: {{ ride.interview_address }}</div>
 								    <div>Company: {{ ride.interview_company }}</div>
 								</div>
@@ -115,12 +173,8 @@ td {
 			{% endfor %}
 			</table>
 		</div>
-
-		<div style="flex:1; padding-left: 25px">
-			
-		</div>
+		<div style="flex:1; padding-left: 25px;" id="map_canvas"></div>
 	</div>
 </body>
 {% endblock %}
 </html>
-

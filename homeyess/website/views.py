@@ -14,15 +14,13 @@ from .models import Profile, Ride, JobPost, RideRequestPost
 import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User
-
+import googlemaps
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.utils.decorators import method_decorator
 from .decorators import is_homeless, is_volunteer, is_company
-
 import requests
 from homeyess.settings import GOOGLE_MAPS_API_KEY
 import functools
-
 from django.conf import settings
 import math
 from django.core.serializers.json import DjangoJSONEncoder
@@ -276,7 +274,7 @@ def postjob(request, user_id):
     return render(request, 'jobs/postjob.html', {'form': form})
 
 @user_passes_test(is_volunteer, login_url='accounts/login/')
-def search_rides(request):
+def ride_board(request):
     rides = Ride.objects.filter(volunteer=None)
     start_datetime = request.GET.get('start_datetime', None)
     end_datetime = request.GET.get('end_datetime', None)
@@ -297,10 +295,18 @@ def search_rides(request):
         'max_range': request.GET.get('max_range', None),
         'start_address': request.GET.get('start_address', None),
     })
-    context['GOOGLE_MAPS_API_KEY'] = settings.GOOGLE_MAPS_API_KEY
+    context['GOOGLE_MAPS_API_KEY'] = GOOGLE_MAPS_API_KEY
     context['rides_json'] = json.dumps(list(rides), cls=DjangoJSONEncoder)
     context['rides'] = rides
-    return render(request, 'map.html', context=context)
+
+    print("fuck" + GOOGLE_MAPS_API_KEY)
+    gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
+    home_info = gmaps.geocode(request.user.profile.home_address)
+    if home_info:
+        location = home_info[0]['geometry']['location']
+        context['home'] = location
+
+    return render(request, 'ride_board.html', context=context)
 
 def confirmRide(request, ride_id):
     ride = Ride.objects.get(pk=ride_id)
@@ -320,10 +326,6 @@ def confirmRide(request, ride_id):
     ride.start_datetime, ride.pickup_datetime, ride.end_datetime = getTimes(td_vec, ride.interview_datetime)
     ride.save()
 
-    total_time = functools.reduce(lambda a, b: a + b, times)
-    volunteer.profile.total_volunteer_minutes += total_time
-    volunteer.save()
-
     return redirect('search_rides')
 
 def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
@@ -340,7 +342,13 @@ def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
             ride.ed = None
         else:
             ride.d = getDistance(td_vec)
-            ride.sd, _, ride.ed = getTimes(td_vec, ride.interview_datetime)
+            ride.sd, _, ride.ed, ride.total_time = getTimes(td_vec, ride.interview_datetime)
+
+        #set pickup lat/long
+        # pickup_info = self.gmaps.geocode(ride.homeless.home_address)
+        # if pickup_info:
+        #     location = pickup_info[0]['geometry']['location']
+        #     ride.pickup_location = (location['lat'], location['lng'])
 
     rides = [ride for ride in rides if ride.d != None]
     if start_datetime:
@@ -395,12 +403,25 @@ def getResponseJson(url, params):
 
 def getDistance(vec):
     distances = [distance for (_, distance) in vec]
-    return functools.reduce(lambda a, b: a + b, distances)
+    dist = functools.reduce(lambda a, b: a + b, distances)
+    dist = int(dist)
+    return dist
 
 def getTimes(vec, interview_datetime):
     pickup_datetime = interview_datetime - datetime.timedelta(minutes=vec[1][0])
     start_datetime = pickup_datetime - datetime.timedelta(minutes=vec[0][0])
     times = [time for (time, _) in vec]
     total_time = functools.reduce(lambda a, b: a + b, times)
+    total_time_string = getTimeString(int(total_time))
     end_datetime = start_datetime + datetime.timedelta(minutes=total_time)
-    return start_datetime, pickup_datetime, end_datetime
+    return start_datetime, pickup_datetime, end_datetime, total_time_string
+
+def getTimeString(mins):
+    s = ""
+    hours = mins//60
+    m = mins%60
+    if hours > 0:
+        s += str(hours) + ' hrs '
+    if m > 0:
+        s += str(m) + ' min'
+    return s
