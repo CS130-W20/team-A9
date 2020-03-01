@@ -76,49 +76,37 @@ td {
 </head>
 <body>
 	<h1>
-		{% if user.first_name %}
-			{{ user.first_name }}
-			{% if user.last_name %}
-				{{ user.last_name }}
-			{% endif %}
-		{% elif user.username %}
-			{{ user.username }}
-		{% else %}
-			Dashboard
-		{% endif %}
+		Volunteer To Drive
 	</h1>
-
-	<h3>
-		Total time volunteered: {{ total_time }} hours
-	</h3>
 
 	<div></div>
 	<div class="flex-container" style="margin-left: 100px; margin-right: 100px;">
 		<div style="flex:1">
-			<div style="margin-left:0px">
-				<h2>Upcoming Rides</h2>
-				{% if not confirmed_rides %}
+			<div>
+				{% if not ride_requests %}
 					<div style="padding:20px">
-						No upcoming rides yet. Volunteer to drive!
+						No rides requests yet. Check back later!
 					</div>
 				{% endif %}
 			</div>
 			<table style="width: 100%">
-			{% for ride in confirmed_rides %}
+			{% for ride in ride_requests %}
 			    <tr>
 			    	<td>
 			    		<div>
 			    			<div class="flex-container">
 			    				<div class="flex-container-vertical" style="margin-left:0px">
-									<h5>Pickup Time: {{ ride.pickup_datetime }}</h5>
+			    					<h5>Time: {{ ride.leave_time }} - {{ ride.return_time }} ({{ ride.total_time }})
+			    					<div>Distance: {{ ride.distance }} miles</div>
+									<div>Pickup Time: {{ ride.pickup_datetime }}</div>
 								    <div>Pickup Address: {{ ride.pickup_address }}</div>
 								    <div>Interview Time: {{ ride.interview_datetime }}</div>
+								    <div>Interview Duration: {{ ride.interview_duration }}</div>
 								    <div>Interview Address: {{ ride.interview_address }}</div>
 								    <div>Company: {{ ride.interview_company }}</div>
-								    <div>Candidate Name: {{ ride.homeless.user.first_name }} {{ ride.homeless.user.last_name }}</div>
 								</div>
 								<div>
-									<a href="#">Details</a>
+									<a href="#">Confirm this ride</a>
 								</div>
 							</div>
 					    </div>
@@ -129,35 +117,7 @@ td {
 		</div>
 
 		<div style="flex:1; padding-left: 25px">
-			<h2>Past Rides</h2>
-			{% if not confirmed_rides %}
-				<div style="padding:20px">
-					No past rides yet.
-				</div>
-			{% endif %}
-			<table style="width: 100%">
-			{% for ride in finished_rides %}
-			    <tr>
-			    	<td>
-			    		<div>
-			    			<div class="flex-container">
-			    				<div class="flex-container-vertical">
-							    	<h5>Time: {{ ride.pickup_datetime }} - {{ ride.end_datetime }}</h5>
-							    	<div>Pickup Address: {{ ride.pickup_address }}</div>
-							    	<div>Interview Time: {{ ride.interview_datetime }}</div>
-							    	<div>Interview Address: {{ ride.interview_address }}</div>
-							    	<div>Company: {{ ride.interview_company }}</div>
-								    <div>Candidate Name: {{ ride.homeless.user.first_name }} {{ ride.homeless.user.last_name }}</div>
-							    </div>
-							    <div>
-							    	<a href="#">Details</a>
-							    </div>
-							</div>
-						</div>
-				    </td>
-			    </tr>
-			{% endfor %}
-			</table>
+			
 		</div>
 	</div>
 </body>
