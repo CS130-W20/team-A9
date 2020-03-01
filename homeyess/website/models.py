@@ -84,9 +84,9 @@ class Ride(models.Model):
 	interview_duration = models.IntegerField()
 	interview_address = models.CharField(max_length=200)
 	interview_company = models.CharField(max_length=100)
-	start_datetime = models.DateTimeField(null=True)
-	pickup_datetime = models.DateTimeField(null=True)
-	end_datetime = models.DateTimeField(null=True)
+	start_datetime = models.DateTimeField(null=True, blank=True)
+	pickup_datetime = models.DateTimeField(null=True, blank=True)
+	end_datetime = models.DateTimeField(null=True, blank=True)
 
 
 class JobPost(models.Model):
