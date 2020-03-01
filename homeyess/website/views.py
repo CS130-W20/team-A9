@@ -262,7 +262,8 @@ def postjob(request, user_id):
 
 class RideRequestListView(ListView):
     model = Ride
-    template_name = 'map.html'
+    template_name = 'ride_board.html'
+    gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
 
     def get_queryset(self):
         rides = Ride.objects.filter(volunteer=None)
@@ -286,6 +287,12 @@ class RideRequestListView(ListView):
             'max_range': self.request.GET.get('max_range', None),
             'start_address': self.request.GET.get('start_address', None),
         })
+        context['GOOGLE_MAPS_API_KEY'] = GOOGLE_MAPS_API_KEY
+        home_info = self.gmaps.geocode(self.request.user.profile.home_address)
+        if home_info:
+            location = home_info[0]['geometry']['location']
+            context['home'] = location
+
         return context
 
 def confirmRide(request, ride_id):
@@ -323,6 +330,13 @@ def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
             ride.d = getDistance(td_vec)
             ride.sd, _, ride.ed = getTimes(td_vec, ride.interview_datetime)
 
+        #set pickup lat/long
+        # pickup_info = self.gmaps.geocode(ride.homeless.home_address)
+        # if pickup_info:
+        #     location = pickup_info[0]['geometry']['location']
+        #     ride.pickup_location = (location['lat'], location['lng'])
+
+    #return rides 
     rides = [ride for ride in rides if ride.d != None]
     if start_datetime:
         rides = [ride for ride in rides if ride.sd >= start_datetime]
