@@ -117,11 +117,20 @@ class GetTimeDistanceVectorTest(SimpleTestCase):
 
 class FilterQuerySetTest(SimpleTestCase):
 
+
+
     class SimpleRide:
+        class SimpleHomeless:
+            def __init__(self):
+                self.home_address = ''
+            def __eq__(self, other):
+                return self.__dict__ == other.__dict__
+
         def __init__(self, i_datetime, i_duration, **kwargs):
             self.interview_address = ''
             self.interview_datetime = i_datetime
             self.interview_duration = i_duration
+            self.homeless = self.SimpleHomeless()
             if 'd' in kwargs:
                 self.d = kwargs['d']
             if 'ed' in kwargs:
@@ -200,7 +209,7 @@ class FilterQuerySetTest(SimpleTestCase):
         for t in tests:
             @mock.patch('website.views.getTimeDistanceVector', side_effect=td_vecs)
             def actual(self):
-                return filterQuerySet(rides, t['start'], t['end'], t['max_range'], '', '')
+                return filterQuerySet(rides, t['start'], t['end'], t['max_range'], '')
             actual_rides = actual()
             self.assertTrue(len(t['expected']) == len(actual_rides))
             for er, ar in zip(t['expected'], actual_rides):

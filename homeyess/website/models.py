@@ -82,12 +82,11 @@ class Ride(models.Model):
 	volunteer = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='ride_volunteer_set')
 	interview_datetime = models.DateTimeField()
 	interview_duration = models.IntegerField()
-	pickup_address = models.CharField(max_length=200)
-	pickup_datetime = models.DateTimeField()
 	interview_address = models.CharField(max_length=200)
 	interview_company = models.CharField(max_length=100)
-	end_datetime = models.DateTimeField()
-	start_datetime = models.DateTimeField()
+	start_datetime = models.DateTimeField(null=True)
+	pickup_datetime = models.DateTimeField(null=True)
+	end_datetime = models.DateTimeField(null=True)
 
 
 class JobPost(models.Model):

@@ -26,7 +26,7 @@ class SignUpFormTest(TestCase):
         'car_make': '',
         'car_model': '',
         'car_plate': '',
-        'home_address': '',
+        'home_address': 'a',
     }
     company_data = {
         'username': 'susername',
@@ -99,4 +99,3 @@ class PostEditJobFormTest(TestCase):
         job_post = JobPost(self.data.copy())
         form = PostJobForm(instance=job_post)
         self.assertTrue(form.is_valid())
-

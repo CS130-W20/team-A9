@@ -23,7 +23,7 @@ class SignUpForm(UserCreationForm):
     car_plate = forms.CharField(max_length=8, required=False, label="License Plate Number", help_text="Required for volunteers.")
     car_make = forms.CharField(max_length=20, required=False, label="Make of Car", help_text="Required for volunteers.")
     car_model = forms.CharField(max_length=20, required=False, label="Model of Car", help_text="Required for volunteers.")
-    home_address = forms.CharField(max_length=200, required=False, label="Home Address", help_text="Required for volunteers.")
+    home_address = forms.CharField(max_length=200, required=False, label="Home Address", help_text="Companies need not fill this out.")
 
     class Meta:
         model = User
@@ -39,12 +39,14 @@ class SignUpForm(UserCreationForm):
         home_address = cleaned_data.get("home_address")
         if user_type == 'V' and (car_make == '' or car_make == None or car_model == None or car_plate == None or car_model == '' or car_plate == ''):
             raise forms.ValidationError("Volunteers must fill out car information")
-        if user_type == 'V' and (car_make == '' or car_make == None or car_model == None or car_plate == None or car_model == '' or car_plate == '' or home_address == '' or home_address == None):
-            raise forms.ValidationError("Volunteers must fill out car information and home address")
-        if user_type != 'C' and last_name == '':
+        if user_type != 'C' and (last_name == '' or last_name == None):
             raise forms.ValidationError("Volunteers and Users must fill out last name")
-        if user_type == 'C' and last_name != '':
+        if user_type != 'C' and (home_address == '' or home_address == None):
+            raise forms.ValidationError("Volunteers and Users must fill out home address")
+        if user_type == 'C' and (last_name != '' and last_name != None):
             raise forms.ValidationError("Companies should not fill out last name")
+        if user_type == 'C' and (home_address != '' and home_adress != None):
+            raise forms.ValidationError("Companies should not fill out home address")
 
 class PostJobForm(ModelForm):
     '''PostJobForm for companies to post and edit jobs

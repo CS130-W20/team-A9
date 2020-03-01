@@ -266,34 +266,36 @@ class RideRequestListView(ListView):
 
     def get_queryset(self):
         rides = Ride.objects.filter(volunteer=None)
-        start_datetime = self.request.GET['start_datetime']
-        end_datetime = self.request.GET['end_datetime']
-        max_range = self.request.GET['max_range']
+        start_datetime = self.request.GET.get('start_datetime', None)
+        end_datetime = self.request.GET.get('end_datetime', None)
+        max_range = self.request.GET.get('max_range', None)
+        profile = Profile.objects.get(user=self.request.user)
 
         return filterQuerySet(
             rides,
             start_datetime,
             end_datetime,
             max_range,
-            ride.homeless.pickup_address,
-            self.request.user.home_address)
+            profile.home_address)
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['form'] = FilterForm(initial={
-            'start_time': self.request.GET['start_datetime'],
-            'end_time': self.request.GET['end_datetime'],
-            'max_range': self.request.GET['max_range'],
-            'start_address': self.request.GET['start_address'],
+            'start_time': self.request.GET.get('start_datetime', None),
+            'end_time': self.request.GET.get('end_datetime', None),
+            'max_range': self.request.GET.get('max_range', None),
+            'start_address': self.request.GET.get('start_address', None),
         })
         return context
 
 def confirmRide(request, ride_id):
     ride = Ride.objects.get(pk=ride_id)
     ride.volunteer = request.user
+    homeless_profile = Profile.objects.get(user=ride.homeless)
+    volunteer_profile = Profile.objects.get(user=request.user)
     td_vec = getTimeDistanceVector(
-        ride.homeless.pickup_address,
-        request.user.home_address,
+        volunteer_profile.home_address,
+        homeless_profile.home_address,
         ride.interview_address,
         ride.interview_duration
     )
@@ -305,10 +307,10 @@ def confirmRide(request, ride_id):
 
     return redirect('search_rides')
 
-def filterQuerySet(rides, start_datetime, end_datetime, max_range, hp_start, v_start):
+def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
     for ride in rides:
         td_vec = getTimeDistanceVector(
-            hp_start,
+            ride.homeless.home_address,
             v_start,
             ride.interview_address,
             ride.interview_duration
