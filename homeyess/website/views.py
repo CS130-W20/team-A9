@@ -15,7 +15,7 @@ import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.utils.decorators import method_decorator
 from .decorators import is_homeless, is_volunteer, is_company
 
@@ -25,6 +25,8 @@ import functools
 
 from django.conf import settings
 import math
+from django.core.serializers.json import DjangoJSONEncoder
+import json
 
 def index(request):
     '''Renders the index / home page
@@ -67,6 +69,7 @@ def signup(request):
 
     return render(request, 'registration/signup.html', {'form': form})
 
+@login_required(login_url='accounts/login/')
 def dashboard(request, user_id):
     '''Renders the dashboard page for all users
 
@@ -89,6 +92,7 @@ def dashboard(request, user_id):
         return company(request, user)
     return HttpResponse(status=404)
 
+@user_passes_test(is_homeless, login_url='accounts/login/')
 def homeless(request, user):
     '''Renders the dashboard page for homeless users
 
@@ -104,6 +108,7 @@ def homeless(request, user):
     context = {'user': user, 'unconfirmed_rides': unconfirmed_rides, 'confirmed_rides': confirmed_rides}
     return render(request, 'dashboard/homeless.html', context)
 
+@user_passes_test(is_company, login_url='accounts/login/')
 def company(request, user):
     '''Renders the dashboard page for company users
 
@@ -118,6 +123,7 @@ def company(request, user):
     context = {'user': user, 'job_posts': job_posts}
     return render(request, 'dashboard/company.html', context)
 
+@user_passes_test(is_volunteer, login_url='accounts/login/')
 def volunteer(request, user):
     '''Renders the dashboard page for volunteer users
 
@@ -140,7 +146,7 @@ def volunteer(request, user):
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides, 'total_time': total_time}
     return render(request, 'dashboard/volunteer.html', context)
 
-@method_decorator(user_passes_test(is_homeless, login_url='accounts/login/'), name='dispatch')
+@user_passes_test(is_homeless, login_url='accounts/login/')
 def job_board(request):
     '''Renders the job board page for homeless users to view jobs
 
@@ -152,6 +158,7 @@ def job_board(request):
     job_posts = JobPost.objects.all().order_by('-created')
     return render(request, 'job_board/job_board.html', {'job_posts': job_posts})
 
+@user_passes_test(is_homeless, login_url='accounts/login/')
 def job_detail(request, job_id):
     '''Renders the job detail page to see more information on a job from the job board
 
@@ -167,10 +174,7 @@ def job_detail(request, job_id):
         return HttpResponse(status=404)
     return render(request, 'job_board/job_detail.html', {'job': job})
 
-def map(request):
-    GOOGLE_MAPS_API_KEY = settings.GOOGLE_MAPS_API_KEY
-    return render(request, 'map.html', {'GOOGLE_MAPS_API_KEY': GOOGLE_MAPS_API_KEY})
-
+@method_decorator(user_passes_test(is_homeless, login_url='accounts/login/'), name='dispatch')
 class RequestRideCreate(CreateView):
 	'''Object used to render the ride request creation view
 
@@ -185,7 +189,7 @@ class RequestRideCreate(CreateView):
 	form_class = RideRequestForm
 	queryset = RideRequestPost.objects.all()
 
-
+@user_passes_test(is_homeless, login_url='accounts/login/')
 def viewrideform(request, post_id):
 	'''Renders the view that allows people experiencing homelessness to view a specific ride request
 	he/she filled out, so that they can review and potentially edit the form
@@ -200,6 +204,7 @@ def viewrideform(request, post_id):
 	context = {'form': form}
 	return render(request, 'ride_request/ViewRideForm.html', context)
 
+@method_decorator(user_passes_test(is_homeless, login_url='accounts/login/'), name='dispatch')
 class RequestRideEdit(UpdateView):
 	'''Object used to render the request form's update view
 
@@ -218,6 +223,7 @@ class RequestRideEdit(UpdateView):
 		id_ = self.kwargs.get('post_id')
 		return get_object_or_404(RideRequestPost, id=id_)
 
+@user_passes_test(is_company, login_url='accounts/login/')
 def editjob(request, user_id, job_id):
     '''Renders the editjob form on GET; processes the editjob form on POST
 
@@ -244,6 +250,7 @@ def editjob(request, user_id, job_id):
 
     return render(request, 'jobs/editjob.html', {'form': form})
 
+@user_passes_test(is_company, login_url='accounts/login/')
 def postjob(request, user_id):
     '''Renders the postjob form on GET; processes the postjob form on POST
 
@@ -268,33 +275,32 @@ def postjob(request, user_id):
 
     return render(request, 'jobs/postjob.html', {'form': form})
 
-class RideRequestListView(ListView):
-    model = Ride
-    template_name = 'map.html'
+@user_passes_test(is_volunteer, login_url='accounts/login/')
+def search_rides(request):
+    rides = Ride.objects.filter(volunteer=None)
+    start_datetime = request.GET.get('start_datetime', None)
+    end_datetime = request.GET.get('end_datetime', None)
+    max_range = request.GET.get('max_range', None)
+    profile = Profile.objects.get(user=request.user)
 
-    def get_queryset(self):
-        rides = Ride.objects.filter(volunteer=None)
-        start_datetime = self.request.GET.get('start_datetime', None)
-        end_datetime = self.request.GET.get('end_datetime', None)
-        max_range = self.request.GET.get('max_range', None)
-        profile = Profile.objects.get(user=self.request.user)
+    rides = filterQuerySet(
+        rides,
+        start_datetime,
+        end_datetime,
+        max_range,
+        profile.home_address)
 
-        return filterQuerySet(
-            rides,
-            start_datetime,
-            end_datetime,
-            max_range,
-            profile.home_address)
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context['form'] = FilterForm(initial={
-            'start_time': self.request.GET.get('start_datetime', None),
-            'end_time': self.request.GET.get('end_datetime', None),
-            'max_range': self.request.GET.get('max_range', None),
-            'start_address': self.request.GET.get('start_address', None),
-        })
-        return context
+    context = {}
+    context['form'] = FilterForm(initial={
+        'start_time': request.GET.get('start_datetime', None),
+        'end_time': request.GET.get('end_datetime', None),
+        'max_range': request.GET.get('max_range', None),
+        'start_address': request.GET.get('start_address', None),
+    })
+    context['GOOGLE_MAPS_API_KEY'] = settings.GOOGLE_MAPS_API_KEY
+    context['rides_json'] = json.dumps(list(rides), cls=DjangoJSONEncoder)
+    context['rides'] = rides
+    return render(request, 'map.html', context=context)
 
 def confirmRide(request, ride_id):
     ride = Ride.objects.get(pk=ride_id)
@@ -310,8 +316,13 @@ def confirmRide(request, ride_id):
     if td_vec == None:
         return redirect('search_rides')
     ride.distance = getDistance(td_vec)
+    times = [time for (time, _) in td_vec]
     ride.start_datetime, ride.pickup_datetime, ride.end_datetime = getTimes(td_vec, ride.interview_datetime)
     ride.save()
+
+    total_time = functools.reduce(lambda a, b: a + b, times)
+    volunteer.profile.total_volunteer_minutes += total_time
+    volunteer.save()
 
     return redirect('search_rides')
 
