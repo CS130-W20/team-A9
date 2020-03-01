@@ -156,9 +156,9 @@ def job_detail(request, job_id):
         return HttpResponse(status=404)
     return render(request, 'job_board/job_detail.html', {'job': job})
 
-def map(request):
+def ride_board(request):
     GOOGLE_MAPS_API_KEY = settings.GOOGLE_MAPS_API_KEY
-    return render(request, 'map.html', {'GOOGLE_MAPS_API_KEY': GOOGLE_MAPS_API_KEY})
+    return render(request, 'ride_board.html', {'GOOGLE_MAPS_API_KEY': GOOGLE_MAPS_API_KEY})
 
 class RequestRideCreate(CreateView):
 	'''Object used to render the ride request creation view

@@ -69,8 +69,56 @@ td {
 	padding: 15px;
 }
 </style>
+
+<script>
+window.onload = loadScript;
+
+function loadScript() {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = "https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}&callback=initialize"; 
+  document.body.appendChild(script);
+}
+
+
+var map;
+function initialize() {
+	var mapDiv = document.getElementById('map_canvas');
+	map = new google.maps.Map(mapDiv, {
+	  center: new google.maps.LatLng(48.208174,16.373819),
+	  zoom: 12,
+	  mapTypeId: google.maps.MapTypeId.ROADMAP
+	});
+
+	google.maps.event.addListenerOnce(map, 'tilesloaded', addMarkers);
+}
+function addMarkers() {
+  var point = new google.maps.LatLng(48.208174,16.373819);
+  var marker = new google.maps.Marker({
+        position: point,
+        map: map,
+        url: 'http://172.16.0.101:8882/zone/1',
+       title: 'test_title',
+    });
+         marker['infowindow']  = new google.maps.InfoWindow({
+                 content: "testing content",
+    });
+    google.maps.event.addListener(marker, 'click', function() {
+        //window.location.href = this.url;
+         this['infowindow'].open(map, this);
+    });
+   google.maps.event.addListener(marker, 'mouseover', function() {
+        // this['infowindow'].open(map, this);
+            });
+   google.maps.event.addListener(marker, 'mouseout', function() {
+        // this['infowindow'].close(map, this);
+
+    });
+}
+</script>
+
 <head>
-  <title>Dashboard</title>
+  <title>Ride Board</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -80,8 +128,8 @@ td {
 	</h1>
 
 	<div></div>
-	<div class="flex-container" style="margin-left: 100px; margin-right: 100px;">
-		<div style="flex:1">
+	<div class="flex-container" style="margin-left: 100px; margin-right: 100px; min-height: 400px;">
+		<div style="flex:1;">
 			<div>
 				{% if not ride_requests %}
 					<div style="padding:20px">
@@ -116,9 +164,7 @@ td {
 			</table>
 		</div>
 
-		<div style="flex:1; padding-left: 25px">
-			
-		</div>
+		<div style="flex:1; padding-left: 25px;" id="map_canvas"></div>
 	</div>
 </body>
 {% endblock %}

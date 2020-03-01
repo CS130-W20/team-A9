@@ -44,7 +44,7 @@
 
       {% if user.is_authenticated and user.profile.user_type == 'V' %}
       <li class="nav-item">
-        <a class="nav-link" href="#">Volunteer to drive</a>
+        <a class="nav-link" href="{% url 'ride_board' %}">Volunteer to drive</a>
       </li>
       {% endif %}
 
