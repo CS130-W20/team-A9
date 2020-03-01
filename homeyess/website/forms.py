@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 from website.models import Profile, JobPost
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 from django.db import models
 from .models import RideRequestPost
 from django.urls import reverse
@@ -23,6 +23,7 @@ class SignUpForm(UserCreationForm):
     car_plate = forms.CharField(max_length=8, required=False, label="License Plate Number", help_text="Required for volunteers.")
     car_make = forms.CharField(max_length=20, required=False, label="Make of Car", help_text="Required for volunteers.")
     car_model = forms.CharField(max_length=20, required=False, label="Model of Car", help_text="Required for volunteers.")
+    home_address = forms.CharField(max_length=200, required=False, label="Home Address", help_text="Companies need not fill this out.")
 
     class Meta:
         model = User
@@ -34,9 +35,19 @@ class SignUpForm(UserCreationForm):
         car_make = cleaned_data.get("car_make")
         car_model = cleaned_data.get("car_model")
         car_plate = cleaned_data.get("car_plate")
+        last_name = cleaned_data.get("last_name")
+        home_address = cleaned_data.get("home_address")
         if user_type == 'V' and (car_make == '' or car_make == None or car_model == None or car_plate == None or car_model == '' or car_plate == ''):
             raise forms.ValidationError("Volunteers must fill out car information")
-        
+        if user_type != 'C' and (last_name == '' or last_name == None):
+            raise forms.ValidationError("Volunteers and Users must fill out last name")
+        if user_type != 'C' and (home_address == '' or home_address == None):
+            raise forms.ValidationError("Volunteers and Users must fill out home address")
+        if user_type == 'C' and (last_name != '' and last_name != None):
+            raise forms.ValidationError("Companies should not fill out last name")
+        if user_type == 'C' and (home_address != '' and home_adress != None):
+            raise forms.ValidationError("Companies should not fill out home address")
+
 class PostJobForm(ModelForm):
     '''PostJobForm for companies to post and edit jobs
 
@@ -53,18 +64,23 @@ class PostJobForm(ModelForm):
         fields = ['location', 'wage', 'hours', 'job_title', 'short_summary', 'description']
 
 class RideRequestForm(ModelForm):
-	'''Ride Request Form for people experiencing homelessness to request a ride to their interview
-    
-	'''
-	class Meta:
-		model = RideRequestPost
-		fields = ['pickup_date', 'interview_duration', 'pickup_address', 'interview_address', 'company_name']
+    '''Ride Request Form for people experiencing homelessness to request a ride to their interview
 
-	class DateInput(forms.DateInput):
-		input_type = 'date'
-	pickup_date = forms.DateField(widget=DateInput, required=True)
-	interview_duration = forms.CharField(max_length=30, required=True, help_text=' (in minutes)')
-	pickup_address = forms.CharField(max_length=200, required=True)
-	interview_address = forms.CharField(max_length=200, required=True)
-	company_name = forms.CharField(max_length=200, required=True)
-    
+    '''
+    class Meta:
+        model = RideRequestPost
+        fields = ['pickup_date', 'interview_duration', 'pickup_address', 'interview_address', 'company_name']
+
+    class DateInput(forms.DateInput):
+        input_type = 'date'
+
+    pickup_date = forms.DateField(widget=DateInput, required=True)
+    interview_duration = forms.CharField(max_length=30, required=True, help_text=' (in minutes)')
+    pickup_address = forms.CharField(max_length=200, required=True)
+    interview_address = forms.CharField(max_length=200, required=True)
+    company_name = forms.CharField(max_length=200, required=True)
+
+class FilterForm(Form):
+    start_datetime = forms.DateTimeField(required=False)
+    end_datetime = forms.DateTimeField(required=False)
+    max_range = forms.IntegerField(required=False)

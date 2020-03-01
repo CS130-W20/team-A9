@@ -12,7 +12,7 @@ from datetime import time
 
 class Profile(models.Model):
 	'''Model to store information about a user
-	
+
 	:param user: the authentication object containing username, password, email (optional), first / last name
 	:type user: User
 	:param phone: the user's phone number
@@ -27,6 +27,8 @@ class Profile(models.Model):
 	:type car_model: (optional) CharField / string
 	:param total_volunteer_minutes: the total amount of time a volunteer has volunteered
 	:type total_volunteer_minutes: int
+	:param home_address: home address (only required for volunteer)
+	:type home_address: CharField / string
 	'''
 	class UserType(Enum):
 		'''Enum to represent types of users: Volunteer, Homeless, Company
@@ -45,12 +47,13 @@ class Profile(models.Model):
 	car_make = models.CharField(max_length=20, blank=True, null=True)
 	car_model = models.CharField(max_length=20, blank=True, null=True)
 	total_volunteer_minutes = models.IntegerField(blank=True, null=True)
+	home_address = models.CharField(max_length=200, blank=True, null=True)
 
 
 class Ride(models.Model):
 	'''Model to store information about a ride request. Contains start / end time and location, the homeless person, and a volunteer if the ride has already been confirmed.
 	Note that the object should be created when a ride request is made and altered when the request is updated (by homeless) or confirmed (by user).
-	
+
 	:param homeless: the user who requested the ride
 	:type homeless: User
 	:param volunteer: the user who volunteered to give the ride
@@ -74,24 +77,17 @@ class Ride(models.Model):
 	:param ride_status: the status of the ride
 	:type ride_status: RideStatus
 	'''
-	class RideStatus(Enum):
-		'''Enum to represent the status of a ride: Unconfirmed (requested by homeless), Confirmed (matched with volunteer), Finished (already happened)
-		'''
-		Unconfirmed = 'U'
-		Confirmed = "C"
-		Finished = "F"
-		
+
 	homeless = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='ride_homeless_set')
 	volunteer = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='ride_volunteer_set')
 	interview_datetime = models.DateTimeField()
 	interview_duration = models.IntegerField()
-	volunteer_address = models.CharField(max_length=200, null=True)
-	pickup_address = models.CharField(max_length=200)
-	pickup_datetime = models.DateTimeField()
 	interview_address = models.CharField(max_length=200)
 	interview_company = models.CharField(max_length=100)
-	end_datetime = models.DateTimeField()
-	ride_status = models.CharField(max_length=100, choices=[(tag.value, tag.name) for tag in RideStatus], default=RideStatus.Unconfirmed)
+	start_datetime = models.DateTimeField(null=True)
+	pickup_datetime = models.DateTimeField(null=True)
+	end_datetime = models.DateTimeField(null=True)
+
 
 class JobPost(models.Model):
 	'''Model to store information about a job post
@@ -154,10 +150,9 @@ class RideRequestPost(models.Model):
 	pickup_address = models.CharField(max_length=200)
 	interview_address = models.CharField(max_length=200)
 	company_name = models.CharField(max_length=100, default='')
-    
+
 	def get_absolute_url(self):
 		return '/ViewRideForm/' + str(self.id)
 
 	def __str__(self):
 		return self.pickup_address
-
