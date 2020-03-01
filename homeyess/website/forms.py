@@ -64,15 +64,12 @@ class RideRequestForm(ModelForm):
     '''
     class Meta:
         model = Ride
-        fields = ['interview_datetime', 'interview_duration', 'pickup_address', 'interview_address', 'interview_company']
+        fields = ['interview_datetime', 'interview_duration', 'interview_address', 'interview_company']
 
     class DateInput(forms.DateInput):
         input_type = 'date'
-    pickup_datetime = forms.DateTimeField(required=False, widget=forms.HiddenInput)
-    end_datetime = forms.DateTimeField(required=False, widget=forms.HiddenInput)
-    interview_datetime = forms.DateTimeField(required=True, widget=forms.DateTimeInput)
+    interview_datetime = forms.DateTimeField(required=True, widget=forms.DateTimeInput, help_text=' (Example: 01/20/2021 10:00)')
     interview_duration = forms.IntegerField(required=True, help_text=' (in minutes)')
-    pickup_address = forms.CharField(max_length=200, required=True)
     interview_address = forms.CharField(max_length=200, required=True)
     interview_company = forms.CharField(max_length=100, required=True)
     

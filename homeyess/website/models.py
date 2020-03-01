@@ -77,30 +77,31 @@ class Ride(models.Model):
 	:param ride_status: the status of the ride
 	:type ride_status: RideStatus
 	'''
-	class RideStatus(Enum):
-		'''Enum to represent the status of a ride: Unconfirmed (requested by homeless), Confirmed (matched with volunteer), Finished (already happened)
-		'''
-		Unconfirmed = 'U'
-		Confirmed = "C"
-		Finished = "F"
 	
 	def get_absolute_url(self):
+		'''Returns the path to view a specific ride request that was just created/edited
+			:return: a string of the path to view the created/modified ride request
+			:rtype: string
+
+		'''
 		return '/ViewRideForm/' + str(self.id)
 
 	def get_fields(self):
+		'''Returns a list of attributes of the Ride object, used for the ViewRideForm template
+			:return: A list of tuples that contain (field_name, field_value)
+			:rtype: List[(string, string)]
+
+		'''
 		return [(field.name, field.value_to_string(self)) for field in Ride._meta.fields]
 
 	homeless = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='ride_homeless_set')
 	volunteer = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='ride_volunteer_set')
 	interview_datetime = models.DateTimeField()
 	interview_duration = models.IntegerField()
-	volunteer_address = models.CharField(max_length=200, null=True)
-	pickup_address = models.CharField(max_length=200)
 	pickup_datetime = models.DateTimeField()
 	interview_address = models.CharField(max_length=200)
 	interview_company = models.CharField(max_length=100)
 	end_datetime = models.DateTimeField()
-	ride_status = models.CharField(max_length=100, choices=[(tag.value, tag.name) for tag in RideStatus], default=RideStatus.Unconfirmed)
 
 class JobPost(models.Model):
 	'''Model to store information about a job post

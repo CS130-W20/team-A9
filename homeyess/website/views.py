@@ -175,19 +175,16 @@ class RequestRideEdit(UpdateView):
 		id_ = self.kwargs.get("post_id")
 		return get_object_or_404(Ride, id=id_)
 
-class RequestRideDelete(DeleteView):
-    model = Ride
-    template_name = 'ride_request/DeleteRideRequest.html'
-    form_class = RideRequestForm
-    queryset = Ride.objects.all()
-
-    def get_object(self):
-        id_ = self.kwargs.get("post_id")
-        print(self.request.__dict__.keys())
-        return get_object_or_404(Ride, id=id_)
-    success_url = '/'
-   # def get_success_url(self):
-   #     return '/dashboard/' + str(self.request.user)
+def DeleteRideRequest(request, post_id):
+    instance = Ride.objects.get(id=post_id)
+    if instance:
+        homeless_id = instance.homeless.id
+        print(homeless_id)
+        user = User.objects.get(pk=homeless_id)
+        instance.delete()
+        return redirect('/dashboard/' + str(homeless_id))
+    else:
+        return index(request)
 
 def editjob(request, user_id, job_id):
     '''Renders the editjob form on GET; processes the editjob form on POST
