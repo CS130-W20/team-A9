@@ -15,6 +15,8 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.conf import settings
 
+from googlemaps import Client as GoogleMaps
+
 import math
 
 def index(request):
@@ -158,7 +160,7 @@ def job_detail(request, job_id):
 
 def ride_board(request):
     GOOGLE_MAPS_API_KEY = settings.GOOGLE_MAPS_API_KEY
-    return render(request, 'ride_board.html', {'GOOGLE_MAPS_API_KEY': GOOGLE_MAPS_API_KEY})
+    return render(request, 'ride_board.html', {'GOOGLE_MAPS_API_KEY': GOOGLE_MAPS_API_KEY, 'GoogleMaps': GoogleMaps})
 
 class RequestRideCreate(CreateView):
 	'''Object used to render the ride request creation view
