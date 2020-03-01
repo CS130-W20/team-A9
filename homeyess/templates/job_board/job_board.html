@@ -74,36 +74,32 @@ tr {
 </head>
 <body>
 	<h1>
-		{% if user.first_name %}
-			{{ user.first_name }}
-		{% elif user.username %}
-			{{ user.username }}
-		{% else %}
-			Dashboard
-		{% endif %}
+		Jobs
 	</h1>
-
 	<div></div>
 	<div>
-		<h2>Jobs Posted</h2>
 		{% if not job_posts %}
 				<div style="padding:20px">
-					No jobs posts yet. Post a job now!
+					No jobs posts yet!
 				</div>
 		{% else %}
 			<table style="width: 100%; margin: 15px;">
 				<tr style="color:#4285F4">
 					<th></th>
-					<th style="padding-bottom: 5px;">Date Created</th>
+					<th style="padding-bottom: 5px;">Posted</th>
 					<th style="padding-bottom: 5px;">Title</th>
+					<th style="padding-bottom: 5px;">Company</th>
+					<th style="padding-bottom: 5px;">Location</th>
 					<th style="padding-bottom: 5px;">Wage</th>
 					<th style="padding-bottom: 5px;">Description</th>
 				</tr>
 				{% for job in job_posts %}
 			   		<tr>
-						<td style="padding:15px"><a href="#">Open</a></td>
+						<td style="padding:15px"><a href="{% url 'job_detail' job.pk %}">Details</a></td>
 						<td>{{ job.created }}</td>
 						<td>{{ job.job_title }}</td>
+						<td>{{ job.company.user.first_name }}</td>
+						<td>{{ job.location }}</td>
 						<td>{{ job.wage }}</td>
 						<td>{{ job.short_summary }}</td>
 			    	</tr>

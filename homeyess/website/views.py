@@ -17,6 +17,8 @@ from django.contrib.auth.models import User
 import requests
 from homeyess.settings import GOOGLE_MAPS_API_KEY
 import functools
+from django.conf import settings
+import math
 
 def index(request):
     '''Renders the index / home page
@@ -69,8 +71,11 @@ def dashboard(request, user_id):
     :return: the rendered dashboard page for the user using the homeless.html, company.html, or volunteer.html template which matches the type of the requesting user
     :rtype: HttpResponse
     '''
-    user = User.objects.get(pk=user_id)
-    if user.profile.user_type == 'V':
+    user = User.objects.filter(pk=user_id).first()
+    if not user:
+        return HttpResponse(status=404)
+
+    if user.profile.user_type == "V":
         return volunteer(request, user)
     elif user.profile.user_type == 'H':
         return homeless(request, user)
@@ -88,8 +93,8 @@ def homeless(request, user):
     :return: the rendered dashboard page for the user using the homeless.html template
     :rtype: HttpResponse
     '''
-    unconfirmed_rides = Ride.objects.filter(homeless = user.profile, volunteer = None, interview_datetime__gt = timezone.now())
-    confirmed_rides = Ride.objects.filter(homeless = user.profile, interview_datetime__gt = timezone.now()).exclude(volunteer = None)
+    unconfirmed_rides = Ride.objects.filter(homeless = user.profile, volunteer = None, interview_datetime__gt = timezone.now()).order_by('-interview_datetime')
+    confirmed_rides = Ride.objects.filter(homeless = user.profile, interview_datetime__gt = timezone.now()).exclude(volunteer = None).order_by('-interview_datetime')
     context = {'user': user, 'unconfirmed_rides': unconfirmed_rides, 'confirmed_rides': confirmed_rides}
     return render(request, 'dashboard/homeless.html', context)
 
@@ -103,7 +108,7 @@ def company(request, user):
     :return: the rendered dashboard page for the user using the company.html template
     :rtype: HttpResponse
     '''
-    job_posts = JobPost.objects.filter(company=user.profile)
+    job_posts = JobPost.objects.filter(company=user.profile).order_by('-created')
     context = {'user': user, 'job_posts': job_posts}
     return render(request, 'dashboard/company.html', context)
 
@@ -117,10 +122,47 @@ def volunteer(request, user):
     :return: the rendered dashboard page for the user using the volunteer.html template
     :rtype: HttpResponse
     '''
-    confirmed_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__gt = timezone.now())
-    finished_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__lte = timezone.now())
-    context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides}
+    confirmed_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__gt = timezone.now()).order_by('-interview_datetime')
+    finished_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__lte = timezone.now()).order_by('-interview_datetime')
+    total_time = 0
+    for ride in finished_rides:
+        time = ride.end_datetime - ride.pickup_datetime
+        hours = time.seconds/60/60
+        total_time+=hours
+
+    total_time = math.floor(total_time)
+    context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides, 'total_time': total_time}
     return render(request, 'dashboard/volunteer.html', context)
+
+def job_board(request):
+    '''Renders the job board page for homeless users to view jobs
+
+    :param request: The http request containing user information or extra arguments
+    :type request: HttpRequest
+    :return: the rendered job board page using the job_board.html template
+    :rtype: HttpResponse
+    '''
+    job_posts = JobPost.objects.all().order_by('-created')
+    return render(request, 'job_board/job_board.html', {'job_posts': job_posts})
+
+def job_detail(request, job_id):
+    '''Renders the job detail page to see more information on a job from the job board
+
+    :param request: The http request containing user information or extra arguments
+    :type request: HttpRequest
+    :param user_id: The id of the job to be viewed
+    :type request: String
+    :return: the rendered job detail page using the job_detail.html template
+    :rtype: HttpResponse
+    '''
+    job = JobPost.objects.filter(pk=job_id).first()
+    if not job:
+        return HttpResponse(status=404)
+    return render(request, 'job_board/job_detail.html', {'job': job})
+
+def map(request):
+    GOOGLE_MAPS_API_KEY = settings.GOOGLE_MAPS_API_KEY
+    return render(request, 'map.html', {'GOOGLE_MAPS_API_KEY': GOOGLE_MAPS_API_KEY})
 
 class RequestRideCreate(CreateView):
 	'''Object used to render the ride request creation view
