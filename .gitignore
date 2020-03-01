@@ -111,3 +111,6 @@ dist
 
 # Pycache
 *.pyc
+
+# Migration Files
+homeyess/website/migrations
