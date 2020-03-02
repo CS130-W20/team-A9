@@ -272,7 +272,7 @@ def editjob(request, job_id):
     else:
         form = PostJobForm(instance=job_post)
 
-    return render(request, 'jobs/editjob.html', {'job_id': job_id, 'form': form})
+    return render(request, 'jobs/editjob.html', {'form': form})
 
 @user_passes_test(is_company, login_url='/')
 def postjob(request):
