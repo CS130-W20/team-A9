@@ -264,10 +264,7 @@ def editjob(request, job_id):
             else:
                 return render(request, 'jobs/editjob.html', {'form': form})
 
-        user = Profile.objects.get(pk=request.user.id)
-        job_posts = JobPost.objects.filter(company=user)
-        context = {'user': user, 'job_posts': job_posts}
-        return render(request, 'dashboard/company.html', context)
+        return redirect('/dashboard/' + str(request.user.id))
     else:
         form = PostJobForm(instance=job_post)
 
@@ -288,9 +285,7 @@ def postjob(request):
             user = Profile.objects.get(pk=request.user.id)
             job_post = JobPost(company=user, **form.cleaned_data)
             job_post.save()
-            job_posts = JobPost.objects.filter(company=user)
-            context = {'user': user, 'job_posts': job_posts}
-            return render(request, 'dashboard/company.html', context)
+            return redirect('/dashboard/' + str(request.user.id))
     else:
         form = PostJobForm(initial={'wage': '15.50 usd/hr', 'hours': '40 hr/wk'})
 
