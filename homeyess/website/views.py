@@ -182,9 +182,7 @@ def DeleteRideRequest(request, post_id):
         print(homeless_id)
         user = User.objects.get(pk=homeless_id)
         instance.delete()
-        return redirect('/dashboard/' + str(homeless_id))
-    else:
-        return index(request)
+    return redirect('/dashboard/' + str(homeless_id))
 
 def editjob(request, user_id, job_id):
     '''Renders the editjob form on GET; processes the editjob form on POST
