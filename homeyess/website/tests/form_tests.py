@@ -76,7 +76,6 @@ class SignUpFormTest(TestCase):
 class PostEditJobFormTest(TestCase):
 
     data = {
-        'company'
         'location': '124 Test Dr.',
         'wage': '20 usd/hr',
         'hours': '10 hr/wk',
@@ -97,6 +96,6 @@ class PostEditJobFormTest(TestCase):
 
     def test_edit_job_success(self):
         job_post = JobPost(self.data.copy())
-        form = PostJobForm(instance=job_post)
+        form = PostJobForm(self.data.copy(), instance=job_post)
         self.assertTrue(form.is_valid())
 
