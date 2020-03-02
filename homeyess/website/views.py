@@ -10,7 +10,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
 
 from website.forms import SignUpForm, RideRequestForm, PostJobForm, FilterForm
-from .models import Profile, Ride, JobPost, RideRequestPost
+from .models import Profile, Ride, JobPost
 import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User
