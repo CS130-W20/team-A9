@@ -263,7 +263,7 @@ def editjob(request, job_id):
             if form.is_valid():
                 form.save()
             else:
-                return render(request, 'jobs/editjob.html', {'job_id': job_id, 'form': form})
+                return render(request, 'jobs/editjob.html', {'form': form})
 
         user = Profile.objects.get(pk=request.user.id)
         job_posts = JobPost.objects.filter(company=user)
