@@ -14,28 +14,54 @@
 }
 .gray-box {
 	background-color: lightgray;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	border-radius: 10px;
 	margin-left: 15px;
 	margin-bottom: 10px;
 	margin-right: 15px;
 	padding: 10px;
 }
-.detail-button {
-	background-color: blue;
-	border-radius: 10px;
-	color: black;
-	padding: 10px
-}
 .detail-text {
-	color: gray;
 	display: inline;
 }
-h1 {
-	color: blue;
-	padding-left: 15px;
+.table-container {
+	background-color: #f2f0f0; 
+	border-radius: 10px;
+	margin-left: 15px;
+	margin-right: 15px;
 }
-h2 {
+.btn-primary {
+	border-radius: 10px;
+	color: black;
+	padding-top: 10px;
+	padding-bottom: 10px;
 	padding-left: 15px;
 	padding-right: 15px;
+}
+h1 {
+	text-align: center;
+	font-family: "Raleway", "Times New Roman", Times, serif;
+	font-size: 75px;
+	margin: 20px;
+}
+h2 {
+	padding: 15px;
+}
+table {
+  border-collapse: collapse;
+}
+tr:first-child {
+  border-top: none;
+}
+tr:last-child {
+  border-bottom: none;
+}
+tr { 
+  border: solid;
+  border-width: 1px 0;
+}
+td {
+	padding: 15px;
 }
 </style>
 <head>
@@ -44,19 +70,20 @@ h2 {
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<h1>Dashboard</h1>
-	<div></div>
-	<div class="gray-box" style="display: inline-block">
-		<div class="flex-container-vertical">
-			<div>Name <div class="detail-text">{{ user.first_name }} {{ user.last_name }}</div></div>
-			<div>Username <div class="detail-text">{{ user.username }}</div></div>
-			<div>E-mail <div class="detail-text">{{ user.email }}</div></div>
-			<div>Phone <div class="detail-text">{{ user.profile.phone }}</div></div>
-		</div>
-	</div>
+	<h1>
+		{% if user.first_name %}
+			{{ user.first_name }}
+			{% if user.last_name %}
+				{{ user.last_name }}
+			{% endif %}
+		{% elif user.username %}
+			{{ user.username }}
+		{% else %}
+			Dashboard
+		{% endif %}
+	</h1>
 
-	<div></div>
-	<div class="flex-container">
+	<div class="flex-container" style="margin-left: 100px; margin-right: 100px;">
 		<div style="flex:1">
 			<h2>Confirmed Rides</h2>
 			{% if not confirmed_rides %}
@@ -68,17 +95,19 @@ h2 {
 				{% for ride in confirmed_rides %}
 				    <tr>
 				    	<td>
-				    		<div class="gray-box">
+				    		<div>
 				    			<div class="flex-container">
 				    				<div class="flex-container-vertical">
-								    	<div>Pickup Time: <div class="detail-text">{{ ride.pickup_datetime }}</div></div>
-								    	<div>Pickup Address: <div class="detail-text">{{ ride.pickup_address }}</div></div>
-								    	<div>License Plate: <div class="detail-text">{{ ride.volunteer.car_plate }}</div></div>
-								    	<div>Car Make/Model: <div class="detail-text">{{ ride.volunteer.car_make }} {{ ride.volunteer.car_model }}</div></div>
-								    	<div>Volunteer Name: <div class="detail-text">{{ ride.volunteer.user.first_name }} {{ ride.volunteer.user.last_name }}</div></div>
+				    					<h5>{{ ride.interview_company }} - {{ ride.interview_datetime }}</h5>
+				    					<div>Company Address: {{ ride.interview_address }}</div>
+								    	<div>Pickup Time: {{ ride.pickup_datetime }}</div>
+								    	<div>Pickup Address: {{ ride.pickup_address }}</div>
+								    	<div>License Plate: {{ ride.volunteer.car_plate }}</div>
+								    	<div>Car: {{ ride.volunteer.car_make }} {{ ride.volunteer.car_model }}</div>
+								    	<div>Volunteer: {{ ride.volunteer.user.first_name }} {{ ride.volunteer.user.last_name }}</div>
 								    </div>
 								    <div>
-										<a class="detail-button" href="#">Details</a>
+										<a href="#">Details</a>
 									</div>
 								</div>
 							</div>
@@ -87,7 +116,7 @@ h2 {
 				{% endfor %}
 			</table>
 		</div>
-		<div style="flex:1">
+		<div style="flex:1; padding-left: 25px">
 			<h2>Unconfirmed Rides</h2>
 			{% if not unconfirmed_rides %}
 				<div style="padding:20px">
@@ -98,15 +127,18 @@ h2 {
 				{% for ride in unconfirmed_rides %}
 				    <tr>
 				    	<td>
-				    		<div class="gray-box">
+				    		<div>
 				    			<div class="flex-container">
 				    				<div class="flex-container-vertical">
-								    	<div>Company: <div class="detail-text">{{ ride.interview_company }}</div></div>
-								    	<div>Interview Time: <div class="detail-text">{{ ride.interview_datetime }}</div></div>
-								    	<div>Pickup Address: <div class="detail-text">{{ ride.pickup_address }}</div></div>
+								    	<h5>{{ ride.interview_company }} - {{ ride.interview_datetime }}</h5>
+								    	<div>Pickup Address: {{ ride.pickup_address }}</div>
+								    	<div>Company Address: {{ ride.interview_address }}</div>
+								    	<br>
+								    	<br>
 								    </div>
 					    			<div>
 										<a class="detail-button" href="/ViewRideForm/{{ ride.id }}">Details</a>
+
 									</div>
 					    		</div>
 					    	</div>

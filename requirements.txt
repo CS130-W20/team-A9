@@ -31,4 +31,5 @@ wrapt==1.11.2
 yarl==1.4.2
 djangorestframework==3.11.0
 selenium
-
+django-google-maps==0.12.1
+googlemaps==4.2.0

@@ -12,7 +12,7 @@ from datetime import time
 
 class Profile(models.Model):
 	'''Model to store information about a user
-	
+
 	:param user: the authentication object containing username, password, email (optional), first / last name
 	:type user: User
 	:param phone: the user's phone number
@@ -53,7 +53,7 @@ class Profile(models.Model):
 class Ride(models.Model):
 	'''Model to store information about a ride request. Contains start / end time and location, the homeless person, and a volunteer if the ride has already been confirmed.
 	Note that the object should be created when a ride request is made and altered when the request is updated (by homeless) or confirmed (by user).
-	
+
 	:param homeless: the user who requested the ride
 	:type homeless: User
 	:param volunteer: the user who volunteered to give the ride
@@ -93,6 +93,7 @@ class Ride(models.Model):
 
 		'''
 		return [(field.name, field.value_to_string(self)) for field in Ride._meta.fields]
+
 
 	homeless = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='ride_homeless_set')
 	volunteer = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='ride_volunteer_set')
@@ -140,6 +141,5 @@ def update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
-
 
 
