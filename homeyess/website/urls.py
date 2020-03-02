@@ -14,6 +14,7 @@ urlpatterns = [
     path('request-ride', views.RequestRideCreate.as_view(), name='request_ride'),
     path('jobs/<str:user_id>/', views.postjob, name='post_job'),
     path('jobs/<str:user_id>/<int:job_id>/', views.editjob, name='edit_job'),
+    path('jobs/delete/<str:user_id>/<int:job_id>/', views.deletejob, name='delete_job'),
     path('search_rides', views.RideRequestListView.as_view(), name='search_rides'),
     path('confirm_ride/<int:ride_id>', views.confirmRide, name='confirm_ride'),
     path('job-board/', views.job_board, name="job_board"),

@@ -210,6 +210,19 @@ class RequestRideEdit(UpdateView):
 		id_ = self.kwargs.get('post_id')
 		return get_object_or_404(RideRequestPost, id=id_)
 
+def deletejob(request, user_id, job_id):
+    job_post = JobPost.objects.get(pk=job_id)
+    if request.method == 'POST':
+        job_post.delete()
+        user = Profile.objects.get(pk=user_id)
+        job_posts = JobPost.objects.filter(company=user)
+        context = {'user': user, 'job_posts': job_posts}
+        return render(request, 'dashboard/company.html', context)
+    else:
+        context = {'user_id': user_id, 'job_id': job_id}
+        return render(request, 'jobs/deletejob.html', context)
+
+
 def editjob(request, user_id, job_id):
     '''Renders the editjob form on GET; processes the editjob form on POST
 
@@ -234,7 +247,7 @@ def editjob(request, user_id, job_id):
     else:
         form = PostJobForm(instance=job_post)
 
-    return render(request, 'jobs/editjob.html', {'form': form})
+    return render(request, 'jobs/editjob.html', {'user_id': user_id, 'job_id': job_id, 'form': form})
 
 def postjob(request, user_id):
     '''Renders the postjob form on GET; processes the postjob form on POST

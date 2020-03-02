@@ -16,6 +16,7 @@
       </div>
     {% endfor %}
     <button type="submit" class="btn-primary">Submit Changes</button>
+    <a href="{% url 'delete_job' user_id job_id %}" class="primary">Delete</a>
   </form>
   </div>
   <div class="col-md-4"></div>
