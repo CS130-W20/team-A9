@@ -10,7 +10,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
 
 from website.forms import SignUpForm, RideRequestForm, PostJobForm, FilterForm
-from .models import Profile, Ride, JobPost, RideRequestPost
+from .models import Profile, Ride, JobPost
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 import googlemaps
@@ -91,7 +91,7 @@ def dashboard(request, user_id):
         return company(request, user)
     return HttpResponse(status=404)
 
-@user_passes_test(is_homeless, login_url='accounts/login/')
+@user_passes_test(is_homeless, login_url='/')
 def homeless(request, user):
     '''Renders the dashboard page for homeless users
 
@@ -107,7 +107,7 @@ def homeless(request, user):
     context = {'user': user, 'unconfirmed_rides': unconfirmed_rides, 'confirmed_rides': confirmed_rides}
     return render(request, 'dashboard/homeless.html', context)
 
-@user_passes_test(is_company, login_url='accounts/login/')
+@user_passes_test(is_company, login_url='/')
 def company(request, user):
     '''Renders the dashboard page for company users
 
@@ -122,7 +122,7 @@ def company(request, user):
     context = {'user': user, 'job_posts': job_posts}
     return render(request, 'dashboard/company.html', context)
 
-@user_passes_test(is_volunteer, login_url='accounts/login/')
+@user_passes_test(is_volunteer, login_url='/')
 def volunteer(request, user):
     '''Renders the dashboard page for volunteer users
 
@@ -145,7 +145,7 @@ def volunteer(request, user):
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides, 'total_time': total_time}
     return render(request, 'dashboard/volunteer.html', context)
 
-@user_passes_test(is_homeless, login_url='accounts/login/')
+@user_passes_test(is_homeless, login_url='/')
 def job_board(request):
     '''Renders the job board page for homeless users to view jobs
 
@@ -157,7 +157,7 @@ def job_board(request):
     job_posts = JobPost.objects.all().order_by('-created')
     return render(request, 'job_board/job_board.html', {'job_posts': job_posts})
 
-@user_passes_test(is_homeless, login_url='accounts/login/')
+@user_passes_test(is_homeless, login_url='/')
 def job_detail(request, job_id):
     '''Renders the job detail page to see more information on a job from the job board
 
@@ -173,7 +173,7 @@ def job_detail(request, job_id):
         return HttpResponse(status=404)
     return render(request, 'job_board/job_detail.html', {'job': job})
 
-@method_decorator(user_passes_test(is_homeless, login_url='accounts/login/'), name='dispatch')
+@method_decorator(user_passes_test(is_homeless, login_url='/'), name='dispatch')
 class RequestRideCreate(CreateView):
     '''Object used to render the ride request creation view
 
@@ -197,7 +197,7 @@ class RequestRideCreate(CreateView):
 
 
 
-@user_passes_test(is_homeless, login_url='accounts/login/')
+@user_passes_test(is_homeless, login_url='/')
 def viewrideform(request, post_id):
     '''Renders the view that allows people experiencing homelessness to view a specific ride request
     he/she filled out, so that they can review and potentially edit the form
@@ -215,7 +215,7 @@ def viewrideform(request, post_id):
     context = {'form': form}
     return render(request, 'ride_request/ViewRideForm.html', context)
 
-@method_decorator(user_passes_test(is_homeless, login_url='accounts/login/'), name='dispatch')
+@method_decorator(user_passes_test(is_homeless, login_url='/'), name='dispatch')
 class RequestRideEdit(UpdateView):
 	'''Object used to render the request form's update view
 
@@ -243,7 +243,7 @@ def DeleteRideRequest(request, post_id):
         instance.delete()
     return redirect('/dashboard/' + str(homeless_id))
 
-@user_passes_test(is_company, login_url='accounts/login/')
+@user_passes_test(is_company, login_url='/')
 def editjob(request, user_id, job_id):
     '''Renders the editjob form on GET; processes the editjob form on POST
 
@@ -270,7 +270,7 @@ def editjob(request, user_id, job_id):
 
     return render(request, 'jobs/editjob.html', {'form': form})
 
-@user_passes_test(is_company, login_url='accounts/login/')
+@user_passes_test(is_company, login_url='/')
 def postjob(request, user_id):
     '''Renders the postjob form on GET; processes the postjob form on POST
 
@@ -295,7 +295,7 @@ def postjob(request, user_id):
 
     return render(request, 'jobs/postjob.html', {'form': form})
 
-@user_passes_test(is_volunteer, login_url='accounts/login/')
+@user_passes_test(is_volunteer, login_url='/')
 def ride_board(request):
     rides = Ride.objects.filter(volunteer=None)
     start_datetime = request.GET.get('start_datetime', None)
