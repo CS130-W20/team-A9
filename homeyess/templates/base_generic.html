@@ -35,7 +35,7 @@
 
       {% if user.is_authenticated and user.profile.user_type == 'H' %}
       <li class="nav-item">
-        <a class="nav-link" href="#">Search Jobs</a>
+        <a class="nav-link" href="{% url 'job_board' %}">Search Jobs</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'request_ride' %}">Request Ride</a>
@@ -44,7 +44,7 @@
 
       {% if user.is_authenticated and user.profile.user_type == 'V' %}
       <li class="nav-item">
-        <a class="nav-link" href="#">Volunteer to drive</a>
+        <a class="nav-link" href="{% url 'search_rides' %}">Volunteer to drive</a>
       </li>
       {% endif %}
 

@@ -46,21 +46,15 @@
 h1 {
 	text-align: center;
 	font-family: "Raleway", "Times New Roman", Times, serif;
-	font-size: 75px;
-	margin: 25px;
+	font-size: 50px;
+	margin-top: 25px;
 }
-h2 {
-	padding: 15px;
+h3 {
+	text-align: center;
+	font-family: "Raleway", "Times New Roman", Times, serif;
 }
 table {
   border-collapse: collapse;
-}
-tr:first-child {
-  border-top: none;
-  border-bottom: none;
-}
-tr:last-child {
-  border-bottom: none;
 }
 tr { 
   border: solid;
@@ -74,42 +68,18 @@ tr {
 </head>
 <body>
 	<h1>
-		{% if user.first_name %}
-			{{ user.first_name }}
-		{% elif user.username %}
-			{{ user.username }}
-		{% else %}
-			Dashboard
-		{% endif %}
+		{{ job.job_title }}
 	</h1>
-
+	<h3>
+		{{ job.company.user.first_name }}
+	</h3>
 	<div></div>
-	<div>
-		<h2>Jobs Posted</h2>
-		{% if not job_posts %}
-				<div style="padding:20px">
-					No jobs posts yet. Post a job now!
-				</div>
-		{% else %}
-			<table style="width: 100%; margin: 15px;">
-				<tr style="color:#4285F4">
-					<th></th>
-					<th style="padding-bottom: 5px;">Date Created</th>
-					<th style="padding-bottom: 5px;">Title</th>
-					<th style="padding-bottom: 5px;">Wage</th>
-					<th style="padding-bottom: 5px;">Description</th>
-				</tr>
-				{% for job in job_posts %}
-			   		<tr>
-						<td style="padding:15px"><a href="#">Open</a></td>
-						<td>{{ job.created }}</td>
-						<td>{{ job.job_title }}</td>
-						<td>{{ job.wage }}</td>
-						<td>{{ job.short_summary }}</td>
-			    	</tr>
-				   {% endfor %}
-			</table>
-		{% endif %}
+	<div style="margin-left: 25px;">
+		<div>Date Posted: {{ job.created }}</div>
+		<div>Location: {{ job.location }}</div>
+		<div>Wage: {{ job.wage }}</div>
+		<div>Hours: {{ job.hours }}</div>
+		<div>Description: {{ job.description }}</div>
 	</div>
 </body>
 {% endblock %}
