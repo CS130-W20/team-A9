@@ -244,47 +244,49 @@ def DeleteRideRequest(request, post_id):
     return redirect('/dashboard/' + str(homeless_id))
 
 @user_passes_test(is_company, login_url='/')
-def editjob(request, user_id, job_id):
+def editjob(request, job_id):
     '''Renders the editjob form on GET; processes the editjob form on POST
 
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
-    :param user_id: The primary key used to index the user that owns the job
-    :type request: string
-    :param job_d: The primary key used to index the specific job we are editing
+    :param job_id: The primary key used to index the specific job we are editing
     :type request: int
     :return: the rendered JobForm or a redirect to the company's dashboard
     :rtype: HttpResponse
     '''
     job_post = JobPost.objects.get(pk=job_id)
     if request.method == 'POST':
-        form = PostJobForm(request.POST, instance=job_post)
-        if form.is_valid():
-            form.save()
-            user = Profile.objects.get(pk=user_id)
-            job_posts = JobPost.objects.filter(company=user)
-            context = {'user': user, 'job_posts': job_posts}
-            return render(request, 'dashboard/company.html', context)
+        if 'delete' in request.POST:
+            job_post.delete()
+        else:
+            form = PostJobForm(request.POST, instance=job_post)
+            if form.is_valid():
+                form.save()
+            else:
+                return render(request, 'jobs/editjob.html', {'job_id': job_id, 'form': form})
+
+        user = Profile.objects.get(pk=request.user.id)
+        job_posts = JobPost.objects.filter(company=user)
+        context = {'user': user, 'job_posts': job_posts}
+        return render(request, 'dashboard/company.html', context)
     else:
         form = PostJobForm(instance=job_post)
 
     return render(request, 'jobs/editjob.html', {'form': form})
 
 @user_passes_test(is_company, login_url='/')
-def postjob(request, user_id):
+def postjob(request):
     '''Renders the postjob form on GET; processes the postjob form on POST
 
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
-    :param user_id: The primary key used to index the user that owns the job
-    :type request: string
     :return: the rendered JobForm or a redirect to the company's dashboard
     :rtype: HttpResponse
     '''
     if request.method == 'POST':
         form = PostJobForm(request.POST)
         if form.is_valid():
-            user = Profile.objects.get(pk=user_id)
+            user = Profile.objects.get(pk=request.user.id)
             job_post = JobPost(company=user, **form.cleaned_data)
             job_post.save()
             job_posts = JobPost.objects.filter(company=user)
