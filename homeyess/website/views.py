@@ -211,6 +211,18 @@ class RequestRideEdit(UpdateView):
 		return get_object_or_404(RideRequestPost, id=id_)
 
 def deletejob(request, user_id, job_id):
+    '''Renders the deletejob form on GET; deletes the job post from the database
+    
+    :param request: The http request containing user information or extra arguments
+    :type request: HttpRequest
+    :param user_id: The primary key used to index the user that owns the job
+    :type request: string
+    :param job_d: The primary key used to index the specific job we are editing
+    :type request: int
+    :return: the rendered delete job page or a redirect to the company's dashboard or a return to the edit job page
+    :rtype: HttpResponse
+	'''
+
     job_post = JobPost.objects.get(pk=job_id)
     if request.method == 'POST':
         job_post.delete()
