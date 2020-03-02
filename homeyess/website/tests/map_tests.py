@@ -2,6 +2,7 @@ from django.test import SimpleTestCase
 from website.views import getDistance, getTimes, getTimeDistanceVector, filterQuerySet, getResponseJson
 from unittest import mock
 import datetime
+from datetime import timezone
 
 
 class GetDistanceTest(SimpleTestCase):
@@ -19,10 +20,12 @@ class GetTimesTest(SimpleTestCase):
         expected_pickup = datetime.datetime(2020, 1, 1, 14, 33)
         expected_start = datetime.datetime(2020, 1, 1, 14, 32)
         expected_end = datetime.datetime(2020, 1, 1, 16, 21)
-        actual_start, actual_pickup, actual_end = getTimes(td_vec, interview_datetime)
+        expected_total = '1 hrs 49 min'
+        actual_start, actual_pickup, actual_end, actual_total = getTimes(td_vec, interview_datetime)
         self.assertTrue(expected_start == actual_start)
         self.assertTrue(expected_pickup == actual_pickup)
         self.assertTrue(expected_end == actual_end)
+        self.assertTrue(expected_total == actual_total)
 
 class GetTimeDistanceVectorTest(SimpleTestCase):
     def createElement(self, status, duration, distance):
@@ -137,14 +140,16 @@ class FilterQuerySetTest(SimpleTestCase):
                 self.ed = kwargs['ed']
             if 'sd' in kwargs:
                 self.sd = kwargs['sd']
+            if 'total_time' in kwargs:
+                self.total_time = kwargs['total_time']
 
     def test_filter_query_set(self):
         rides = [
-            self.SimpleRide(datetime.datetime(2020, 1, 1, 16), 60), # after end time
-            self.SimpleRide(datetime.datetime(2020, 1, 1, 12), 90), # more than max_range
-            self.SimpleRide(datetime.datetime(2020, 1, 1, 9), 45), # before start time
-            self.SimpleRide(datetime.datetime(2020, 1, 1, 11), 30), # good
-            self.SimpleRide(datetime.datetime(2020, 1, 1, 11), 30), # td_vec returns None
+            self.SimpleRide(datetime.datetime(2020, 1, 1, 16, tzinfo=timezone.utc), 60), # after end time
+            self.SimpleRide(datetime.datetime(2020, 1, 1, 12, tzinfo=timezone.utc), 90), # more than max_range
+            self.SimpleRide(datetime.datetime(2020, 1, 1, 9, tzinfo=timezone.utc), 45), # before start time
+            self.SimpleRide(datetime.datetime(2020, 1, 1, 11, tzinfo=timezone.utc), 30), # good
+            self.SimpleRide(datetime.datetime(2020, 1, 1, 11, tzinfo=timezone.utc), 30), # td_vec returns None
         ]
 
         td_vecs = [
@@ -162,46 +167,51 @@ class FilterQuerySetTest(SimpleTestCase):
                 'max_range': None,
                 'expected': [
                     self.SimpleRide(
-                        datetime.datetime(2020, 1, 1, 16),
+                        datetime.datetime(2020, 1, 1, 16, tzinfo=timezone.utc),
                         60,
                         d=4,
-                        sd=datetime.datetime(2020, 1, 1, 15, 58),
-                        ed=datetime.datetime(2020, 1, 1, 17, 2),
+                        sd=datetime.datetime(2020, 1, 1, 15, 58, tzinfo=timezone.utc),
+                        ed=datetime.datetime(2020, 1, 1, 17, 2, tzinfo=timezone.utc),
+                        total_time='1 hrs 4 min',
                     ),
                     self.SimpleRide(
-                        datetime.datetime(2020, 1, 1, 12),
+                        datetime.datetime(2020, 1, 1, 12, tzinfo=timezone.utc),
                         90,
                         d=107,
-                        sd=datetime.datetime(2020, 1, 1, 11, 58),
-                        ed=datetime.datetime(2020, 1, 1, 13, 32),
+                        sd=datetime.datetime(2020, 1, 1, 11, 58, tzinfo=timezone.utc),
+                        ed=datetime.datetime(2020, 1, 1, 13, 32, tzinfo=timezone.utc),
+                        total_time='1 hrs 34 min',
                     ),
                     self.SimpleRide(
-                        datetime.datetime(2020, 1, 1, 9),
+                        datetime.datetime(2020, 1, 1, 9, tzinfo=timezone.utc),
                         45,
                         d=4,
-                        sd=datetime.datetime(2020, 1, 1, 8, 58),
-                        ed=datetime.datetime(2020, 1, 1, 9, 47),
+                        sd=datetime.datetime(2020, 1, 1, 8, 58, tzinfo=timezone.utc),
+                        ed=datetime.datetime(2020, 1, 1, 9, 47, tzinfo=timezone.utc),
+                        total_time='49 min',
                     ),
                     self.SimpleRide(
-                        datetime.datetime(2020, 1, 1, 11),
+                        datetime.datetime(2020, 1, 1, 11, tzinfo=timezone.utc),
                         30,
                         d=4,
-                        sd=datetime.datetime(2020, 1, 1, 10, 58),
-                        ed=datetime.datetime(2020, 1, 1, 11, 32),
+                        sd=datetime.datetime(2020, 1, 1, 10, 58, tzinfo=timezone.utc),
+                        ed=datetime.datetime(2020, 1, 1, 11, 32, tzinfo=timezone.utc),
+                        total_time='34 min',
                     ),
                 ],
             },
             {
-                'start': datetime.datetime(2020, 1, 1, 10),
-                'end': datetime.datetime(2020, 1, 1, 17),
+                'start': '2020-01-01 10:00',
+                'end': '2020-01-01 17:00',
                 'max_range': 100,
                 'expected': [
                     self.SimpleRide(
-                        datetime.datetime(2020, 1, 1, 11),
+                        datetime.datetime(2020, 1, 1, 11, tzinfo=timezone.utc),
                         30,
                         d=4,
-                        sd=datetime.datetime(2020, 1, 1, 10, 58),
-                        ed=datetime.datetime(2020, 1, 1, 11, 32),
+                        sd=datetime.datetime(2020, 1, 1, 10, 58, tzinfo=timezone.utc),
+                        ed=datetime.datetime(2020, 1, 1, 11, 32, tzinfo=timezone.utc),
+                        total_time='34 min',
                     ),
                 ]
             }

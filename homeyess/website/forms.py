@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from website.models import Profile, JobPost
 from django.forms import ModelForm, Form
 from django.db import models
-from .models import RideRequestPost
+from .models import Ride
 from django.urls import reverse
 
 class SignUpForm(UserCreationForm):
@@ -65,20 +65,18 @@ class PostJobForm(ModelForm):
 
 class RideRequestForm(ModelForm):
     '''Ride Request Form for people experiencing homelessness to request a ride to their interview
-
     '''
     class Meta:
-        model = RideRequestPost
-        fields = ['pickup_date', 'interview_duration', 'pickup_address', 'interview_address', 'company_name']
+        model = Ride
+        fields = ['interview_datetime', 'interview_duration', 'interview_address', 'interview_company']
 
     class DateInput(forms.DateInput):
         input_type = 'date'
-
-    pickup_date = forms.DateField(widget=DateInput, required=True)
-    interview_duration = forms.CharField(max_length=30, required=True, help_text=' (in minutes)')
-    pickup_address = forms.CharField(max_length=200, required=True)
+    interview_datetime = forms.DateTimeField(required=True, widget=forms.DateTimeInput, help_text=' (Example: 01/20/2021 10:00)')
+    interview_duration = forms.IntegerField(required=True, help_text=' (in minutes)')
     interview_address = forms.CharField(max_length=200, required=True)
-    company_name = forms.CharField(max_length=200, required=True)
+    interview_company = forms.CharField(max_length=100, required=True)
+    
 
 class FilterForm(Form):
     start_datetime = forms.DateTimeField(required=False)
