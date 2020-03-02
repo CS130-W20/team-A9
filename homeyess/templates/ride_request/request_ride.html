@@ -15,7 +15,11 @@
           {% endif %}
           </div>
         {% endfor %}
-        <button type="submit" class="btn-primary">Request Ride</button>
+        {% if update is None %}
+          <button type="submit" class="btn-primary">Request Ride</button>
+        {% else %}
+          <button type="submit" class="btn-primary">Submit Changes</button>
+        {% endif %}
       </form>
     </div>
   </div>

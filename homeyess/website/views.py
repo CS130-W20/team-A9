@@ -212,22 +212,27 @@ def viewrideform(request, ride_id):
 
 @method_decorator(user_passes_test(is_homeless, login_url='/'), name='dispatch')
 class RequestRideEdit(UpdateView):
-	'''Object used to render the request form's update view
+    '''Object used to render the request form's update view
 
-	:param template_name: the name of the template used to render the view
-	:type template_name: string
-	:param form_class: the form that specifies what data needs to be input
-	:type form_class: ModelFormMetaclass
-	:param queryset: the queryable attributes of the form
-	:type queryset: QuerySet
-	'''
-	template_name = 'ride_request/request_ride.html'
-	form_class = RideRequestForm
-	queryset = Ride.objects.all()
+    :param template_name: the name of the template used to render the view
+    :type template_name: string
+    :param form_class: the form that specifies what data needs to be input
+    :type form_class: ModelFormMetaclass
+    :param queryset: the queryable attributes of the form
+    :type queryset: QuerySet
+    '''
+    template_name = 'ride_request/request_ride.html'
+    form_class = RideRequestForm
+    queryset = Ride.objects.all()
 
-	def get_object(self):
-		id_ = self.kwargs.get("ride_id")
-		return get_object_or_404(Ride, id=id_)
+    def get_object(self):
+        id_ = self.kwargs.get("ride_id")
+        return get_object_or_404(Ride, id=id_)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['update'] = True
+        return context
 
 def DeleteRideRequest(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
