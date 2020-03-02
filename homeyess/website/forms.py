@@ -72,11 +72,11 @@ class RideRequestForm(ModelForm):
 
     class DateInput(forms.DateInput):
         input_type = 'date'
-    interview_datetime = forms.DateTimeField(required=True, widget=forms.DateTimeInput, help_text=' (Example: 01/20/2021 10:00)')
-    interview_duration = forms.IntegerField(required=True, help_text=' (in minutes)')
+    interview_datetime = forms.DateTimeField(required=True, widget=forms.DateTimeInput, help_text=' Format YYYY-MM-DD HH:MM:SS')
+    interview_duration = forms.IntegerField(required=True, help_text='(in minutes)')
     interview_address = forms.CharField(max_length=200, required=True)
     interview_company = forms.CharField(max_length=100, required=True)
-    
+
 
 class FilterForm(Form):
     start_datetime = forms.DateTimeField(required=False)
