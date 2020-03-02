@@ -5,39 +5,28 @@
 
 		<div class="container" style="padding=40px;">
 		<div class="row justify-content-center">
-		<h1><a href="/ViewRideForm/{{ form.id }}/Update">Click Here to Edit Ride Request </a></h1>
-	</div></div>
+			<h1><a href="/ViewRideForm/{{ form.id }}/Update">Click Here to Edit Ride Request </a></h1>
+
+		</div></div>
+
 		<div class="container" style="padding=40px;">
 		<div class="row justify-content-center">
-
-		<table style="width:30%">
-			<tr>
-				<td>Post ID</td>
-				<td>{{form.id}}</td>
-			</tr>
-			<tr>
-				<td>Pick-Up Date</td>
-				<td>{{form.pickup_date}}</td>
-			</tr>
-			<tr>
-				<td>Interview Duration</td>
-				<td>{{form.interview_duration}}</td>
-			</tr>
-			<tr>
-				<td>Pickup Address</td>
-				<td>{{form.pickup_address}}</td>
-			</tr>
-			<tr>
-				<td>Interview Address</td>
-				<td>{{form.interview_address}}</td>
-			</tr>
-			<tr>
-				<td>Company Name</td>
-				<td>{{form.company_name}}</td>
-			</tr>
+		<table style="width:40%">
+			{% for attribute, value in form.get_fields %}
+				<tr>
+					<td>{{ attribute }}</td>
+					<td>{{ value }}</td>
+				</tr>
+			{% endfor %}
 		</table>
-	</div>
-</div>
+		</div>
+		</div>
+
+		<div class="container" style="padding=40px;">
+		<div class="row justify-content-center">
+			<h1><a href="/ViewRideForm/{{ form.id }}/Delete"> Click Here to Delete Ride Request </a></h1>
+		</div></div>
+
 
 
 	{% else %}
