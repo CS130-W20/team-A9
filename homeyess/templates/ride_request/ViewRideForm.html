@@ -1,34 +1,43 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
+<h1 class="row justify-content-center">Ride Request Details</h1>
 <div class="container" style="padding=40px;">
-<div class="row justify-content-center">
-<table style="width:50%"">
-	<tr>
-		<td>Interview Company</td>
-		<td>{{ ride_request.interview_company }}</td>
-	</tr>
-		<tr>
-			<td>Interview Time</td>
-			<td>{{ ride_request.interview_datetime }}</td>
-		</tr>
-		<tr>
-			<td>Interview Duration</td>
-			<td>{{ ride_request.interview_duration }} minutes</td>
-		</tr>
-		<tr>
-			<td>Interview Address</td>
-			<td>{{ ride_request.interview_address }}</td>
-		</tr>
-</table>
-</div>
-<div class="row justify-content-center">
-	<div class="col-md-4">
+	<div class="row justify-content-center">
+		<div class="col-md-4 offset-md-2">Interview Company:</div>
+		<div class="col-md-4">{{ ride_request.interview_company }}</div>
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-md-4 offset-md-2">Interview Time:</div>
+		<div class="col-md-4">{{ ride_request.interview_datetime }}</div>
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-md-4 offset-md-2">Interview Duration:</div>
+		<div class="col-md-4">{{ ride_request.interview_duration }} minutes</div>
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-md-4 offset-md-2">Interview Address:</div>
+		<div class="col-md-4">{{ ride_request.interview_address }}</div>
+	</div>
+
+	{% if ride_request.volunteer %}
+		<div class="row justify-content-center">
+			<div class="col-md-4 offset-md-2">Volunteer:</div>
+			<div class="col-md-4">{{ ride_request.volunteer.user.first_name }} {{ ride_request.user.volunteer.last_name}}</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="col-md-4 offset-md-2">Pickup Time:</div>
+			<div class="col-md-4">{{ ride_request.pickup_datetime }}</div>
+		</div>
+	{% endif %}
+
+<div class="row justify-content-center" style="margin-top:40px;">
+	<div class="col-md-4 offset-md-2">
 		<a href="{% url 'update_ride' ride_request.id %}">
 			<button type="button" class="btn btn-primary">Update Ride Request</button>
 		</a>
 	</div>
-	<div class="col-md-4 offset-md-4">
+	<div class="col-md-4">
 		<a href="{% url 'delete_ride' ride_request.id %}">
 			<button type="button" class="btn btn-danger">Delete Ride Request</button>
 		</a>

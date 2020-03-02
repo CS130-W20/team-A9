@@ -2,6 +2,31 @@
 {% block content %}
 {% load static %}
 <img src="{% static 'logo.png' %}" class="mx-auto d-block" />
+
+<style>
+.block {
+   text-align: center;
+   vertical-align: middle;
+}
+.circle {
+   background: #87CEFA;
+   border-radius: 200px;
+   color: white;
+   height: 250px;
+   font-weight: bold;
+   font-size: 20px;
+   width: 250px;
+   display: table;
+   margin: 20px auto;
+   padding: 30px;
+}
+.circle p {
+   vertical-align: middle;
+   display: table-cell;
+}
+
+</style>
+
 <div class="container">
   <div class="col-md-12 block">
     <p class="mx-auto d-block" style="font-weight: bold; font-size: 20px;">
