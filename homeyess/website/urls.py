@@ -7,7 +7,8 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('accounts/signup', views.signup, name='signup'),
+    path('accounts/signup/<str:user_type>/', views.signup, name='signup'),
+    path('accounts/user-type', views.user_type, name='user_type'),
     path('dashboard/<str:user_id>/', views.dashboard, name='dashboard'),
     path('view-ride/<int:ride_id>/', views.viewrideform, name='view_ride'),
     path('update-ride/<int:ride_id>', views.RequestRideEdit.as_view(), name='update_ride'),

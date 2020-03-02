@@ -15,38 +15,46 @@ class SignUpForm(UserCreationForm):
     '''SignUpForm for users, companies, and volunteers
 
     '''
-    first_name = forms.CharField(max_length=30, required=True, help_text="Required.", label="First Name / Company Name")
-    last_name = forms.CharField(max_length=30, required=False, help_text="Companies need not fill this out.")
-    email = forms.EmailField(max_length=254, required=False, help_text='Optional.')
-    phone = forms.RegexField(regex='\d{3}-\d{3}-\d{4}', required=False, help_text='Optional.', label="Phone Number (###-###-####)")
-    user_type = forms.ChoiceField(choices=[(tag.value, tag.name) for tag in Profile.UserType], initial=Profile.UserType.Homeless)
-    car_plate = forms.CharField(max_length=8, required=False, label="License Plate Number", help_text="Required for volunteers.")
-    car_make = forms.CharField(max_length=20, required=False, label="Make of Car", help_text="Required for volunteers.")
-    car_model = forms.CharField(max_length=20, required=False, label="Model of Car", help_text="Required for volunteers.")
-    home_address = forms.CharField(max_length=200, required=False, label="Home Address", help_text="Companies need not fill this out.")
+
+    def __init__(self, *args, **kwargs):
+        user_type = kwargs.pop('user_type', None)
+        super(SignUpForm, self).__init__(*args, **kwargs)
+        self.user_type = user_type
+
+        if user_type == 'C':
+            self.fields['first_name'] = forms.CharField(max_length=30, required=True, help_text="Required.", label="Name")
+        else:
+            self.fields['first_name'] = forms.CharField(max_length=30, required=True, help_text="Required.", label="First Name")
+        if user_type != 'C':
+            self.fields['last_name'] = forms.CharField(max_length=30, required=False, help_text="Companies need not fill this out.")
+        self.fields['email'] = forms.EmailField(max_length=254, required=False, help_text='Optional.')
+        self.fields['phone'] = forms.RegexField(regex='\d{3}-\d{3}-\d{4}', required=False, help_text='Optional.', label="Phone Number (###-###-####)")
+        if user_type == 'V':
+            self.fields['car_plate'] = forms.CharField(max_length=8, required=False, label="License Plate Number", help_text="Required for volunteers.")
+            self.fields['car_make'] = forms.CharField(max_length=20, required=False, label="Make of Car", help_text="Required for volunteers.")
+            self.fields['car_model'] = forms.CharField(max_length=20, required=False, label="Model of Car", help_text="Required for volunteers.")
+        if user_type != 'C':
+            self.fields['home_address'] = forms.CharField(max_length=200, required=False, label="Home Address", help_text="Companies need not fill this out.")
+
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'phone', 'username', 'password1', 'password2')
+        fields = fields = ('first_name', 'email', 'username', 'password1', 'password2')
 
     def clean(self):
         cleaned_data = super().clean()
-        user_type = cleaned_data.get("user_type")
-        car_make = cleaned_data.get("car_make")
-        car_model = cleaned_data.get("car_model")
-        car_plate = cleaned_data.get("car_plate")
-        last_name = cleaned_data.get("last_name")
-        home_address = cleaned_data.get("home_address")
+        user_type = self.user_type
+        car_make = cleaned_data.get("car_make", None)
+        car_model = cleaned_data.get("car_model", None)
+        car_plate = cleaned_data.get("car_plate", None)
+        last_name = cleaned_data.get("last_name", None)
+        home_address = cleaned_data.get("home_address", None)
         if user_type == 'V' and (car_make == '' or car_make == None or car_model == None or car_plate == None or car_model == '' or car_plate == ''):
-            raise forms.ValidationError("Volunteers must fill out car information")
+            raise forms.ValidationError("Car information is required.")
         if user_type != 'C' and (last_name == '' or last_name == None):
-            raise forms.ValidationError("Volunteers and Users must fill out last name")
+            raise forms.ValidationError("First and last names are required")
         if user_type != 'C' and (home_address == '' or home_address == None):
-            raise forms.ValidationError("Volunteers and Users must fill out home address")
-        if user_type == 'C' and (last_name != '' and last_name != None):
-            raise forms.ValidationError("Companies should not fill out last name")
-        if user_type == 'C' and (home_address != '' and home_adress != None):
-            raise forms.ValidationError("Companies should not fill out home address")
+            raise forms.ValidationError("Home address is required")
 
 class PostJobForm(ModelForm):
     '''PostJobForm for companies to post and edit jobs
@@ -72,7 +80,7 @@ class RideRequestForm(ModelForm):
 
     class DateInput(forms.DateInput):
         input_type = 'date'
-    interview_datetime = forms.DateTimeField(required=True, widget=forms.DateTimeInput, help_text=' Format YYYY-MM-DD HH:MM:SS')
+    interview_datetime = forms.DateTimeField(required=True, widget=forms.DateTimeInput, help_text='Format YYYY-MM-DD HH:MM:SS')
     interview_duration = forms.IntegerField(required=True, help_text='(in minutes)')
     interview_address = forms.CharField(max_length=200, required=True)
     interview_company = forms.CharField(max_length=100, required=True)
@@ -82,3 +90,6 @@ class FilterForm(Form):
     start_datetime = forms.DateTimeField(required=False)
     end_datetime = forms.DateTimeField(required=False)
     max_range = forms.IntegerField(required=False)
+
+class UserTypeForm(Form):
+    user_type = forms.ChoiceField(choices=[(tag.value, tag.name) for tag in Profile.UserType], required=True)
