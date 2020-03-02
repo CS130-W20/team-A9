@@ -190,55 +190,54 @@ class RequestRideCreate(CreateView):
     def form_valid(self, form):
         print("form data: {}".format(form.data))
         form.instance.homeless = Profile.objects.get(user=self.request.user)
-        form.instance.pickup_datetime = "2020-01-20 00:00"
-        form.instance.end_datetime = "2020-01-20 00:00"
         return super(RequestRideCreate, self).form_valid(form)
     queryset = Ride.objects.all()
 
 
 
+
 @user_passes_test(is_homeless, login_url='/')
-def viewrideform(request, post_id):
+def viewrideform(request, ride_id):
     '''Renders the view that allows people experiencing homelessness to view a specific ride request
     he/she filled out, so that they can review and potentially edit the form
 
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
-    :param post_id: The ride request post's idea
-    :type post_id: int
+    :param ride_id: The ride request post's idea
+    :type ride_id: int
     '''
-    form_set = Ride.objects.filter(id=post_id)
-    if form_set:
-        form = form_set[0]
-    else:
-        form = []
-    context = {'form': form}
+    ride_request = get_object_or_404(Ride, id=ride_id)
+    context = {'ride_request': ride_request}
     return render(request, 'ride_request/ViewRideForm.html', context)
 
 @method_decorator(user_passes_test(is_homeless, login_url='/'), name='dispatch')
 class RequestRideEdit(UpdateView):
-	'''Object used to render the request form's update view
+    '''Object used to render the request form's update view
 
-	:param template_name: the name of the template used to render the view
-	:type template_name: string
-	:param form_class: the form that specifies what data needs to be input
-	:type form_class: ModelFormMetaclass
-	:param queryset: the queryable attributes of the form
-	:type queryset: QuerySet
-	'''
-	template_name = 'ride_request/request_ride.html'
-	form_class = RideRequestForm
-	queryset = Ride.objects.all()
+    :param template_name: the name of the template used to render the view
+    :type template_name: string
+    :param form_class: the form that specifies what data needs to be input
+    :type form_class: ModelFormMetaclass
+    :param queryset: the queryable attributes of the form
+    :type queryset: QuerySet
+    '''
+    template_name = 'ride_request/request_ride.html'
+    form_class = RideRequestForm
+    queryset = Ride.objects.all()
 
-	def get_object(self):
-		id_ = self.kwargs.get("post_id")
-		return get_object_or_404(Ride, id=id_)
+    def get_object(self):
+        id_ = self.kwargs.get("ride_id")
+        return get_object_or_404(Ride, id=id_)
 
-def DeleteRideRequest(request, post_id):
-    instance = Ride.objects.get(id=post_id)
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['update'] = True
+        return context
+
+def DeleteRideRequest(request, ride_id):
+    instance = Ride.objects.get(id=ride_id)
     if instance:
         homeless_id = instance.homeless.id
-        print(homeless_id)
         user = User.objects.get(pk=homeless_id)
         instance.delete()
     return redirect('/dashboard/' + str(homeless_id))

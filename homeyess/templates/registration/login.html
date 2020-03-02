@@ -3,40 +3,30 @@
 {% block content %}
 
   {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
+    <div class="alert alert-danger">
+      <p>Your username and password didn't match. Please try again.</p>
+    </div>
   {% endif %}
-  
-  {% if next %}
-    {% if user.is_authenticated %}
-      <p>Your account doesn't have access to this page. To proceed,
-      please login with an account that has access.</p>
-    {% else %}
-      <p>Please login to see this page.</p>
-    {% endif %}
-  {% endif %}
-  <h1 class="row justify-content-center">Login</h1>
-  <div class="container">
+
+  <h1 class="row justify-content-center">Log In</h1>
+  <div class="container" style="padding=40px;">
     <div class="row justify-content-center">
       <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
-        <table>
-          <tr>
-            <td>{{ form.username.label_tag }}</td>
-            <td>{{ form.username }}</td>
-          </tr>
-          <tr>
-            <td>{{ form.password.label_tag }}</td>
-            <td>{{ form.password }}</td>
-          </tr>
-        </table>
-        <input type="submit" class="btn-primary" value="login" />
-        <input type="hidden" name="next" value="{{ next }}" />
-        {# Assumes you setup the password_reset view in your URLconf #}
-        <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+        {% for field in form.visible_fields %}
+        <div class="form-group">
+          {{field.label_tag}}
+          {{field}}
+          {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+          {% endif %}
+          </div>
+        {% endfor %}
+        <button type="submit" class="btn-primary">Log in</button>
       </form>
     </div>
   </div>
-  
 
-  
+
+
 {% endblock %}
