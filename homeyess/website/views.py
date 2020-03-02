@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Profile, Ride, JobPost, RideRequestPost
+from .models import Profile, Ride, JobPost
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
 
@@ -175,33 +175,45 @@ def job_detail(request, job_id):
 
 @method_decorator(user_passes_test(is_homeless, login_url='accounts/login/'), name='dispatch')
 class RequestRideCreate(CreateView):
-	'''Object used to render the ride request creation view
+    '''Object used to render the ride request creation view
 
-	:param template_name: the name of the template used to render the view
-	:type template_name: string
-	:param form_class: the form that specifies what data needs to be input
-	:type form_class: ModelFormMetaclass
-	:param queryset: the queryable attributes of the form
-	:type queryset: QuerySet
-	'''
-	template_name = 'ride_request/request_ride.html'
-	form_class = RideRequestForm
-	queryset = RideRequestPost.objects.all()
+    :param template_name: the name of the template used to render the view
+    :type template_name: string
+    :param form_class: the form that specifies what data needs to be input
+    :type form_class: ModelFormMetaclass
+    :param queryset: the queryable attributes of the form
+    :type queryset: QuerySet
+    '''
+
+    template_name = 'ride_request/request_ride.html'
+    form_class = RideRequestForm
+    def form_valid(self, form):
+        print("form data: {}".format(form.data))
+        form.instance.homeless = Profile.objects.get(user=self.request.user)
+        form.instance.pickup_datetime = "2020-01-20 00:00"
+        form.instance.end_datetime = "2020-01-20 00:00"
+        return super(RequestRideCreate, self).form_valid(form)
+    queryset = Ride.objects.all()
+
+
 
 @user_passes_test(is_homeless, login_url='accounts/login/')
 def viewrideform(request, post_id):
-	'''Renders the view that allows people experiencing homelessness to view a specific ride request
-	he/she filled out, so that they can review and potentially edit the form
+    '''Renders the view that allows people experiencing homelessness to view a specific ride request
+    he/she filled out, so that they can review and potentially edit the form
 
-	:param request: The http request containing user information or extra arguments
-	:type request: HttpRequest
-	:param post_id: The ride request post's idea
-	:type post_id: int
-	'''
-	form_set = RideRequestPost.objects.filter(id=post_id)
-	form = form_set[0]
-	context = {'form': form}
-	return render(request, 'ride_request/ViewRideForm.html', context)
+    :param request: The http request containing user information or extra arguments
+    :type request: HttpRequest
+    :param post_id: The ride request post's idea
+    :type post_id: int
+    '''
+    form_set = Ride.objects.filter(id=post_id)
+    if form_set:
+        form = form_set[0]
+    else:
+        form = []
+    context = {'form': form}
+    return render(request, 'ride_request/ViewRideForm.html', context)
 
 @method_decorator(user_passes_test(is_homeless, login_url='accounts/login/'), name='dispatch')
 class RequestRideEdit(UpdateView):
@@ -216,11 +228,20 @@ class RequestRideEdit(UpdateView):
 	'''
 	template_name = 'ride_request/request_ride.html'
 	form_class = RideRequestForm
-	queryset = RideRequestPost.objects.all()
+	queryset = Ride.objects.all()
 
 	def get_object(self):
-		id_ = self.kwargs.get('post_id')
-		return get_object_or_404(RideRequestPost, id=id_)
+		id_ = self.kwargs.get("post_id")
+		return get_object_or_404(Ride, id=id_)
+
+def DeleteRideRequest(request, post_id):
+    instance = Ride.objects.get(id=post_id)
+    if instance:
+        homeless_id = instance.homeless.id
+        print(homeless_id)
+        user = User.objects.get(pk=homeless_id)
+        instance.delete()
+    return redirect('/dashboard/' + str(homeless_id))
 
 @user_passes_test(is_company, login_url='accounts/login/')
 def editjob(request, user_id, job_id):
