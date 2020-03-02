@@ -2,13 +2,25 @@
 
 {% block content %}
   <h1 class="row justify-content-center">Request Ride To Interview</h1>
-    <div class="container" style="padding=40px;">
+  <div class="container" style="padding=40px;">
     <div class="row justify-content-center">
-	<form method="post">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button type="submit" class="btn-primary">Request Ride</button>
-	</form>
-</div>
-</div>
+      <form method="post">
+        {% csrf_token %}
+        {% for field in form.visible_fields %}
+        <div class="form-group">
+          {{field.label_tag}}
+          {{field}}
+          {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+          {% endif %}
+          </div>
+        {% endfor %}
+        {% if update is None %}
+          <button type="submit" class="btn-primary">Request Ride</button>
+        {% else %}
+          <button type="submit" class="btn-primary">Submit Changes</button>
+        {% endif %}
+      </form>
+    </div>
+  </div>
 {% endblock %}
