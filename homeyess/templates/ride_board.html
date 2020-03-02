@@ -2,13 +2,13 @@
 <html lang="en">
 {% extends 'base_generic.html' %}
 {% block content %}
-<script>
+
 window.onload = loadScript;
 
 function loadScript() {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src = "https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}&callback=initialize"; 
+  script.src = "https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}&callback=initialize";
   document.body.appendChild(script);
 }
 
@@ -74,14 +74,14 @@ function addRideMarker(ride) {
 	<div class="flex-container" style="margin-left: 100px; margin-right: 100px; min-height: 400px;">
 		<div style="flex:1;">
 			<div>
-				{% if not object_list %}
+				{% if not rides %}
 					<div style="padding:20px">
 						No rides requests yet. Check back later!
 					</div>
 				{% endif %}
 			</div>
 			<table style="width: 100%">
-			{% for ride in object_list %}
+			{% for ride in rides %}
 			    <tr>
 			    	<td>
 			    		<div>
@@ -89,7 +89,6 @@ function addRideMarker(ride) {
 			    				<div class="flex-container-vertical" style="margin-left:0px">
 			    					<h5>Time: {{ ride.sd }} - {{ ride.ed }} ({{ ride.total_time }})
 			    					<div>Distance: {{ ride.d }} miles</div>
-									<div>Pickup Time: {{ ride.pickup_datetime }}</div>
 								    <div>Pickup Address: {{ ride.homeless.home_address }}</div>
 								    <div>Interview Time: {{ ride.interview_datetime }}</div>
 								    <div>Interview Duration: {{ ride.interview_duration }} minutes</div>
@@ -97,7 +96,7 @@ function addRideMarker(ride) {
 								    <div>Company: {{ ride.interview_company }}</div>
 								</div>
 								<div>
-									<a href="#">Confirm this ride</a>
+									<a href="{% url 'confirm_ride' ride.pk %}">Confirm this ride</a>
 								</div>
 							</div>
 					    </div>
@@ -111,4 +110,3 @@ function addRideMarker(ride) {
 </body>
 {% endblock %}
 </html>
-
