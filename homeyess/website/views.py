@@ -244,7 +244,7 @@ def DeleteRideRequest(request, post_id):
     return redirect('/dashboard/' + str(homeless_id))
 
 @user_passes_test(is_company, login_url='/')
-def editjob(request, user_id, job_id):
+def editjob(request, job_id):
     '''Renders the editjob form on GET; processes the editjob form on POST
 
     :param request: The http request containing user information or extra arguments
@@ -275,7 +275,7 @@ def editjob(request, user_id, job_id):
     return render(request, 'jobs/editjob.html', {'job_id': job_id, 'form': form})
 
 @user_passes_test(is_company, login_url='/')
-def postjob(request, user_id):
+def postjob(request):
     '''Renders the postjob form on GET; processes the postjob form on POST
 
     :param request: The http request containing user information or extra arguments
