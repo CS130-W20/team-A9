@@ -77,6 +77,9 @@ class RideRequestForm(ModelForm):
     interview_address = forms.CharField(max_length=200, required=True)
     interview_company = forms.CharField(max_length=100, required=True)
 
+class JobBoardFilterForm(Form):
+    location = forms.CharField(required=False)
+    job_title = forms.CharField(required=False)
 
 class FilterForm(Form):
     start_datetime = forms.DateTimeField(required=False)
