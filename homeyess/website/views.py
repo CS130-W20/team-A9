@@ -1,7 +1,7 @@
 '''
 homeyess/website/views.py
 '''
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
@@ -314,8 +314,10 @@ def ride_board(request):
         'start_address': request.GET.get('start_address', None),
     })
     context['GOOGLE_MAPS_API_KEY'] = GOOGLE_MAPS_API_KEY
-    context['rides_json'] = json.dumps(list(model_to_dict(ride) for ride in rides), cls=DjangoJSONEncoder)
     context['rides'] = rides
+
+
+    context['rides_json'] = json.dumps(list(getRideDict(ride) for ride in rides), cls=DjangoJSONEncoder)
 
     gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
     home_info = gmaps.geocode(request.user.profile.home_address)
@@ -324,6 +326,16 @@ def ride_board(request):
         context['home'] = location
 
     return render(request, 'ride_board.html', context=context)
+
+def getRideDict(ride):
+    ride_dict = model_to_dict(ride)
+    ride_dict['d'] = ride.d
+    ride_dict['sd'] = ride.sd
+    ride_dict['ed'] = ride.ed
+    ride_dict['total_time'] = ride.total_time
+    ride_dict['pickup_location'] = ride.pickup_location
+    ride_dict['pickup_address'] = ride.homeless.home_address
+    return ride_dict
 
 def confirmRide(request, ride_id):
     ride = Ride.objects.get(pk=ride_id)
@@ -362,10 +374,13 @@ def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
             ride.sd, _, ride.ed, ride.total_time = getTimes(td_vec, ride.interview_datetime)
 
         #set pickup lat/long
-        # pickup_info = self.gmaps.geocode(ride.homeless.home_address)
-        # if pickup_info:
-        #     location = pickup_info[0]['geometry']['location']
-        #     ride.pickup_location = (location['lat'], location['lng'])
+        gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
+        pickup_info = gmaps.geocode(ride.homeless.home_address)
+        if pickup_info:
+            location = pickup_info[0]['geometry']['location']
+            ride.pickup_location = location
+        else:
+            ride.pickup_location = None
 
     rides = [ride for ride in rides if ride.d != None]
     if start_datetime:
@@ -442,8 +457,12 @@ def getTimeString(mins):
     s = ""
     hours = mins//60
     m = mins%60
-    if hours > 0:
+    if hours == 1:
+        s += str(hours) + ' hr '
+    elif hours > 1:
         s += str(hours) + ' hrs '
-    if m > 0:
+    if m == 1:
         s += str(m) + ' min'
+    elif m > 0:
+        s += str(m) + ' mins'
     return s

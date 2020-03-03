@@ -21,38 +21,82 @@ function initialize() {
 	  zoom: 12,
 	  mapTypeId: google.maps.MapTypeId.ROADMAP
 	});
-
+	addHomeMarker();
 	google.maps.event.addListenerOnce(map, 'tilesloaded', addMarkers);
 }
 function addMarkers() {
-    // var i;
-    // var rides = {{ ride_list }}:
-    // for (i=0; i<rides.length; i++) {
-    //   addRideMarker(rides[i]);
-    // }
- }
-function addRideMarker(ride) {
-	return
-  var point = new google.maps.LatLng(ride.pickup_location);
-  var marker = new google.maps.Marker({
+
+    var myJSONList = (("{{rides_json}}").replace(/&(l|g|quo)t;/g, function(a,b){
+        return {
+            l   : '<',
+            g   : '>',
+            quo : '"'
+        }[b];
+    }));
+
+ 	rides_data = JSON.parse(myJSONList);
+ //     var rides_list = (("{{rides|safe}}").replace(/&(l|g|quo)t;/g, function(a,b){
+ //            return {
+ //                l   : '<',
+ //                g   : '>',
+ //                quo : '"'
+ //            }[b];
+ //        }));
+
+	// rides_list = rides_list.replace(/u'/g, '\'');
+	// rides_list = rides_list.replace(/'/g, '\"');
+
+	// console.log(rides_list);
+	// rides_json = JSON.parse(rides_list);
+
+	var i;
+    for (i=0; i<rides_data.length; i++) {
+		addRideMarker(rides_data[i]);
+    }
+}
+function addHomeMarker() {
+	var point = new google.maps.LatLng({{ home.lat }}, {{ home.lng }});
+	var marker = new google.maps.Marker({
         position: point,
         map: map,
-        url: 'http://172.16.0.101:8882/zone/1',
-       title: 'test_title',
+       	label: {
+		    fontWeight: 'bold',
+		    text: 'Home',
+  		},
     });
-         marker['infowindow']  = new google.maps.InfoWindow({
-                 content: "testing content",
+}
+
+function addRideMarker(ride) {
+	var point = new google.maps.LatLng(ride.pickup_location.lat, ride.pickup_location.lng);
+	var marker = new google.maps.Marker({
+        position: point,
+        map: map,
+       	label: ride.total_time,
+    });
+
+	sd = new Date(ride.sd);
+	ed = new Date(ride.ed);
+	interview_datetime = new Date(ride.interview_datetime);
+
+    marker['infowindow']  = new google.maps.InfoWindow({
+        content: 
+        "Time: " + sd.toLocaleDateString("en-US") + "-" + ed.toLocaleDateString("en-US") + "(" + ride.total_time + ")<br>"
+        + "Distance: " + ride.d + " miles<br>"
+        + "Pickup Address: " + ride.pickup_address + "<br>"
+        + "Interview Time: " + interview_datetime.toLocaleDateString("en-US") + "<br>"
+        + "Interview Duration: " + ride.interview_duration + " minutes<br>"
+        + "Interview Address: " + ride.interview_address + "<br>"
+        + "Company: " + ride.interview_company,
     });
     google.maps.event.addListener(marker, 'click', function() {
         //window.location.href = this.url;
-         this['infowindow'].open(map, this);
+        this['infowindow'].open(map, this);
     });
-   google.maps.event.addListener(marker, 'mouseover', function() {
-        // this['infowindow'].open(map, this);
-            });
-   google.maps.event.addListener(marker, 'mouseout', function() {
-        // this['infowindow'].close(map, this);
-
+	google.maps.event.addListener(marker, 'mouseover', function() {
+        this['infowindow'].open(map, this);
+	});
+	google.maps.event.addListener(marker, 'mouseout', function() {
+        this['infowindow'].close(map, this);
     });
 }
 </script>
@@ -105,7 +149,7 @@ function addRideMarker(ride) {
 			{% endfor %}
 			</table>
 		</div>
-		<div style="flex:1; padding-left: 25px;" id="map_canvas"></div>
+		<div style="flex:1; padding-left: 25px; height: 400px;" id="map_canvas"></div>
 	</div>
 </body>
 {% endblock %}
