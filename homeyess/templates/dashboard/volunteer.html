@@ -51,7 +51,7 @@
 								    <div>Candidate Name: {{ ride.homeless.user.first_name }} {{ ride.homeless.user.last_name }}</div>
 								</div>
 								<div>
-									<a href="#">Details</a>
+									<a href="{% url 'view_ride' ride.id %}">Details</a>
 								</div>
 							</div>
 					    </div>
@@ -96,4 +96,3 @@
 </body>
 {% endblock %}
 </html>
-

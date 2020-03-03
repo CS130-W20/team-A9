@@ -217,7 +217,7 @@ class RequestRideCreate(CreateView):
 
 
 
-@user_passes_test(is_homeless, login_url='/')
+@user_passes_test(lambda a: is_homeless(a) or is_volunteer(a), login_url='/')
 def viewrideform(request, ride_id):
     '''Renders the view that allows people experiencing homelessness to view a specific ride request
     he/she filled out, so that they can review and potentially edit the form
@@ -229,7 +229,7 @@ def viewrideform(request, ride_id):
     '''
     ride_request = get_object_or_404(Ride, id=ride_id)
     context = {'ride_request': ride_request}
-    return render(request, 'ride_request/ViewRideForm.html', context)
+    return render(request, 'ride_request/view_ride.html', context)
 
 @method_decorator(user_passes_test(is_homeless, login_url='/'), name='dispatch')
 class RequestRideEdit(UpdateView):
