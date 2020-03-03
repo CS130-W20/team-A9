@@ -20,7 +20,7 @@
 		<div class="col-md-4">{{ ride_request.interview_address }}</div>
 	</div>
 
-	{% if ride_request.volunteer %}
+	{% if ride_request.volunteer and user.profile.user_type == 'H' %}
 	<div class="row justify-content-center">
 		<div class="col-md-4 offset-md-2">Volunteer:</div>
 		<div class="col-md-4">{{ ride_request.volunteer.user.first_name }} {{ ride_request.user.volunteer.last_name}}</div>
@@ -29,10 +29,23 @@
 		<div class="col-md-4 offset-md-2">Pickup Time:</div>
 		<div class="col-md-4">{{ ride_request.pickup_datetime }}</div>
 	</div>
-	{% else %}
+	{% endif %}
+	{% if user.profile.user_type == 'V' %}
 	<div class="row justify-content-center">
-		<div class="col-md-4 offset-md-2">Volunteer:</div>
-		<div class="col-md-4">Your ride has not been confirmed by a volunteer yet. Please check back later.</div>
+		<div class="col-md-4 offset-md-2">Pickup Address:</div>
+		<div class="col-md-4">{{ ride_request.homeless.home_address }}</div>
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-md-4 offset-md-2">Leave your house at:</div>
+		<div class="col-md-4">{{ ride_request.start_datetime }}</div>
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-md-4 offset-md-2">Pick up {{ ride_request.homeless.user.first_name }} at:</div>
+		<div class="col-md-4">{{ ride_request.pickup_datetime }}</div>
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-md-4 offset-md-2">Arrive back at your house at:</div>
+		<div class="col-md-4">{{ ride_request.end_datetime }}</div>
 	</div>
 	{% endif %}
 

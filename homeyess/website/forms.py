@@ -20,26 +20,42 @@ class SignUpForm(UserCreationForm):
         user_type = kwargs.pop('user_type', None)
         super(SignUpForm, self).__init__(*args, **kwargs)
         self.user_type = user_type
+        field_order = []
 
         if user_type == 'C':
-            self.fields['first_name'] = forms.CharField(max_length=30, required=True, help_text="Required.", label="Name")
+            self.fields['first_name'] = forms.CharField(max_length=30, required=True, label=" Company Name")
         else:
-            self.fields['first_name'] = forms.CharField(max_length=30, required=True, help_text="Required.", label="First Name")
+            self.fields['first_name'] = forms.CharField(max_length=30, required=True, label="First Name")
+        field_order.append('first_name')
         if user_type != 'C':
-            self.fields['last_name'] = forms.CharField(max_length=30, required=False, help_text="Companies need not fill this out.")
+            self.fields['last_name'] = forms.CharField(max_length=30, required=False)
+            field_order.append('last_name')
+        field_order.append('username')
+        field_order.append('password1')
+        field_order.append('password2')
         self.fields['email'] = forms.EmailField(max_length=254, required=False, help_text='Optional.')
+        field_order.append('email')
         self.fields['phone'] = forms.RegexField(regex='\d{3}-\d{3}-\d{4}', required=False, help_text='Optional.', label="Phone Number (###-###-####)")
+        field_order.append('phone')
         if user_type == 'V':
-            self.fields['car_plate'] = forms.CharField(max_length=8, required=False, label="License Plate Number", help_text="Required for volunteers.")
-            self.fields['car_make'] = forms.CharField(max_length=20, required=False, label="Make of Car", help_text="Required for volunteers.")
-            self.fields['car_model'] = forms.CharField(max_length=20, required=False, label="Model of Car", help_text="Required for volunteers.")
-        if user_type != 'C':
-            self.fields['home_address'] = forms.CharField(max_length=200, required=False, label="Home Address", help_text="Companies need not fill this out.")
+            self.fields['car_plate'] = forms.CharField(max_length=8, required=False, label="License Plate Number")
+            self.fields['car_make'] = forms.CharField(max_length=20, required=False, label="Make of Car")
+            self.fields['car_model'] = forms.CharField(max_length=20, required=False, label="Model of Car")
+            field_order.append('car_plate')
+            field_order.append('car_make')
+            field_order.append('car_model')
+        if user_type == 'V':
+            self.fields['home_address'] = forms.CharField(max_length=200, required=False, label="Home Address")
+            field_order.append('home_address')
+        if user_type == 'H':
+            self.fields['home_address'] = forms.CharField(max_length=200, required=False, label="Pickup Address")
+            field_order.append('home_address')
 
+        self.order_fields(field_order)
 
     class Meta:
         model = User
-        fields = fields = ('first_name', 'email', 'username', 'password1', 'password2')
+        fields = ('first_name', 'email', 'username', 'password1', 'password2')
 
     def clean(self):
         cleaned_data = super().clean()
