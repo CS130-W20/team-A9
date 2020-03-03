@@ -11,36 +11,44 @@
 	<h1>
 		Jobs
 	</h1>
-	<div></div>
-	<div>
-		{% if not job_posts %}
-				<div style="padding:20px">
-					No jobs posts yet!
-				</div>
-		{% else %}
-			<table style="width: 100%; margin: 15px;">
-				<tr style="color:#4285F4">
-					<th></th>
-					<th style="padding-bottom: 5px;">Posted</th>
-					<th style="padding-bottom: 5px;">Title</th>
-					<th style="padding-bottom: 5px;">Company</th>
-					<th style="padding-bottom: 5px;">Location</th>
-					<th style="padding-bottom: 5px;">Wage</th>
-					<th style="padding-bottom: 5px;">Description</th>
-				</tr>
-				{% for job in job_posts %}
-			   		<tr>
-						<td style="padding:15px"><a href="{% url 'job_detail' job.pk %}">Details</a></td>
-						<td>{{ job.created }}</td>
-						<td>{{ job.job_title }}</td>
-						<td>{{ job.company.user.first_name }}</td>
-						<td>{{ job.location }}</td>
-						<td>{{ job.wage }}</td>
-						<td>{{ job.short_summary }}</td>
-			    	</tr>
-				   {% endfor %}
-			</table>
-		{% endif %}
+	<form method="get" style="text-align: center">
+    	{{ form }}
+    	<button type="submit">Apply Filters</button>
+  	</form>
+	<br>
+	<div class="flex-container" style="margin-left: 100px; margin-right: 100px; min-height: 400px;">
+		<div style="flex:1;">
+			<div>
+				{% if not job_posts %}
+					<div style="padding:20px">
+						No jobs posts yet!
+					</div>
+				{% else %}
+					<table style="width: 100%; margin: 15px;">
+						<tr style="color:#4285F4">
+							<th></th>
+							<th style="padding-bottom: 5px;">Posted</th>
+							<th style="padding-bottom: 5px;">Title</th>
+							<th style="padding-bottom: 5px;">Company</th>
+							<th style="padding-bottom: 5px;">Location</th>
+							<th style="padding-bottom: 5px;">Wage</th>
+							<th style="padding-bottom: 5px;">Description</th>
+						</tr>
+						{% for job in job_posts %}
+							<tr>
+								<td style="padding:15px"><a href="{% url 'job_detail' job.pk %}">Details</a></td>
+								<td>{{ job.created }}</td>
+								<td>{{ job.job_title }}</td>
+								<td>{{ job.company.user.first_name }}</td>
+								<td>{{ job.location }}</td>
+								<td>{{ job.wage }}</td>
+								<td>{{ job.short_summary }}</td>
+							</tr>
+						{% endfor %}
+					</table>
+				{% endif %}
+			</div>
+		</div>
 	</div>
 </body>
 {% endblock %}
