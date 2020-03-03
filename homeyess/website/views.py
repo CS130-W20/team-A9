@@ -188,16 +188,16 @@ class RequestRideCreate(CreateView):
     template_name = 'ride_request/request_ride.html'
     form_class = RideRequestForm
     def form_valid(self, form):
-        print("form data: {}".format(form.data))
         form.instance.homeless = Profile.objects.get(user=self.request.user)
+        self.success_url = '/dashboard/' + str(form.instance.homeless_id)
+
         return super(RequestRideCreate, self).form_valid(form)
     queryset = Ride.objects.all()
 
 
 
-
 @user_passes_test(is_homeless, login_url='/')
-def viewrideform(request, ride_id):
+def viewRide(request, ride_id):
     '''Renders the view that allows people experiencing homelessness to view a specific ride request
     he/she filled out, so that they can review and potentially edit the form
 
@@ -224,9 +224,9 @@ class RequestRideEdit(UpdateView):
     template_name = 'ride_request/request_ride.html'
     form_class = RideRequestForm
     queryset = Ride.objects.all()
-
     def get_object(self):
         id_ = self.kwargs.get("ride_id")
+        self.success_url = '/view-ride/' + str(id_)
         return get_object_or_404(Ride, id=id_)
 
     def get_context_data(self, *args, **kwargs):
@@ -241,6 +241,18 @@ def DeleteRideRequest(request, ride_id):
         user = User.objects.get(pk=homeless_id)
         instance.delete()
     return redirect('/dashboard/' + str(homeless_id))
+
+def cancelRide(request, ride_id):
+    instance = Ride.objects.get(id=ride_id)
+    if instance:
+        volunteer_id = instance.volunteer.id
+        instance.volunteer = None
+        instance.pickup_datetime = None
+        instance.start_datetime = None
+        instance.end_datetime = None
+        instance.save()
+    return redirect('/dashboard/' + str(volunteer_id))
+
 
 @user_passes_test(is_company, login_url='/')
 def editjob(request, job_id):
