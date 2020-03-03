@@ -22,13 +22,13 @@
     <ul class="navbar-nav">
       {% if user.is_authenticated %}
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'dashboard' user.profile.pk %}">Dashboard</a>
+        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
       </li>
       {% endif %}
 
       {% if not user.is_authenticated %}
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+        <a class="nav-link" href="{% url 'user_type' %}">Signup</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'login' %}">Login</a>
@@ -65,5 +65,8 @@
   </div>
 </nav>
 {% block content %}{% endblock %}
+
+<div style="margin-top:40px;"></div>
+
 </body>
 </html>

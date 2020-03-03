@@ -1,0 +1,20 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<h1 class="row justify-content-center">Sign Up</h1>
+<div class="container" style="padding=40px;">
+  <div class="row justify-content-center">
+    <form method="post">
+      {% csrf_token %}
+      <p>Please select the type of account you would like to create.</p>
+      {% for choice in form.user_type %}
+      <div class="radio">
+        {{ choice.tag }} {{ choice.choice_label }}
+      </div>
+      {% endfor %}
+      <button type="submit" class="btn-primary" style="margin-top: 40px;">Sign up</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

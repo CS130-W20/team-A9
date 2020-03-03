@@ -42,36 +42,30 @@ class SignUpFormTest(TestCase):
     }
 
     def test_volunteer_success(self):
-        form = SignUpForm(self.volunteer_data.copy())
+        form = SignUpForm(self.volunteer_data.copy(), user_type='V')
         self.assertTrue(form.is_valid())
 
     def test_volunteer_failure(self):
         d = self.volunteer_data.copy()
         d['car_make'] = ''
-        form = SignUpForm(d)
+        form = SignUpForm(d, user_type='V')
         self.assertFalse(form.is_valid())
 
     def test_homeless_success(self):
         d = self.homeless_data.copy()
-        form = SignUpForm(d)
+        form = SignUpForm(d, user_type='H')
         self.assertTrue(form.is_valid())
 
     def test_homeless_failure(self):
         d = self.homeless_data.copy()
         d['last_name'] = ''
-        form = SignUpForm(d)
+        form = SignUpForm(d, user_type='H')
         self.assertFalse(form.is_valid())
 
     def test_company_success(self):
         d = self.company_data.copy()
-        form = SignUpForm(d)
+        form = SignUpForm(d, user_type='C')
         self.assertTrue(form.is_valid())
-
-    def test_company_failure(self):
-        d = self.company_data.copy()
-        d['last_name'] = 'last'
-        form = SignUpForm(d)
-        self.assertFalse(form.is_valid())
 
 class PostEditJobFormTest(TestCase):
 
@@ -98,4 +92,3 @@ class PostEditJobFormTest(TestCase):
         job_post = JobPost(self.data.copy())
         form = PostJobForm(self.data.copy(), instance=job_post)
         self.assertTrue(form.is_valid())
-

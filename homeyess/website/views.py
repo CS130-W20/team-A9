@@ -9,7 +9,7 @@ from .models import Profile, Ride, JobPost
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
 
-from website.forms import SignUpForm, RideRequestForm, PostJobForm, FilterForm
+from website.forms import SignUpForm, RideRequestForm, PostJobForm, FilterForm, UserTypeForm
 from .models import Profile, Ride, JobPost
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
@@ -37,7 +37,7 @@ def index(request):
     '''
     return render(request, 'index.html')
 
-def signup(request):
+def signup(request, user_type):
     '''Renders the signup form on GET; processes the signup form on POST
 
     :param request: The http request containing user information or extra arguments
@@ -45,18 +45,26 @@ def signup(request):
     :return: the rendered SignUpForm or a redirect to homepage
     :rtype: HttpResponse
     '''
+    if user_type == 'homeless':
+        user_type = 'H'
+    elif user_type == 'volunteer':
+        user_type = 'V'
+    elif user_type == 'company':
+        user_type = 'C'
+    else:
+        return HttpResponse(status=404)
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = SignUpForm(request.POST, user_type=user_type)
         if form.is_valid():
             user = form.save()
             user.refresh_from_db()
             user.profile.phone = form.cleaned_data.get('phone')
-            user.profile.user_type = form.cleaned_data.get('user_type')
-            user.profile.car_plate = form.cleaned_data.get('car_plate')
-            user.profile.car_make = form.cleaned_data.get('car_make')
-            user.profile.car_model = form.cleaned_data.get('car_model')
+            user.profile.car_plate = form.cleaned_data.get('car_plate', None)
+            user.profile.car_make = form.cleaned_data.get('car_make', None)
+            user.profile.car_model = form.cleaned_data.get('car_model', None)
             user.profile.total_volunteer_minutes = 0
-            user.profile.home_address = form.cleaned_data.get('home_address')
+            user.profile.home_address = form.cleaned_data.get('home_address', None)
+            user.profile.user_type = user_type
             user.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
@@ -64,12 +72,27 @@ def signup(request):
             login(request, user)
             return redirect('/')
     else:
-        form = SignUpForm()
+        form = SignUpForm(user_type=user_type)
 
     return render(request, 'registration/signup.html', {'form': form})
 
+def user_type(request):
+    if request.method == 'POST':
+        form = UserTypeForm(request.POST)
+        if form.is_valid():
+            user_type = form.cleaned_data.get('user_type')
+            if user_type == 'H':
+                return redirect('signup/homeless/')
+            if user_type == 'C':
+                return redirect('signup/company/')
+            else:
+                return redirect('signup/volunteer/')
+    else:
+        form = UserTypeForm()
+    return render(request, 'registration/user_type.html', {'form': form})
+
 @login_required(login_url='accounts/login/')
-def dashboard(request, user_id):
+def dashboard(request):
     '''Renders the dashboard page for all users
 
     :param request: The http request containing user information or extra arguments
@@ -79,9 +102,7 @@ def dashboard(request, user_id):
     :return: the rendered dashboard page for the user using the homeless.html, company.html, or volunteer.html template which matches the type of the requesting user
     :rtype: HttpResponse
     '''
-    user = User.objects.filter(pk=user_id).first()
-    if not user:
-        return HttpResponse(status=404)
+    user = request.user
 
     if user.profile.user_type == "V":
         return volunteer(request, user)
@@ -188,16 +209,14 @@ class RequestRideCreate(CreateView):
     template_name = 'ride_request/request_ride.html'
     form_class = RideRequestForm
     def form_valid(self, form):
-        print("form data: {}".format(form.data))
         form.instance.homeless = Profile.objects.get(user=self.request.user)
+        self.success_url = 'dashboard'
+
         return super(RequestRideCreate, self).form_valid(form)
     queryset = Ride.objects.all()
 
-
-
-
-@user_passes_test(is_homeless, login_url='/')
-def viewrideform(request, ride_id):
+@user_passes_test(lambda a: is_homeless(a) or is_volunteer(a), login_url='/')
+def viewRide(request, ride_id):
     '''Renders the view that allows people experiencing homelessness to view a specific ride request
     he/she filled out, so that they can review and potentially edit the form
 
@@ -208,7 +227,7 @@ def viewrideform(request, ride_id):
     '''
     ride_request = get_object_or_404(Ride, id=ride_id)
     context = {'ride_request': ride_request}
-    return render(request, 'ride_request/ViewRideForm.html', context)
+    return render(request, 'ride_request/view_ride.html', context)
 
 @method_decorator(user_passes_test(is_homeless, login_url='/'), name='dispatch')
 class RequestRideEdit(UpdateView):
@@ -224,9 +243,9 @@ class RequestRideEdit(UpdateView):
     template_name = 'ride_request/request_ride.html'
     form_class = RideRequestForm
     queryset = Ride.objects.all()
-
     def get_object(self):
         id_ = self.kwargs.get("ride_id")
+        self.success_url = '/view-ride/' + str(id_)
         return get_object_or_404(Ride, id=id_)
 
     def get_context_data(self, *args, **kwargs):
@@ -234,13 +253,27 @@ class RequestRideEdit(UpdateView):
         context['update'] = True
         return context
 
-def DeleteRideRequest(request, ride_id):
+@user_passes_test(is_homeless, login_url='/')
+def deleteRideRequest(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
         homeless_id = instance.homeless.id
         user = User.objects.get(pk=homeless_id)
         instance.delete()
-    return redirect('/dashboard/' + str(homeless_id))
+    return redirect('dashboard')
+
+@user_passes_test(is_homeless, login_url='/')
+def cancelRide(request, ride_id):
+    instance = Ride.objects.get(id=ride_id)
+    if instance:
+        volunteer_id = instance.volunteer.id
+        instance.volunteer = None
+        instance.pickup_datetime = None
+        instance.start_datetime = None
+        instance.end_datetime = None
+        instance.save()
+    return redirect('dashboard')
+
 
 @user_passes_test(is_company, login_url='/')
 def editjob(request, job_id):
@@ -264,7 +297,7 @@ def editjob(request, job_id):
             else:
                 return render(request, 'jobs/editjob.html', {'form': form})
 
-        return redirect('/dashboard/' + str(request.user.id))
+        return redirect('dashboard')
     else:
         form = PostJobForm(instance=job_post)
 
@@ -285,7 +318,7 @@ def postjob(request):
             user = Profile.objects.get(pk=request.user.id)
             job_post = JobPost(company=user, **form.cleaned_data)
             job_post.save()
-            return redirect('/dashboard/' + str(request.user.id))
+            return redirect('dashboard')
     else:
         form = PostJobForm(initial={'wage': '15.50 usd/hr', 'hours': '40 hr/wk'})
 
@@ -337,6 +370,7 @@ def getRideDict(ride):
     ride_dict['pickup_address'] = ride.homeless.home_address
     return ride_dict
 
+@user_passes_test(is_volunteer, login_url='/')
 def confirmRide(request, ride_id):
     ride = Ride.objects.get(pk=ride_id)
     homeless_profile = ride.homeless
@@ -355,7 +389,7 @@ def confirmRide(request, ride_id):
     ride.start_datetime, ride.pickup_datetime, ride.end_datetime, _ = getTimes(td_vec, ride.interview_datetime)
     ride.save()
 
-    return redirect('search_rides')
+    return redirect('dashboard')
 
 def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
     for ride in rides:
