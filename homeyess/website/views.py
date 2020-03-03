@@ -184,7 +184,11 @@ def job_board(request):
     job_title = request.GET.get('job_title', None)
 
     # Let the query function extract the jobs we care about:
+<<<<<<< HEAD
     jobs = job_utils.filterQuerySet(
+=======
+    jobs = filterQuerySetJobs(
+>>>>>>> basic filter added
         job_posts,
         location,
         job_title)
@@ -411,6 +415,17 @@ def confirm_ride(request, ride_id):
     ride.save()
 
     return redirect('dashboard')
+
+def filterQuerySetJobs(jobs, location, job_title):
+    # If no filter has been applied, don't filter:
+    if location is None and job_title is None:
+        return jobs
+
+    # This way we can filter if only one of the values is set:
+    loc_filter = location.lower() if location is not None else ''
+    title_filter = job_title.lower() if job_title is not None else ''
+
+    return list(filter(lambda job: (loc_filter in job.location.lower()) and (title_filter in job.job_title.lower()), jobs))
 
 def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
     for ride in rides:
