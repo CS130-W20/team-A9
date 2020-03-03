@@ -11,6 +11,38 @@ from django.db import models
 from .models import Ride
 from django.urls import reverse
 
+FORM_CLASS = 'form-control'
+
+class BootstrapCharField(forms.CharField):
+    def __init__(self, *args, **kwargs):
+        if 'widget' not in kwargs:
+            kwargs['widget'] = forms.TextInput(attrs={'class': FORM_CLASS})
+        super(BootstrapCharField, self).__init__(*args, **kwargs)
+
+class BootstrapIntegerField(forms.IntegerField):
+    def __init__(self, *args, **kwargs):
+        if 'widget' not in kwargs:
+            kwargs['widget'] = forms.NumberInput(attrs={'class': FORM_CLASS})
+        super(BootstrapIntegerField, self).__init__(*args, **kwargs)
+
+class BootstrapDateTimeField(forms.DateTimeField):
+    def __init__(self, *args, **kwargs):
+        if 'widget' not in kwargs:
+            kwargs['widget'] = forms.DateTimeInput(attrs={'class': FORM_CLASS})
+        super(BootstrapDateTimeField, self).__init__(*args, **kwargs)
+
+class BootstrapEmailField(forms.EmailField):
+    def __init__(self, *args, **kwargs):
+        if 'widget' not in kwargs:
+            kwargs['widget'] = forms.EmailInput(attrs={'class': FORM_CLASS})
+        super(BootstrapEmailField, self).__init__(*args, **kwargs)
+
+class BootstrapRegexField(forms.RegexField):
+    def __init__(self, *args, **kwargs):
+        if 'widget' not in kwargs:
+            kwargs['widget'] = forms.TextInput(attrs={'class': FORM_CLASS})
+        super(BootstrapRegexField, self).__init__(*args, **kwargs)
+
 class SignUpForm(UserCreationForm):
     '''SignUpForm for users, companies, and volunteers
 
@@ -23,32 +55,35 @@ class SignUpForm(UserCreationForm):
         field_order = []
 
         if user_type == 'C':
-            self.fields['first_name'] = forms.CharField(max_length=30, required=True, label=" Company Name")
+            self.fields['first_name'] = BootstrapCharField(max_length=30, required=True, label=" Company Name")
         else:
-            self.fields['first_name'] = forms.CharField(max_length=30, required=True, label="First Name")
+            self.fields['first_name'] = BootstrapCharField(max_length=30, required=True, label="First Name")
         field_order.append('first_name')
         if user_type != 'C':
-            self.fields['last_name'] = forms.CharField(max_length=30, required=False)
+            self.fields['last_name'] = BootstrapCharField(max_length=30, required=False)
             field_order.append('last_name')
+        self.fields['username'] = BootstrapCharField(required=True)
         field_order.append('username')
+        self.fields['password1'] = BootstrapCharField(required=True, widget=forms.PasswordInput(attrs={'class': FORM_CLASS}), label="Password")
         field_order.append('password1')
+        self.fields['password2'] = BootstrapCharField(required=True, widget=forms.PasswordInput(attrs={'class': FORM_CLASS}), label="Confirm password")
         field_order.append('password2')
-        self.fields['email'] = forms.EmailField(max_length=254, required=False, help_text='Optional.')
+        self.fields['email'] = BootstrapEmailField(max_length=254, required=False, help_text='Optional.')
         field_order.append('email')
-        self.fields['phone'] = forms.RegexField(regex='\d{3}-\d{3}-\d{4}', required=False, help_text='Optional.', label="Phone Number (###-###-####)")
+        self.fields['phone'] = BootstrapRegexField(regex='\d{3}-\d{3}-\d{4}', required=False, help_text='Optional.', label="Phone Number (###-###-####)", error_messages={'invalid': 'Incorrect phone number format'})
         field_order.append('phone')
         if user_type == 'V':
-            self.fields['car_plate'] = forms.CharField(max_length=8, required=False, label="License Plate Number")
-            self.fields['car_make'] = forms.CharField(max_length=20, required=False, label="Make of Car")
-            self.fields['car_model'] = forms.CharField(max_length=20, required=False, label="Model of Car")
+            self.fields['car_plate'] = BootstrapCharField(max_length=8, required=False, label="License Plate Number")
+            self.fields['car_make'] = BootstrapCharField(max_length=20, required=False, label="Make of Car")
+            self.fields['car_model'] = BootstrapCharField(max_length=20, required=False, label="Model of Car")
             field_order.append('car_plate')
             field_order.append('car_make')
             field_order.append('car_model')
         if user_type == 'V':
-            self.fields['home_address'] = forms.CharField(max_length=200, required=False, label="Home Address")
+            self.fields['home_address'] = BootstrapCharField(max_length=200, required=False, label="Home Address")
             field_order.append('home_address')
         if user_type == 'H':
-            self.fields['home_address'] = forms.CharField(max_length=200, required=False, label="Pickup Address")
+            self.fields['home_address'] = BootstrapCharField(max_length=200, required=False, label="Pickup Address")
             field_order.append('home_address')
 
         self.order_fields(field_order)
@@ -76,12 +111,13 @@ class PostJobForm(ModelForm):
     '''PostJobForm for companies to post and edit jobs
 
     '''
-    location = forms.CharField(max_length=100, required=True, help_text='Location of job itself, not interview.')
-    wage = forms.CharField(max_length=100, required=True)
-    hours = forms.CharField(max_length=100, required=True)
-    job_title = forms.CharField(max_length=100, required=True)
-    short_summary = forms.CharField(max_length=200, required=True, help_text='First description seen by potential applicants.')
-    description = forms.CharField(widget=forms.Textarea, required=True, help_text='Detail job responsibilities and roles, desired skills and experiences, and means of getting into contact with you.')
+
+    location = BootstrapCharField(max_length=100, required=True, help_text='Location of job itself, not interview.')
+    wage = BootstrapCharField(max_length=100, required=True)
+    hours = BootstrapCharField(max_length=100, required=True, help_text="Number of hours per day / week, expected work hours, etc.")
+    job_title = BootstrapCharField(max_length=100, required=True)
+    short_summary = BootstrapCharField(max_length=200, required=True, help_text='First description seen by potential applicants.')
+    description = BootstrapCharField(widget=forms.Textarea(attrs={'rows': '5', 'class': FORM_CLASS}), required=True, help_text='Detail job responsibilities and roles, desired skills and experiences, and means of getting into contact with you.')
 
     class Meta:
         model = JobPost
@@ -94,18 +130,16 @@ class RideRequestForm(ModelForm):
         model = Ride
         fields = ['interview_datetime', 'interview_duration', 'interview_address', 'interview_company']
 
-    class DateInput(forms.DateInput):
-        input_type = 'date'
-    interview_datetime = forms.DateTimeField(required=True, widget=forms.DateTimeInput, help_text='Format YYYY-MM-DD HH:MM:SS')
-    interview_duration = forms.IntegerField(required=True, help_text='(in minutes)')
-    interview_address = forms.CharField(max_length=200, required=True)
-    interview_company = forms.CharField(max_length=100, required=True)
+    interview_datetime = BootstrapDateTimeField(required=True, help_text='Format YYYY-MM-DD HH:MM:SS')
+    interview_duration = BootstrapIntegerField(required=True, help_text='(in minutes)')
+    interview_address = BootstrapCharField(max_length=200, required=True)
+    interview_company = BootstrapCharField(max_length=100, required=True)
 
 
 class FilterForm(Form):
-    start_datetime = forms.DateTimeField(required=False)
-    end_datetime = forms.DateTimeField(required=False)
-    max_range = forms.IntegerField(required=False)
+    start_datetime = BootstrapDateTimeField(required=False)
+    end_datetime = BootstrapDateTimeField(required=False)
+    max_range = BootstrapIntegerField(required=False)
 
 class UserTypeForm(Form):
-    user_type = forms.ChoiceField(choices=[(tag.value, tag.name) for tag in Profile.UserType], required=True, widget=forms.RadioSelect, initial='H')
+    user_type = forms.ChoiceField(choices=[(tag.value, tag.name) for tag in Profile.UserType], required=True, widget=forms.RadioSelect(), initial='H')

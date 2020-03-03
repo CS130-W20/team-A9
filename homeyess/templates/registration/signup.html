@@ -3,8 +3,12 @@
 {% block content %}
 <h1 class="row justify-content-center">Sign Up</h1>
 <div class="container" style="padding=40px;">
-  {% if form.non_field_errors %}
-  <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+  {% if form.errors %}
+  <div class="alert alert-danger">
+    {% for key, error in form.errors.items %}
+    <p>{{ error }}</p>
+    {% endfor %}
+  </div>
   {% endif %}
   <div class="row justify-content-center">
     <form method="post">
