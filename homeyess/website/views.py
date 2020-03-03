@@ -92,7 +92,7 @@ def user_type(request):
     return render(request, 'registration/user_type.html', {'form': form})
 
 @login_required(login_url='accounts/login/')
-def dashboard(request, user_id):
+def dashboard(request):
     '''Renders the dashboard page for all users
 
     :param request: The http request containing user information or extra arguments
@@ -102,9 +102,7 @@ def dashboard(request, user_id):
     :return: the rendered dashboard page for the user using the homeless.html, company.html, or volunteer.html template which matches the type of the requesting user
     :rtype: HttpResponse
     '''
-    user = User.objects.filter(pk=user_id).first()
-    if not user:
-        return HttpResponse(status=404)
+    user = request.user
 
     if user.profile.user_type == "V":
         return volunteer(request, user)

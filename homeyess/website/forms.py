@@ -92,4 +92,4 @@ class FilterForm(Form):
     max_range = forms.IntegerField(required=False)
 
 class UserTypeForm(Form):
-    user_type = forms.ChoiceField(choices=[(tag.value, tag.name) for tag in Profile.UserType], required=True)
+    user_type = forms.ChoiceField(choices=[(tag.value, tag.name) for tag in Profile.UserType], required=True, widget=forms.RadioSelect, initial='H')
