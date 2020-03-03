@@ -185,7 +185,11 @@ def job_board(request):
 
     # Let the query function extract the jobs we care about:
 <<<<<<< HEAD
+<<<<<<< HEAD
     jobs = job_utils.filterQuerySet(
+=======
+    jobs = filterQuerySetJobs(
+>>>>>>> basic filter added
 =======
     jobs = filterQuerySetJobs(
 >>>>>>> basic filter added
