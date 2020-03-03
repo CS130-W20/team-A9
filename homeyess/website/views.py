@@ -58,6 +58,7 @@ def signup(request, user_type):
         if form.is_valid():
             user = form.save()
             user.refresh_from_db()
+            user.last_name = form.cleaned_data.get('last_name')
             user.profile.phone = form.cleaned_data.get('phone')
             user.profile.car_plate = form.cleaned_data.get('car_plate', None)
             user.profile.car_make = form.cleaned_data.get('car_make', None)
@@ -216,7 +217,7 @@ class RequestRideCreate(CreateView):
     queryset = Ride.objects.all()
 
 @user_passes_test(lambda a: is_homeless(a) or is_volunteer(a), login_url='/')
-def viewRide(request, ride_id):
+def view_ride(request, ride_id):
     '''Renders the view that allows people experiencing homelessness to view a specific ride request
     he/she filled out, so that they can review and potentially edit the form
 
@@ -254,7 +255,7 @@ class RequestRideEdit(UpdateView):
         return context
 
 @user_passes_test(is_homeless, login_url='/')
-def deleteRideRequest(request, ride_id):
+def delete_ride(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
         homeless_id = instance.homeless.id
@@ -263,7 +264,7 @@ def deleteRideRequest(request, ride_id):
     return redirect('dashboard')
 
 @user_passes_test(is_homeless, login_url='/')
-def cancelRide(request, ride_id):
+def cancel_ride(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
         volunteer_id = instance.volunteer.id
@@ -276,7 +277,7 @@ def cancelRide(request, ride_id):
 
 
 @user_passes_test(is_company, login_url='/')
-def editjob(request, job_id):
+def edit_job(request, job_id):
     '''Renders the editjob form on GET; processes the editjob form on POST
 
     :param request: The http request containing user information or extra arguments
@@ -295,16 +296,16 @@ def editjob(request, job_id):
             if form.is_valid():
                 form.save()
             else:
-                return render(request, 'jobs/editjob.html', {'form': form})
+                return render(request, 'jobs/edit_job.html', {'form': form})
 
         return redirect('dashboard')
     else:
         form = PostJobForm(instance=job_post)
 
-    return render(request, 'jobs/editjob.html', {'form': form})
+    return render(request, 'jobs/edit_job.html', {'form': form})
 
 @user_passes_test(is_company, login_url='/')
-def postjob(request):
+def post_job(request):
     '''Renders the postjob form on GET; processes the postjob form on POST
 
     :param request: The http request containing user information or extra arguments
@@ -320,9 +321,9 @@ def postjob(request):
             job_post.save()
             return redirect('dashboard')
     else:
-        form = PostJobForm(initial={'wage': '15.50 usd/hr', 'hours': '40 hr/wk'})
+        form = PostJobForm()
 
-    return render(request, 'jobs/postjob.html', {'form': form})
+    return render(request, 'jobs/post_job.html', {'form': form})
 
 @user_passes_test(is_volunteer, login_url='/')
 def ride_board(request):
@@ -359,7 +360,7 @@ def ride_board(request):
     return render(request, 'ride_board.html', context=context)
 
 @user_passes_test(is_volunteer, login_url='/')
-def confirmRide(request, ride_id):
+def confirm_ride(request, ride_id):
     ride = Ride.objects.get(pk=ride_id)
     homeless_profile = ride.homeless
     volunteer_profile = Profile.objects.get(user=request.user)
