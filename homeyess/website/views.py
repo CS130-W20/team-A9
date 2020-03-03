@@ -197,7 +197,7 @@ class RequestRideCreate(CreateView):
 
 
 @user_passes_test(is_homeless, login_url='/')
-def ViewRide(request, ride_id):
+def viewRide(request, ride_id):
     '''Renders the view that allows people experiencing homelessness to view a specific ride request
     he/she filled out, so that they can review and potentially edit the form
 
@@ -242,7 +242,7 @@ def DeleteRideRequest(request, ride_id):
         instance.delete()
     return redirect('/dashboard/' + str(homeless_id))
 
-def CancelRide(request, ride_id):
+def cancelRide(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
         volunteer_id = instance.volunteer.id
