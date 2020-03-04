@@ -8,8 +8,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profile, Ride, JobPost
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
-
-from website.forms import SignUpForm, RideRequestForm, PostJobForm, FilterForm, UserTypeForm
+from website.forms import SignUpForm, RideRequestForm, PostJobForm, FilterForm, UserTypeForm, JobBoardFilterForm
+import job_utils
 from .models import Profile, Ride, JobPost
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
@@ -176,8 +176,28 @@ def job_board(request):
     :return: the rendered job board page using the job_board.html template
     :rtype: HttpResponse
     '''
+
     job_posts = JobPost.objects.all().order_by('-created')
-    return render(request, 'job_board/job_board.html', {'job_posts': job_posts})
+    
+    # Extract the information we want here:
+    location = request.GET.get('location', None)
+    job_title = request.GET.get('job_title', None)
+
+    # Let the query function extract the jobs we care about:
+    jobs = job_utils.filterQuerySet(
+        job_posts,
+        location,
+        job_title)
+
+    context = {}
+    context['form'] = JobBoardFilterForm(initial={
+        'location': request.GET.get('location', None),
+        'job_title': request.GET.get('job_title', None),
+    })
+    context['job_posts'] = jobs
+
+    job_posts = JobPost.objects.all().order_by('-created')
+    return render(request, 'job_board/job_board.html', context)
 
 @user_passes_test(is_homeless, login_url='/')
 def job_detail(request, job_id):
