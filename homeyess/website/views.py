@@ -9,7 +9,7 @@ from .models import Profile, Ride, JobPost
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
 from .forms import SignUpForm, RideRequestForm, PostJobForm, FilterForm, UserTypeForm, JobBoardFilterForm
-import job_utils
+from website import job_utils
 from .models import Profile, Ride, JobPost
 from datetime import datetime
 from django.contrib.auth.models import User
@@ -193,7 +193,6 @@ def job_board(request):
     })
     context['job_posts'] = jobs
 
-    job_posts = JobPost.objects.all().order_by('-created')
     return render(request, 'jobs/job_board.html', context)
 
 @user_passes_test(is_homeless, login_url='/')
