@@ -136,8 +136,8 @@ class RideRequestForm(ModelForm):
     interview_company = BootstrapCharField(max_length=100, required=True)
 
 class JobBoardFilterForm(Form):
-    location = forms.CharField(required=False)
-    job_title = forms.CharField(required=False)
+    location = BootstrapCharField(required=False)
+    job_title = BootstrapCharField(required=False)
 
 class FilterForm(Form):
     start_datetime = BootstrapDateTimeField(required=False)
