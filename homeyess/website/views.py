@@ -9,7 +9,7 @@ from .models import Profile, Ride, JobPost
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
 from website.forms import SignUpForm, RideRequestForm, PostJobForm, FilterForm, UserTypeForm, JobBoardFilterForm
-import job_utils
+from website import job_utils
 from .models import Profile, Ride, JobPost
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
@@ -186,11 +186,14 @@ def job_board(request):
     # Let the query function extract the jobs we care about:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     jobs = job_utils.filterQuerySet(
 =======
     jobs = filterQuerySetJobs(
 >>>>>>> basic filter added
 =======
+=======
+>>>>>>> more rebase
     jobs = filterQuerySetJobs(
 >>>>>>> basic filter added
         job_posts,
