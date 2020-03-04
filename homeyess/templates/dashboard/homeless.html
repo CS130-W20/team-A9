@@ -39,7 +39,7 @@
 				    					<h5>{{ ride.interview_company }} - {{ ride.interview_datetime }}</h5>
 				    					<div>Company Address: {{ ride.interview_address }}</div>
 								    	<div>Pickup Time: {{ ride.pickup_datetime }}</div>
-								    	<div>Pickup Address: {{ ride.pickup_address }}</div>
+								    	<div>Pickup Address: {{ ride.homeless.home_address }}</div>
 								    	<div>License Plate: {{ ride.volunteer.car_plate }}</div>
 								    	<div>Car: {{ ride.volunteer.car_make }} {{ ride.volunteer.car_model }}</div>
 								    	<div>Volunteer: {{ ride.volunteer.user.first_name }} {{ ride.volunteer.user.last_name }}</div>
@@ -69,7 +69,7 @@
 				    			<div class="flex-container">
 				    				<div class="flex-container-vertical">
 								    	<h5>{{ ride.interview_company }} - {{ ride.interview_datetime }}</h5>
-								    	<div>Pickup Address: {{ ride.pickup_address }}</div>
+								    	<div>Pickup Address: {{ ride.homeless.home_address }}</div>
 								    	<div>Company Address: {{ ride.interview_address }}</div>
 								    	<br>
 								    	<br>

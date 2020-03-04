@@ -26,6 +26,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 import json
 from django.forms.models import model_to_dict
 import pytz
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def index(request):
     '''Renders the index / home page
@@ -393,13 +394,9 @@ def confirm_ride(request, ride_id):
     return redirect('dashboard')
 
 def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
-    for ride in rides:
-        td_vec = getTimeDistanceVector(
-            ride.homeless.home_address,
-            v_start,
-            ride.interview_address,
-            ride.interview_duration
-        )
+    td_vecs = getTimeDistanceVectors(rides, v_start)
+
+    for ride, td_vec in zip(rides, td_vecs):
         if td_vec == None:
             ride.d = None
             ride.sd = None
@@ -431,6 +428,19 @@ def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
         rides = [ride for ride in rides if ride.d <= max_range]
 
     return rides
+
+def getTimeDistanceVectors(rides, v_start):
+    # perform all api calls concurrently
+    with ThreadPoolExecutor() as executor:
+        futures = [
+            executor.submit(
+                getTimeDistanceVector,
+                ride.homeless.home_address,
+                v_start,
+                ride.interview_address,
+                ride.interview_duration
+            ) for ride in rides]
+    return [future.result() for future in as_completed(futures)]
 
 def getTimeDistanceVector(v_start, hp_start, interview_location, interview_duration):
     URL = 'https://maps.googleapis.com/maps/api/distancematrix/json'
@@ -471,7 +481,6 @@ def getTimeDistanceVector(v_start, hp_start, interview_location, interview_durat
 def getResponseJson(url, params):
     r = requests.get(url=url, params=params)
     return r.json()
-
 
 def getDistance(vec):
     distances = [distance for (_, distance) in vec]
