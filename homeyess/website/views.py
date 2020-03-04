@@ -187,6 +187,7 @@ def job_board(request):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     jobs = job_utils.filterQuerySet(
 =======
     jobs = filterQuerySetJobs(
@@ -196,6 +197,9 @@ def job_board(request):
 >>>>>>> more rebase
     jobs = filterQuerySetJobs(
 >>>>>>> basic filter added
+=======
+    jobs = job_utils.filterQuerySet(
+>>>>>>> made most changes requested
         job_posts,
         location,
         job_title)
@@ -423,6 +427,7 @@ def confirm_ride(request, ride_id):
 
     return redirect('dashboard')
 
+<<<<<<< HEAD
 def filterQuerySetJobs(jobs, location, job_title):
     # If no filter has been applied, don't filter:
     if location is None and job_title is None:
@@ -434,6 +439,8 @@ def filterQuerySetJobs(jobs, location, job_title):
 
     return list(filter(lambda job: (loc_filter in job.location.lower()) and (title_filter in job.job_title.lower()), jobs))
 
+=======
+>>>>>>> made most changes requested
 def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
     for ride in rides:
         td_vec = getTimeDistanceVector(
