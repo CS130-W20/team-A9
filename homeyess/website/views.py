@@ -196,7 +196,6 @@ def job_board(request):
     })
     context['job_posts'] = jobs
 
-    job_posts = JobPost.objects.all().order_by('-created')
     return render(request, 'job_board/job_board.html', context)
 
 @user_passes_test(is_homeless, login_url='/')
