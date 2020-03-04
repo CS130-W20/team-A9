@@ -263,7 +263,7 @@ def delete_ride(request, ride_id):
         instance.delete()
     return redirect('dashboard')
 
-@user_passes_test(is_homeless, login_url='/')
+@user_passes_test(is_volunteer, login_url='/')
 def cancel_ride(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
