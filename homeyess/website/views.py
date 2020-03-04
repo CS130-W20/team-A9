@@ -8,12 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profile, Ride, JobPost
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
-
-<<<<<<< HEAD
 from website.forms import SignUpForm, RideRequestForm, PostJobForm, FilterForm, UserTypeForm, JobBoardFilterForm
-=======
-from website.forms import SignUpForm, RideRequestForm, PostJobForm, FilterForm, JobBoardFilterForm
->>>>>>> 246e255474c4b35e63d1eda8d5cf645372e9a8a0
 from .models import Profile, Ride, JobPost
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
@@ -181,7 +176,6 @@ def job_board(request):
     :rtype: HttpResponse
     '''
 
-<<<<<<< HEAD
     job_posts = JobPost.objects.all().order_by('-created')
     
     # Extract the information we want here:
@@ -202,28 +196,6 @@ def job_board(request):
     context['job_posts'] = jobs
 
     job_posts = JobPost.objects.all().order_by('-created')
-=======
-    job_posts = JobPost.objects.all().order_by('-created')
-    
-    # Extract the information we want here:
-    location = request.GET.get('location', None)
-    job_title = request.GET.get('job_title', None)
-
-    # Let the query function extract the jobs we care about:
-    jobs = filterQuerySetJobs(
-        job_posts,
-        location,
-        job_title)
-
-    context = {}
-    context['form'] = JobBoardFilterForm(initial={
-        'location': request.GET.get('location', None),
-        'job_title': request.GET.get('job_title', None),
-    })
-    context['job_posts'] = jobs
-
-    job_posts = JobPost.objects.all().order_by('-created')
->>>>>>> 246e255474c4b35e63d1eda8d5cf645372e9a8a0
     return render(request, 'job_board/job_board.html', context)
 
 @user_passes_test(is_homeless, login_url='/')
