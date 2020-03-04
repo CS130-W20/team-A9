@@ -1,4 +1,4 @@
-from django.forms import forms
+from django import forms
 
 FORM_CLASS = 'form-control'
 

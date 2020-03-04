@@ -1,4 +1,5 @@
 from django.forms.models import model_to_dict
+from homeyess.settings import GOOGLE_MAPS_API_KEY
 
 import requests
 import googlemaps
