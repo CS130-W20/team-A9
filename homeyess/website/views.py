@@ -17,7 +17,6 @@ import googlemaps
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.utils.decorators import method_decorator
 from .decorators import is_homeless, is_volunteer, is_company
-import requests
 from homeyess.settings import GOOGLE_MAPS_API_KEY
 import functools
 from django.conf import settings
