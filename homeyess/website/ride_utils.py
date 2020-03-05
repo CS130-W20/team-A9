@@ -1,4 +1,4 @@
-from homeyess.settings import GOOGLE_MAPS_API_KEY
+from homeyess.settings import GOOGLE_MAPS_API_KEY, TWILIO_AUTH_TOKEN, TWILIO_ACCOUNT_SID
 
 import requests
 import googlemaps
@@ -7,6 +7,9 @@ import functools
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from django.forms.models import model_to_dict
+from django.core.mail import send_mail
+
+from twilio.rest import Client
 
 def getRideDict(ride):
     ride_dict = model_to_dict(ride)
@@ -136,3 +139,25 @@ def getTimeString(mins):
     elif m > 0:
         s += str(m) + ' mins'
     return s
+
+def send_message(message, profile):
+    '''Sends texts and emails to people
+
+    :param message: 
+    :type message: String
+    :param profile: The user's profile
+    :type profile: Profile
+    '''
+    res = [None, None]
+
+    if profile == None:
+        return res
+
+    if profile.phone != "":
+        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+        res[0] = client.messages.create(body=message, from_='+12055089181', to=profile.phone)
+    
+    if profile.user.email != "":
+        res[1] = send_mail('Homeyess Notification', message, 'from@example.com', [profile.user.email], fail_silently=False)
+
+    return res

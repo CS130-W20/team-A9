@@ -1,7 +1,7 @@
 '''
 homeyess/website/views.py
 '''
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
@@ -18,6 +18,8 @@ from django.utils.decorators import method_decorator
 from .decorators import is_homeless, is_volunteer, is_company
 import requests
 from homeyess.settings import GOOGLE_MAPS_API_KEY
+
+import functools
 from django.conf import settings
 import math
 from django.core.serializers.json import DjangoJSONEncoder
@@ -260,6 +262,7 @@ class RequestRideEdit(UpdateView):
     template_name = 'rides/request_ride.html'
     form_class = RideRequestForm
     queryset = Ride.objects.all()
+
     def get_object(self):
         id_ = self.kwargs.get("ride_id")
         self.success_url = '/view-ride/' + str(id_)
@@ -270,10 +273,22 @@ class RequestRideEdit(UpdateView):
         context['update'] = True
         return context
 
+    def form_valid(self, form):
+        super(RequestRideEdit, self).form_valid(form)
+        
+        form_data = self.get_object()
+        send_message("Ride to {} on {} has been updated. You have been removed from the ride request. Check the updated request if you'd still like to volunteer".format(form_data.interview_address, form_data.pickup_datetime), form_data.volunteer)
+        form_data.volunteer = None
+        form_data.save();
+
+        return HttpResponseRedirect(self.get_success_url()) 
+
 @user_passes_test(is_homeless, login_url='/')
 def delete_ride(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
+        send_message("Ride request to {} on {} has been deleted".format(instance.interview_address, instance.pickup_datetime), instance.volunteer)
+
         homeless_id = instance.homeless.id
         user = User.objects.get(pk=homeless_id)
         instance.delete()
@@ -283,12 +298,15 @@ def delete_ride(request, ride_id):
 def cancel_ride(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
+        send_message("Ride to {} on {} has been cancelled by the volunteer. Your request has been relisted under the ride requests.".format(instance.interview_address, instance.pickup_datetime), instance.homeless)
+
         volunteer_id = instance.volunteer.id
         instance.volunteer = None
         instance.pickup_datetime = None
         instance.start_datetime = None
         instance.end_datetime = None
         instance.save()
+
     return redirect('dashboard')
 
 
@@ -395,5 +413,7 @@ def confirm_ride(request, ride_id):
     times = [time for (time, _) in td_vec]
     ride.start_datetime, ride.pickup_datetime, ride.end_datetime, _ = getTimes(td_vec, ride.interview_datetime)
     ride.save()
+
+    send_message("Your ride request to {} on {} has been matched with a volunteer".format(ride.interview_address, ride.pickup_datetime), homeless_profile)
 
     return redirect('dashboard')
