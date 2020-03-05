@@ -277,18 +277,17 @@ class RequestRideEdit(UpdateView):
         super(RequestRideEdit, self).form_valid(form)
         
         form_data = self.get_object()
-        if form_data.volunteer != None:
-            send_message("Ride to {} has been updated".format(form_data.interview_address), form_data.volunteer)
-        if form_data.homeless != None:
-            send_message("Ride to {} has been updated".format(form_data.interview_address), form_data.homeless)
+        send_message("Ride to {} on {} has been updated. You have been removed from the ride request. Check the updated request if you'd still like to volunteer".format(form_data.interview_address, form_data.pickup_datetime), form_data.volunteer)
+        form_data.volunteer = None
+        form_data.save();
+
         return HttpResponseRedirect(self.get_success_url()) 
 
 @user_passes_test(is_homeless, login_url='/')
 def delete_ride(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
-        if instance.volunteer != None:
-            send_message("Ride to {} has been deleted".format(instance.interview_address), instance.volunteer)
+        send_message("Ride request to {} on {} has been deleted".format(instance.interview_address, instance.pickup_datetime), instance.volunteer)
 
         homeless_id = instance.homeless.id
         user = User.objects.get(pk=homeless_id)
@@ -299,8 +298,7 @@ def delete_ride(request, ride_id):
 def cancel_ride(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
-        if instance.homeless != None:
-            send_message("Ride to {} has been cancelled by the volunteer. Your request has been relisted under the ride requests.".format(instance.interview_address), instance.homeless)
+        send_message("Ride to {} on {} has been cancelled by the volunteer. Your request has been relisted under the ride requests.".format(instance.interview_address, instance.pickup_datetime), instance.homeless)
 
         volunteer_id = instance.volunteer.id
         instance.volunteer = None
@@ -416,7 +414,6 @@ def confirm_ride(request, ride_id):
     ride.start_datetime, ride.pickup_datetime, ride.end_datetime, _ = getTimes(td_vec, ride.interview_datetime)
     ride.save()
 
-    if homeless_profile != None:
-        send_message("Ride to {} has been matched with a volunteer".format(ride.interview_address), homeless_profile)
+    send_message("Your ride request to {} on {} has been matched with a volunteer".format(ride.interview_address, ride.pickup_datetime), homeless_profile)
 
     return redirect('dashboard')
