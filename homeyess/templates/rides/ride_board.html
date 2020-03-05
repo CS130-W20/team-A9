@@ -79,7 +79,7 @@ function addRideMarker(ride) {
 	interview_datetime = new Date(ride.interview_datetime);
 
     marker['infowindow']  = new google.maps.InfoWindow({
-        content: 
+        content:
         "Time: " + sd.toLocaleDateString("en-US") + "-" + ed.toLocaleDateString("en-US") + "(" + ride.total_time + ")<br>"
         + "Distance: " + ride.d + " miles<br>"
         + "Pickup Address: " + ride.pickup_address + "<br>"
@@ -112,7 +112,7 @@ function addRideMarker(ride) {
 	</h1>
 	<form method="get" style="text-align: center">
     	{{ form }}
-    	<button type="submit">Apply Filters</button>
+    	<button class="btn btn-primary" type="submit">Apply Filters</button>
   	</form>
   	<br>
 	<div class="flex-container" style="margin-left: 100px; margin-right: 100px; min-height: 400px;">
