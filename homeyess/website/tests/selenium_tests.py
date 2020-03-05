@@ -1,78 +1,73 @@
-from django.test import LiveServerTestCase
+from django.test import TestCase, LiveServerTestCase
+from django.test.utils import override_settings
+from website.forms import SignUpForm, PostJobForm
+from website.models import Profile, JobPost
 from selenium import webdriver
-
+from selenium.webdriver.common.keys import Keys
 
 class SeleniumTests(LiveServerTestCase):
     def setUp(self):
-        # Using Firefox because I think you need to do something extra with chrome:
-        self.selenium = webdriver.Firefox()
+        # Using ChromeDriver here:
+        self.browser = webdriver.Chrome()
+        self.browser.implicitly_wait(10)
+        self.browser.maximize_window()
         super(SeleniumTests, self).setUp()
 
     def tearDown(self):
-        self.selenium.quit()
-        super(SeleniumTests, self).tearDown()
+        self.browser.quit()
+        super(SeleniumTests, self).tearDown()        
 
+    def signup(self, profile_type):
+        self.browser.get(self.live_server_url)
+
+        # First we go ahead and signup:
+        self.browser.find_element_by_xpath('//*[@id="navbarNav"]/ul/li[1]/a').click()
+
+        if profile_type == 'V':
+            self.browser.find_element_by_id('id_user_type_0').click()
+        elif profile_type == 'H':
+            self.browser.find_element_by_id('id_user_type_1').click()
+        elif profile_type == 'C':
+            self.browser.find_element_by_id('id_user_type_2').click()
+
+        # Click on the signup button:
+        self.browser.find_element_by_xpath('/html/body/div[1]/div/form/button').click()
+
+        # Shared by all profile types:
+        self.browser.find_element_by_id('id_username').send_keys('usr_johndoe')
+        self.browser.find_element_by_id('id_password1').send_keys('iNdJDopX2Q')
+        self.browser.find_element_by_id('id_password2').send_keys('iNdJDopX2Q')
+        self.browser.find_element_by_id('id_email').send_keys('john@doe.com')
+        self.browser.find_element_by_id('id_phone').send_keys('202-555-0191')
+
+        if profile_type == 'C':
+            self.browser.find_element_by_id('id_first_name').send_keys('Doe Inc.')
+
+        # Signup sheet things that are shared:
+        if profile_type == 'V' or profile_type == 'H':
+            self.browser.find_element_by_id('id_first_name').send_keys('John')
+            self.browser.find_element_by_id('id_last_name').send_keys('Doe')
+            # Pickup address for homeless people:
+            self.browser.find_element_by_id('id_home_address').send_keys('123 Fake Dr.')
+
+        if profile_type == 'V':
+            self.browser.find_element_by_id('id_car_plate').send_keys('6XLR581')
+            self.browser.find_element_by_id('id_car_make').send_keys('Corolla')
+            self.browser.find_element_by_id('id_car_model').send_keys('Toyota')
+
+        # Now we go ahead and click it:
+        self.browser.find_element_by_xpath('/html/body/div[1]/div/form/button').click()
+
+    @override_settings(DEBUG=True)
     def test_signup_company(self):
-        # Specify the page that we wish to test:
-        self.selenium.get("http://127.0.0.1:8000/accounts/signup")
+        self.signup('C')
 
-        # Now we need to find the elements for the signup form:
-        first_name = self.selenium.find_element_by_id("id_first_name")
-        last_name = self.selenium.find_element_by_id("id_last_name")
-        email = self.selenium.find_element_by_id("id_email")
-        phone = self.selenium.find_element_by_id("id_phone")
-        username = self.selenium.find_element_by_id("id_username")
-        password1 = self.selenium.find_element_by_id("id_password1")
-        password2 = self.selenium.find_element_by_id("id_password2")
-        # Enumerate over options until we hit Company
-        user_type = self.selenium.find_element_by_xpath("//select[@name="user_type"]/option[text()="Company"]")
-        # Companies don"t need these:
-        # car_plate = self.selenium.find_element_by_id("id_car_plate")
-        # car_make = self.selenium.find_element_by_id("id_car_make")
-        # car_model = self.selenium.find_element_by_id("id_car_model")
+        while True:
+            pass
 
-        submit = self.selenium.find_element_by_name("Sign up")
+    # def test_signup_volunteer(self):
+    #     self.signup('V')
 
-        # Now we interact with the page, entering all of the data:
-        first_name.send_keys("John")
-        last_name.send_keys("Doe")
-        email.send_keys("johndoe@email.com")
-        phone.send_keys("111-111-11111")
-        username.send_keys("johnny420")
-        password1.send_keys("ThisIsPassWord1")
-        password2.send_keys("ThisIsPassWord1")
-        user_type.click()
-        submit.click()
-
-        # Check that all is well:
-        correct_sign_in = bool(">Post Job</a>" in self.selenium.page_source)
-        if not correct_sign_in:
-            self.assertTrue(False)
-
-        # Now go ahead and try to post a job:
-        self.selenium.find_element_by_xpath("//a[@label="Post Job"]").click()
-
-        self.selenium.find_element_by_id("id_location").send_keys("123 South St.")
-        self.selenium.find_element_by_id("id_wage").send_keys("12 usd/hr")
-        self.selenium.find_element_by_id("id_hour").send_keys("40 hr/wk")
-        self.selenium.find_element_by_id("id_job_title").send_keys("Janitor")
-        self.selenium.find_element_by_id("id_short_summary").send_keys("Need someone to clean")
-        self.selenium.find_element_by_id("id_description").send_keys("This is a longger description")
-
-        self.selenium.find_element_by_xpath("//button[@label="Submit Job"]").click()
-
-        # Check that we are in the correct dashboard:
-        in_dashboard = bool("<title>Dashboard</title>" in self.selenium.page_source)
-        correct_name = bool("<div>Name <div class="detail-text">John</div></div>" in self.selenium.page_source)
-        correct_username = bool("<div>Username <div class="detail-text">johnny420</div></div>" in self.selenium.page_source)
-        correct_email = bool("<div>E-mail <div class="detail-text">johndoe@email.com</div></div>" in self.selenium.page_source)
-
-        if not (in_dashboard and correct_name and correct_username and correct_email):
-            self.assertTrue(False)
-
-        # Check that the job we just created exists:
-        correct_job_name = bool("<td>Janitor</td>" in self.selenium.page_source)
-        correct_wage = bool("<td>40 hr/wk</td>" in self.selenium.page_source)
-        correct_summary = bool("<td>Need someone to clean</td>" in self.selenium.page_source)
-
-        self.assertTrue(correct_job_name and correct_wage and correct_summary)
+    # def test_signup_homeless(self):
+    #     self.signup('H')
+    
