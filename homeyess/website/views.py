@@ -294,8 +294,6 @@ def delete_ride(request, ride_id):
     if instance:
         if instance.volunteer != None:
             send_message("Ride on {} has been deleted".format(instance.pickup_datetime), instance.volunteer)
-        if instance.homeless != None:
-            send_message("Ride on {} has been deleted".format(instance.pickup_datetime), instance.homeless)
 
         homeless_id = instance.homeless.id
         user = User.objects.get(pk=homeless_id)
