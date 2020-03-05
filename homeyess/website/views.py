@@ -299,10 +299,8 @@ def delete_ride(request, ride_id):
 def cancel_ride(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
-        if instance.volunteer != None:
-            send_message("Ride to {} has been cancelled".format(instance.interview_address), instance.volunteer)
         if instance.homeless != None:
-            send_message("Ride to {} has been cancelled".format(instance.interview_address), instance.homeless)
+            send_message("Ride to {} has been cancelled by the volunteer. Your request has been relisted under the ride requests.".format(instance.interview_address), instance.homeless)
 
         volunteer_id = instance.volunteer.id
         instance.volunteer = None
@@ -418,9 +416,7 @@ def confirm_ride(request, ride_id):
     ride.start_datetime, ride.pickup_datetime, ride.end_datetime, _ = getTimes(td_vec, ride.interview_datetime)
     ride.save()
 
-    if volunteer_profile != None:
-        send_message("Ride to {} has been confirmed".format(ride.interview_address), volunteer_profile)
     if homeless_profile != None:
-        send_message("Ride to {} has been confirmed".format(ride.interview_address), homeless_profile)
+        send_message("Ride to {} has been matched with a volunteer".format(ride.interview_address), homeless_profile)
 
     return redirect('dashboard')
