@@ -1,7 +1,7 @@
 '''
 homeyess/website/views.py
 '''
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
@@ -19,6 +19,12 @@ from django.utils.decorators import method_decorator
 from .decorators import is_homeless, is_volunteer, is_company
 import requests
 from homeyess.settings import GOOGLE_MAPS_API_KEY
+
+from homeyess.settings import TWILIO_AUTH_TOKEN
+from homeyess.settings import TWILIO_ACCOUNT_SID
+from twilio.rest import Client
+from django.core.mail import send_mail
+
 import functools
 from django.conf import settings
 import math
@@ -263,6 +269,7 @@ class RequestRideEdit(UpdateView):
     template_name = 'ride_request/request_ride.html'
     form_class = RideRequestForm
     queryset = Ride.objects.all()
+
     def get_object(self):
         id_ = self.kwargs.get("ride_id")
         self.success_url = '/view-ride/' + str(id_)
@@ -273,10 +280,25 @@ class RequestRideEdit(UpdateView):
         context['update'] = True
         return context
 
+    def form_valid(self, form):
+        super(RequestRideEdit, self).form_valid(form)
+        
+        form_data = self.get_object()
+        if form_data.volunteer != None:
+            send_message("Ride on {} has been updated".format(form_data.pickup_datetime), form_data.volunteer)
+        if form_data.homeless != None:
+            send_message("Ride on {} has been updated".format(form_data.pickup_datetime), form_data.homeless)
+        return HttpResponseRedirect(self.get_success_url()) 
+
 @user_passes_test(is_homeless, login_url='/')
 def delete_ride(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
+        if instance.volunteer != None:
+            send_message("Ride on {} has been deleted".format(instance.pickup_datetime), instance.volunteer)
+        if instance.homeless != None:
+            send_message("Ride on {} has been deleted".format(instance.pickup_datetime), instance.homeless)
+
         homeless_id = instance.homeless.id
         user = User.objects.get(pk=homeless_id)
         instance.delete()
@@ -286,12 +308,18 @@ def delete_ride(request, ride_id):
 def cancel_ride(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
+        if instance.volunteer != None:
+            send_message("Ride on {} has been cancelled".format(instance.pickup_datetime), instance.volunteer)
+        if instance.homeless != None:
+            send_message("Ride on {} has been cancelled".format(instance.pickup_datetime), instance.homeless)
+
         volunteer_id = instance.volunteer.id
         instance.volunteer = None
         instance.pickup_datetime = None
         instance.start_datetime = None
         instance.end_datetime = None
         instance.save()
+
     return redirect('dashboard')
 
 
@@ -409,6 +437,11 @@ def confirm_ride(request, ride_id):
     ride.start_datetime, ride.pickup_datetime, ride.end_datetime, _ = getTimes(td_vec, ride.interview_datetime)
     ride.save()
 
+    if volunteer_profile != None:
+        send_message("Ride on {} has been confirmed".format(ride.pickup_datetime), volunteer_profile)
+    if homeless_profile != None:
+        send_message("Ride on {} has been confirmed".format(ride.pickup_datetime), homeless_profile)
+
     return redirect('dashboard')
 
 def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
@@ -520,3 +553,25 @@ def getTimeString(mins):
     elif m > 0:
         s += str(m) + ' mins'
     return s
+
+def send_message(message, profile):
+    '''Sends texts and emails to people
+
+    :param message: 
+    :type message: String
+    :param profile: The user's profile
+    :type profile: Profile
+    '''
+    res = [None, None]
+
+    if profile == None:
+        return res
+
+    if profile.phone != "":
+        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+        res[0] = client.messages.create(body=message, from_='+12055089181', to=profile.phone)
+    
+    if profile.user.email != "":
+        res[1] = send_mail('Homeyess Notification', message, 'from@example.com', [profile.user.email], fail_silently=False)
+
+    return res
