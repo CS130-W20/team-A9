@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 class MessageTestCase(TestCase):
   def setUp(self):
-    pass
     self.valid = User.objects.create_user(username='valid', password='hellopie')
     self.valid.profile.user_type = "V"
     self.valid.profile.phone = "7148831948"
