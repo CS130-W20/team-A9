@@ -20,7 +20,7 @@ class GetTimesTest(SimpleTestCase):
         expected_pickup = datetime.datetime(2020, 1, 1, 14, 33)
         expected_start = datetime.datetime(2020, 1, 1, 14, 32)
         expected_end = datetime.datetime(2020, 1, 1, 16, 21)
-        expected_total = '1 hrs 49 min'
+        expected_total = '1 hr 49 mins'
         actual_start, actual_pickup, actual_end, actual_total = getTimes(td_vec, interview_datetime)
         self.assertTrue(expected_start == actual_start)
         self.assertTrue(expected_pickup == actual_pickup)
@@ -217,7 +217,7 @@ class FilterQuerySetTest(SimpleTestCase):
             }
         ]
         for t in tests:
-            @mock.patch('website.views.getTimeDistanceVector', side_effect=td_vecs)
+            @mock.patch('website.views.getTimeDistanceVectors', return_value=td_vecs)
             def actual(self):
                 return filterQuerySet(rides, t['start'], t['end'], t['max_range'], '')
             actual_rides = actual()
