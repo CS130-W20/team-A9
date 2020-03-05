@@ -278,9 +278,9 @@ class RequestRideEdit(UpdateView):
         
         form_data = self.get_object()
         if form_data.volunteer != None:
-            send_message("Ride on {} has been updated".format(form_data.pickup_datetime), form_data.volunteer)
+            send_message("Ride to {} has been updated".format(form_data.interview_address), form_data.volunteer)
         if form_data.homeless != None:
-            send_message("Ride on {} has been updated".format(form_data.pickup_datetime), form_data.homeless)
+            send_message("Ride to {} has been updated".format(form_data.interview_address), form_data.homeless)
         return HttpResponseRedirect(self.get_success_url()) 
 
 @user_passes_test(is_homeless, login_url='/')
@@ -288,7 +288,7 @@ def delete_ride(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
         if instance.volunteer != None:
-            send_message("Ride on {} has been deleted".format(instance.pickup_datetime), instance.volunteer)
+            send_message("Ride to {} has been deleted".format(instance.interview_address), instance.volunteer)
 
         homeless_id = instance.homeless.id
         user = User.objects.get(pk=homeless_id)
@@ -300,9 +300,9 @@ def cancel_ride(request, ride_id):
     instance = Ride.objects.get(id=ride_id)
     if instance:
         if instance.volunteer != None:
-            send_message("Ride on {} has been cancelled".format(instance.pickup_datetime), instance.volunteer)
+            send_message("Ride to {} has been cancelled".format(instance.interview_address), instance.volunteer)
         if instance.homeless != None:
-            send_message("Ride on {} has been cancelled".format(instance.pickup_datetime), instance.homeless)
+            send_message("Ride to {} has been cancelled".format(instance.interview_address), instance.homeless)
 
         volunteer_id = instance.volunteer.id
         instance.volunteer = None
@@ -419,8 +419,8 @@ def confirm_ride(request, ride_id):
     ride.save()
 
     if volunteer_profile != None:
-        send_message("Ride on {} has been confirmed".format(ride.pickup_datetime), volunteer_profile)
+        send_message("Ride to {} has been confirmed".format(ride.interview_address), volunteer_profile)
     if homeless_profile != None:
-        send_message("Ride on {} has been confirmed".format(ride.pickup_datetime), homeless_profile)
+        send_message("Ride to {} has been confirmed".format(ride.interview_address), homeless_profile)
 
     return redirect('dashboard')
