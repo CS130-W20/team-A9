@@ -113,7 +113,7 @@ class GetTimeDistanceVectorTest(SimpleTestCase):
             },
         ]
         for t in tests:
-            @mock.patch('website.views.getResponseJson', return_value=t['json'])
+            @mock.patch('website.ride_utils.getResponseJson', return_value=t['json'])
             def actual(self):
                 return getTimeDistanceVector('', '', '', 60)
             self.assertTrue(t['expected'] == actual())
@@ -217,7 +217,7 @@ class FilterQuerySetTest(SimpleTestCase):
             }
         ]
         for t in tests:
-            @mock.patch('website.views.getTimeDistanceVectors', return_value=td_vecs)
+            @mock.patch('website.ride_utils.getTimeDistanceVectors', return_value=td_vecs)
             def actual(self):
                 return filterQuerySet(rides, t['start'], t['end'], t['max_range'], '')
             actual_rides = actual()
