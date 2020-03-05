@@ -19,11 +19,6 @@ from .decorators import is_homeless, is_volunteer, is_company
 import requests
 from homeyess.settings import GOOGLE_MAPS_API_KEY
 
-from homeyess.settings import TWILIO_AUTH_TOKEN
-from homeyess.settings import TWILIO_ACCOUNT_SID
-from twilio.rest import Client
-from django.core.mail import send_mail
-
 import functools
 from django.conf import settings
 import math
@@ -429,25 +424,3 @@ def confirm_ride(request, ride_id):
         send_message("Ride on {} has been confirmed".format(ride.pickup_datetime), homeless_profile)
 
     return redirect('dashboard')
-
-def send_message(message, profile):
-    '''Sends texts and emails to people
-
-    :param message: 
-    :type message: String
-    :param profile: The user's profile
-    :type profile: Profile
-    '''
-    res = [None, None]
-
-    if profile == None:
-        return res
-
-    if profile.phone != "":
-        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-        res[0] = client.messages.create(body=message, from_='+12055089181', to=profile.phone)
-    
-    if profile.user.email != "":
-        res[1] = send_mail('Homeyess Notification', message, 'from@example.com', [profile.user.email], fail_silently=False)
-
-    return res

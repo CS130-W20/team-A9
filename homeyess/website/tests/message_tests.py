@@ -1,5 +1,5 @@
 from django.test import TestCase
-from website.views import send_message
+from website.ride_utils import send_message
 from django.contrib.auth.models import User
 
 class MessageTestCase(TestCase):
