@@ -22,7 +22,7 @@
 	</h1>
 
 	<h3>
-		Total time volunteered: {{ total_time }} hours
+		Total time volunteered: {{ total_time }}
 	</h3>
 
 	<div></div>
@@ -76,7 +76,7 @@
 			    			<div class="flex-container">
 			    				<div class="flex-container-vertical">
 							    	<h5>Time: {{ ride.pickup_datetime }} - {{ ride.end_datetime }}</h5>
-							    	<div>Pickup Address: {{ ride.pickup_address }}</div>
+							    	<div>Pickup Address: {{ ride.homeless.home_address }}</div>
 							    	<div>Interview Time: {{ ride.interview_datetime }}</div>
 							    	<div>Interview Address: {{ ride.interview_address }}</div>
 							    	<div>Company: {{ ride.interview_company }}</div>

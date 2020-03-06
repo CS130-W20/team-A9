@@ -13,17 +13,20 @@ from django.urls import reverse
 
 class SignUpForm(UserCreationForm):
     '''SignUpForm for users, companies, and volunteers
-
     '''
 
     def __init__(self, *args, **kwargs):
+        '''initializes the form
+        :param kwargs['user_type']: the type of the user ('V', 'H', 'C')
+        :type kwargs['user_type']: string
+        '''
         user_type = kwargs.pop('user_type', None)
         super(SignUpForm, self).__init__(*args, **kwargs)
         self.user_type = user_type
         field_order = []
 
         if user_type == 'C':
-            self.fields['first_name'] = BootstrapCharField(max_length=30, required=True, label=" Company Name")
+            self.fields['first_name'] = BootstrapCharField(max_length=30, required=True, label="Company Name")
         else:
             self.fields['first_name'] = BootstrapCharField(max_length=30, required=True, label="First Name")
         field_order.append('first_name')
@@ -61,6 +64,8 @@ class SignUpForm(UserCreationForm):
         fields = ('first_name', 'email', 'username', 'password1', 'password2')
 
     def clean(self):
+        '''checks that signups meet proper constraints such as volunteer must have car
+        '''
         cleaned_data = super().clean()
         user_type = self.user_type
         car_make = cleaned_data.get("car_make", None)
@@ -77,7 +82,6 @@ class SignUpForm(UserCreationForm):
 
 class PostJobForm(ModelForm):
     '''PostJobForm for companies to post and edit jobs
-
     '''
 
     location = BootstrapCharField(max_length=100, required=True, help_text='Location of job itself, not interview.')
@@ -104,13 +108,19 @@ class RideRequestForm(ModelForm):
     interview_company = BootstrapCharField(max_length=100, required=True)
 
 class JobBoardFilterForm(Form):
+    '''Form to allow homeless people to filter job results
+    '''
     location = BootstrapCharField(required=False)
     job_title = BootstrapCharField(required=False)
 
-class FilterForm(Form):
+class RideSearchFilterForm(Form):
+    '''Form to allow volunteers to filter ride requests
+    '''
     start_datetime = BootstrapDateTimeField(required=False)
     end_datetime = BootstrapDateTimeField(required=False)
     max_range = BootstrapIntegerField(required=False)
 
 class UserTypeForm(Form):
+    '''Form to allow users to select the type of user they are in order to be directed to the relevant signup form
+    '''
     user_type = forms.ChoiceField(choices=[(tag.value, tag.name) for tag in Profile.UserType], required=True, widget=forms.RadioSelect(), initial='H')
