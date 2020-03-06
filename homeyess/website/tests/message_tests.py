@@ -1,6 +1,7 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from website.ride_utils import send_message
-from django.contrib.auth.models import User
+
 
 class MessageTestCase(TestCase):
   def setUp(self):

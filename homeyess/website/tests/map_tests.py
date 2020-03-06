@@ -1,8 +1,9 @@
-from django.test import SimpleTestCase
-from website.views import getDistance, getTimes, getTimeDistanceVector, filterQuerySet, getResponseJson
-from unittest import mock
 import datetime
 from datetime import timezone
+from unittest import mock
+
+from django.test import SimpleTestCase
+from website.views import getDistance, getTimes, getTimeDistanceVector, filterQuerySet
 
 
 class GetDistanceTest(SimpleTestCase):
