@@ -301,7 +301,7 @@ class RequestRideEdit(UpdateView):
         form_data = self.get_object()
         send_message("Ride to {} on {} has been updated. You have been removed from the ride request. Check the updated request if you'd still like to volunteer".format(form_data.interview_address, form_data.pickup_datetime), form_data.volunteer)
         form_data.volunteer = None
-        form_data.save();
+        form_data.save()
 
         return HttpResponseRedirect(self.get_success_url())
 
