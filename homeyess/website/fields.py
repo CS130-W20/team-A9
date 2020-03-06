@@ -8,7 +8,7 @@ class BootstrapCharField(forms.CharField):
     def __init__(self, *args, **kwargs):
         if 'widget' not in kwargs:
             kwargs['widget'] = forms.TextInput(attrs={'class': FORM_CLASS})
-        super(BootstrapCharField, self).__init__(*args, **kwargs)
+        super(BootstrapCharField, self).__init__(**kwargs)
 
 class BootstrapIntegerField(forms.IntegerField):
     """Form field for ints with bootstrap styling
@@ -16,7 +16,7 @@ class BootstrapIntegerField(forms.IntegerField):
     def __init__(self, *args, **kwargs):
         if 'widget' not in kwargs:
             kwargs['widget'] = forms.NumberInput(attrs={'class': FORM_CLASS})
-        super(BootstrapIntegerField, self).__init__(*args, **kwargs)
+        super(BootstrapIntegerField, self).__init__(**kwargs)
 
 class BootstrapDateTimeField(forms.DateTimeField):
     """Form field for datetimes with bootstrap styling
@@ -24,7 +24,7 @@ class BootstrapDateTimeField(forms.DateTimeField):
     def __init__(self, *args, **kwargs):
         if 'widget' not in kwargs:
             kwargs['widget'] = forms.DateTimeInput(attrs={'class': FORM_CLASS})
-        super(BootstrapDateTimeField, self).__init__(*args, **kwargs)
+        super(BootstrapDateTimeField, self).__init__(**kwargs)
 
 class BootstrapEmailField(forms.EmailField):
     """Form field for emails with bootstrap styling
@@ -32,7 +32,7 @@ class BootstrapEmailField(forms.EmailField):
     def __init__(self, *args, **kwargs):
         if 'widget' not in kwargs:
             kwargs['widget'] = forms.EmailInput(attrs={'class': FORM_CLASS})
-        super(BootstrapEmailField, self).__init__(*args, **kwargs)
+        super(BootstrapEmailField, self).__init__(**kwargs)
 
 class BootstrapRegexField(forms.RegexField):
     """Form field for regex with bootstrap styling
@@ -40,4 +40,4 @@ class BootstrapRegexField(forms.RegexField):
     def __init__(self, *args, **kwargs):
         if 'widget' not in kwargs:
             kwargs['widget'] = forms.TextInput(attrs={'class': FORM_CLASS})
-        super(BootstrapRegexField, self).__init__(*args, **kwargs)
+        super(BootstrapRegexField, self).__init__(**kwargs)
