@@ -10,7 +10,7 @@ from django.dispatch import receiver
 
 
 class Profile(models.Model):
-    '''Model to store information about a user
+    """Model to store information about a user
 
     :param user: the authentication object containing username, password, email (optional), first / last name
     :type user: User
@@ -28,10 +28,10 @@ class Profile(models.Model):
     :type total_volunteer_minutes: int
     :param home_address: home address (only required for volunteer)
     :type home_address: CharField / string
-    '''
+    """
     class UserType(Enum):
-        '''Enum to represent types of users: Volunteer, Homeless, Company
-        '''
+        """Enum to represent types of users: Volunteer, Homeless, Company
+        """
         Volunteer = 'V'
         Homeless = 'H'
         Company = 'C'
@@ -50,7 +50,7 @@ class Profile(models.Model):
 
 
 class Ride(models.Model):
-    '''Model to store information about a ride request. Contains start / end time and location, the homeless person, and a volunteer if the ride has already been confirmed.
+    """Model to store information about a ride request. Contains start / end time and location, the homeless person, and a volunteer if the ride has already been confirmed.
     Note that the object should be created when a ride request is made and altered when the request is updated (by homeless) or confirmed (by user).
 
     :param homeless: the user who requested the ride
@@ -71,22 +71,22 @@ class Ride(models.Model):
     :type pickup_datetime: DateTime
     :param end_datetime: the time the volunteer arrives back at their house
     :type end_datetime: DateTime
-    '''
+    """
 
     def get_absolute_url(self):
-        '''Returns the path to view a specific ride request that was just created/edited
+        """Returns the path to view a specific ride request that was just created/edited
 
         :return: a string of the path to view the created/modified ride request
         :rtype: string
-        '''
+        """
         return '/ViewRideForm/' + str(self.id)
 
     def get_fields(self):
-        '''Returns a list of attributes of the Ride object, used for the ViewRideForm template
+        """Returns a list of attributes of the Ride object, used for the ViewRideForm template
 
         :return: A list of tuples that contain (field_name, field_value)
         :rtype: List[(string, string)]
-        '''
+        """
         return [(field.name, field.value_to_string(self)) for field in Ride._meta.fields]
 
 
@@ -101,7 +101,7 @@ class Ride(models.Model):
     end_datetime = models.DateTimeField(null=True, blank=True)
 
 class JobPost(models.Model):
-    '''Model to store information about a job post
+    """Model to store information about a job post
 
     :param company: the company that made the post
     :type company: User
@@ -121,7 +121,7 @@ class JobPost(models.Model):
     :type short_summary: CharField / string
     :param description: the job description (should include instruction to apply)
     :type description: Text / string
-    '''
+    """
     company = models.ForeignKey(Profile, on_delete=models.CASCADE)
     created = models.DateField(auto_now_add=True)
     last_edited = models.DateField(auto_now=True)
