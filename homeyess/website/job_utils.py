@@ -3,11 +3,11 @@ def filterQuerySet(jobs, location, job_title):
     '''Filters the list of jobs based on location and job title specified
 
     :param jobs: The list of all jobs we are filtering
-    :type request: list
+    :type jobs: list
     :param location: A location used to filter certain jobs
-    :type request: string
+    :type location: (optional) string
     :param job_title: Job title provided by user to filter certain jobs
-    :type request: string
+    :type job_title: (optional) string
     :return: The list of all jobs that were found based on the filter
     :rtype: list
     '''

@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profile, Ride, JobPost
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
-from .forms import SignUpForm, RideRequestForm, PostJobForm, FilterForm, UserTypeForm, JobBoardFilterForm
+from .forms import SignUpForm, RideRequestForm, PostJobForm, RideSearchFilterForm, UserTypeForm, JobBoardFilterForm
 from website import job_utils
 from .models import Profile, Ride, JobPost
 from datetime import datetime
@@ -37,10 +37,12 @@ def index(request):
     return render(request, 'index.html')
 
 def signup(request, user_type):
-    '''Renders the signup form on GET; processes the signup form on POST
+    '''Renders the signup page specific to the type of user
 
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
+    :param user_type: the type of user in lowercase (homeless, volunteer, company)
+    :type user_type: string
     :return: the rendered SignUpForm or a redirect to homepage
     :rtype: HttpResponse
     '''
@@ -77,6 +79,13 @@ def signup(request, user_type):
     return render(request, 'registration/signup.html', {'form': form})
 
 def user_type(request):
+    '''Renders the page that asks what type of user you are to direct you to the correct signup form
+
+    :param request: the http request
+    :type request: HttpRequest
+    :return: the rendered form to ask your user type
+    :rtype: HttpResponse
+    '''
     if request.method == 'POST':
         form = UserTypeForm(request.POST)
         if form.is_valid():
@@ -97,8 +106,6 @@ def dashboard(request):
 
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
-    :param user_id: The id of the user whose dashboard should be rendered
-    :type request: String
     :return: the rendered dashboard page for the user using the homeless.html, company.html, or volunteer.html template which matches the type of the requesting user
     :rtype: HttpResponse
     '''
@@ -118,8 +125,8 @@ def homeless(request, user):
 
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
-    :param user_id: The id of the user whose dashboard should be rendered
-    :type request: String
+    :param user: the user whose dashboard should be rendered
+    :type user: User
     :return: the rendered dashboard page for the user using the homeless.html template
     :rtype: HttpResponse
     '''
@@ -134,8 +141,8 @@ def company(request, user):
 
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
-    :param user_id: The id of the user whose dashboard should be rendered
-    :type request: String
+    :param user: the user whose dashboard should be rendered
+    :type user: User
     :return: the rendered dashboard page for the user using the company.html template
     :rtype: HttpResponse
     '''
@@ -149,8 +156,8 @@ def volunteer(request, user):
 
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
-    :param user_id: The id of the user whose dashboard should be rendered
-    :type request: String
+    :param user: the user whose dashboard should be rendered
+    :type user: User
     :return: the rendered dashboard page for the user using the volunteer.html template
     :rtype: HttpResponse
     '''
@@ -158,11 +165,10 @@ def volunteer(request, user):
     finished_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__lte = datetime.now()).order_by('-interview_datetime')
     total_time = 0
     for ride in finished_rides:
-        time = ride.end_datetime - ride.pickup_datetime
-        hours = time.seconds/60/60
-        total_time+=hours
+        time = ride.end_datetime - ride.start_datetime
+        total_time += time.minute
 
-    total_time = math.floor(total_time)
+    total_time = getTimeString(total_time)
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides, 'total_time': total_time}
     return render(request, 'dashboard/volunteer.html', context)
 
@@ -175,7 +181,6 @@ def job_board(request):
     :return: the rendered job board page using the job_board.html template
     :rtype: HttpResponse
     '''
-
     job_posts = JobPost.objects.all().order_by('-created')
 
     # Extract the information we want here:
@@ -203,8 +208,8 @@ def job_detail(request, job_id):
 
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
-    :param user_id: The id of the job to be viewed
-    :type request: String
+    :param job_id: The id of the job to be viewed
+    :type job_id: int
     :return: the rendered job detail page using the job_detail.html template
     :rtype: HttpResponse
     '''
@@ -224,15 +229,22 @@ class RequestRideCreate(CreateView):
     :param queryset: the queryable attributes of the form
     :type queryset: QuerySet
     '''
-
     template_name = 'rides/request_ride.html'
     form_class = RideRequestForm
+    queryset = Ride.objects.all()
+
     def form_valid(self, form):
+        '''Checks whether the form has valid inputs. Assigns homeless user to ride.
+
+        :param form: the form used to create the ride
+        :type form: RideRequestForm
+        :return: whether the form has valid inputs
+        :rtype: boolean
+        '''
         form.instance.homeless = Profile.objects.get(user=self.request.user)
         self.success_url = 'dashboard'
 
         return super(RequestRideCreate, self).form_valid(form)
-    queryset = Ride.objects.all()
 
 @user_passes_test(lambda a: is_homeless(a) or is_volunteer(a), login_url='/')
 def view_ride(request, ride_id):
@@ -264,27 +276,52 @@ class RequestRideEdit(UpdateView):
     queryset = Ride.objects.all()
 
     def get_object(self):
+        '''gets the ride object associated with the update or 404 if none
+
+        :return: the ride object or 404
+        :rtype: Ride
+        '''
         id_ = self.kwargs.get("ride_id")
         self.success_url = '/view-ride/' + str(id_)
         return get_object_or_404(Ride, id=id_)
 
     def get_context_data(self, *args, **kwargs):
+        '''Generates the context data for the html template
+
+        :return: data to be displayed in the template
+        :rtype: dict
+        '''
         context = super().get_context_data(*args, **kwargs)
         context['update'] = True
         return context
 
     def form_valid(self, form):
+        '''Checks whether the form has valid inputs. Assigns homeless user to ride.
+
+        :param form: the form used to create the ride
+        :type form: RideRequestForm
+        :return: whether the form has valid inputs
+        :rtype: boolean
+        '''
         super(RequestRideEdit, self).form_valid(form)
-        
         form_data = self.get_object()
         send_message("Ride to {} on {} has been updated. You have been removed from the ride request. Check the updated request if you'd still like to volunteer".format(form_data.interview_address, form_data.pickup_datetime), form_data.volunteer)
         form_data.volunteer = None
         form_data.save();
 
-        return HttpResponseRedirect(self.get_success_url()) 
+        return HttpResponseRedirect(self.get_success_url())
 
 @user_passes_test(is_homeless, login_url='/')
 def delete_ride(request, ride_id):
+    '''Endpoint to delete a ride request
+
+    :param request: the HttpRequest
+    :type request: HttpRequest
+    :param ride_id: the id of the ride to delete
+    :type ride_id: int
+    :return: Redirect to user dashboard
+    :rtype: HttpResponse
+    '''
     instance = Ride.objects.get(id=ride_id)
     if instance:
         send_message("Ride request to {} on {} has been deleted".format(instance.interview_address, instance.pickup_datetime), instance.volunteer)
@@ -296,10 +333,18 @@ def delete_ride(request, ride_id):
 
 @user_passes_test(is_volunteer, login_url='/')
 def cancel_ride(request, ride_id):
+    '''Endpoint to unconfirm a ride request (unmatch a volunteer from the ride)
+
+    :param request: the HttpRequest
+    :type request: HttpRequest
+    :param ride_id: the id of the ride to cancel
+    :type ride_id: int
+    :return: Redirect to user dashboard
+    :rtype: HttpResponse
+    '''
     instance = Ride.objects.get(id=ride_id)
     if instance:
         send_message("Ride to {} on {} has been cancelled by the volunteer. Your request has been relisted under the ride requests.".format(instance.interview_address, instance.pickup_datetime), instance.homeless)
-
         volunteer_id = instance.volunteer.id
         instance.volunteer = None
         instance.pickup_datetime = None
@@ -317,7 +362,7 @@ def edit_job(request, job_id):
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
     :param job_id: The primary key used to index the specific job we are editing
-    :type request: int
+    :type job_id: int
     :return: the rendered JobForm or a redirect to the company's dashboard
     :rtype: HttpResponse
     '''
@@ -361,6 +406,13 @@ def post_job(request):
 
 @user_passes_test(is_volunteer, login_url='/')
 def ride_board(request):
+    '''Renders the job board page where homeless users can view jobs and filter jobs
+
+    :param request: the http request
+    :type request: HttpRequest
+    :return: the rendered ride board
+    :rtype: HttpResponse
+    '''
     rides = Ride.objects.filter(volunteer=None)
     start_datetime = request.GET.get('start_datetime', None)
     end_datetime = request.GET.get('end_datetime', None)
@@ -375,7 +427,7 @@ def ride_board(request):
         profile.home_address)
 
     context = {}
-    context['form'] = FilterForm(initial={
+    context['form'] = RideSearchFilterForm(initial={
         'start_time': request.GET.get('start_datetime', None),
         'end_time': request.GET.get('end_datetime', None),
         'max_range': request.GET.get('max_range', None),
@@ -397,6 +449,15 @@ def ride_board(request):
 
 @user_passes_test(is_volunteer, login_url='/')
 def confirm_ride(request, ride_id):
+    '''Endpoint to confirm a ride (match volunteer with ride)
+
+    :param request: the http request
+    :type request: HttpRequest
+    :param ride_id: the id of the ride to confirm
+    :type ride_id: int
+    :return: redirect to dashboard if confirmation successful else the search_rides page
+    :rtype: HttpResponse
+    '''
     ride = Ride.objects.get(pk=ride_id)
     homeless_profile = ride.homeless
     volunteer_profile = Profile.objects.get(user=request.user)

@@ -62,35 +62,31 @@ class Ride(models.Model):
 	:type interview_datetime: DateTime
 	:param interview_duration: the time in minutes that the interview should last
 	:type interview_duration: int
-	:param volunteer_address: the address the volunteer is coming from
-	:type volunteer_address: CharField / string
-	:param pickup_address: the address from which the homeless person should be picked up / dropped off
-	:type pickup_address: CharField / string
-	:param pickup_datetime: the date and time the homeless person should be picked up for their interview
-	:type pickup_datetime: DateTime
 	:param interview_address: the address of the interview
 	:type interview_address: CharField / string
 	:param interview_company: the company hosting the interview
 	:type interview_company: CharField / string
+	:param start_datetime: the time the volunteer leaves their house
+	:type start_datetime: DateTime
+	:param pickup_datetime: the date and time the homeless person should be picked up for their interview
+	:type pickup_datetime: DateTime
 	:param end_datetime: the time the volunteer arrives back at their house
 	:type end_datetime: DateTime
-	:param ride_status: the status of the ride
-	:type ride_status: RideStatus
 	'''
-	
+
 	def get_absolute_url(self):
 		'''Returns the path to view a specific ride request that was just created/edited
-			:return: a string of the path to view the created/modified ride request
-			:rtype: string
 
+		:return: a string of the path to view the created/modified ride request
+		:rtype: string
 		'''
 		return '/ViewRideForm/' + str(self.id)
 
 	def get_fields(self):
 		'''Returns a list of attributes of the Ride object, used for the ViewRideForm template
-			:return: A list of tuples that contain (field_name, field_value)
-			:rtype: List[(string, string)]
 
+		:return: A list of tuples that contain (field_name, field_value)
+		:rtype: List[(string, string)]
 		'''
 		return [(field.name, field.value_to_string(self)) for field in Ride._meta.fields]
 
@@ -142,5 +138,3 @@ def update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
-
-
