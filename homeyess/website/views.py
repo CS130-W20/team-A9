@@ -279,13 +279,14 @@ class RequestRideEdit(UpdateView):
         self.success_url = '/view-ride/' + str(id_)
         return get_object_or_404(Ride, id=id_)
 
-    def get_context_data(self, *args, **kwargs):
+
+    def get_context_data(self, **kwargs):
         """Generates the context data for the html template
 
         :return: data to be displayed in the template
         :rtype: dict
         """
-        context = super().get_context_data(*args, **kwargs)
+        context = super().get_context_data(**kwargs)
         context['update'] = True
         return context
 
