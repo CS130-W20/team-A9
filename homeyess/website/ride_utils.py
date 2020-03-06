@@ -1,14 +1,15 @@
-from homeyess.settings import GOOGLE_MAPS_API_KEY, TWILIO_AUTH_TOKEN, TWILIO_ACCOUNT_SID
+import functools
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timedelta
 
-import requests
 import googlemaps
 import pytz
-import functools
-from datetime import datetime, timedelta
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from django.forms.models import model_to_dict
+import requests
 from django.core.mail import send_mail
+from django.forms.models import model_to_dict
+from homeyess.settings import GOOGLE_MAPS_API_KEY, TWILIO_AUTH_TOKEN, TWILIO_ACCOUNT_SID
 from twilio.rest import Client
+
 
 def getRideDict(ride):
     '''converts ride to a dictionary to use in the templates

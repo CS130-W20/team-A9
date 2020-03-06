@@ -1,6 +1,6 @@
 from django.test import TestCase
 from website.forms import SignUpForm, PostJobForm
-from website.models import Profile, JobPost
+from website.models import JobPost
 
 class SignUpFormTest(TestCase):
 

@@ -1,8 +1,6 @@
-from django.test import TestCase, LiveServerTestCase
-from website.forms import SignUpForm, PostJobForm
-from website.models import Profile, JobPost
+from django.test import LiveServerTestCase
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+
 
 class SeleniumTests(LiveServerTestCase):
     def setUp(self):
