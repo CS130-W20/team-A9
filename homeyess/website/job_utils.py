@@ -1,6 +1,6 @@
 
 def filterQuerySet(jobs, location, job_title):
-    '''Filters the list of jobs based on location and job title specified
+    """Filters the list of jobs based on location and job title specified
 
     :param jobs: The list of all jobs we are filtering
     :type jobs: list
@@ -10,7 +10,7 @@ def filterQuerySet(jobs, location, job_title):
     :type job_title: (optional) string
     :return: The list of all jobs that were found based on the filter
     :rtype: list
-    '''
+    """
 
     # If no filter has been applied, don't filter:
     if location is None and job_title is None:
