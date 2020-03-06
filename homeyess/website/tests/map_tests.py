@@ -119,9 +119,6 @@ class GetTimeDistanceVectorTest(SimpleTestCase):
             self.assertTrue(t['expected'] == actual())
 
 class FilterQuerySetTest(SimpleTestCase):
-
-
-
     class SimpleRide:
         class SimpleHomeless:
             def __init__(self):
@@ -142,6 +139,8 @@ class FilterQuerySetTest(SimpleTestCase):
                 self.sd = kwargs['sd']
             if 'total_time' in kwargs:
                 self.total_time = kwargs['total_time']
+            if 'pickup_location' in kwargs:
+                self.pickup_location = kwargs['pickup_location']
 
     def test_filter_query_set(self):
         rides = [
@@ -160,6 +159,14 @@ class FilterQuerySetTest(SimpleTestCase):
             None,
         ]
 
+        pickup_infos = [
+            'test_location',
+            None,
+            None,
+            None,
+            None,
+        ]
+
         tests = [
             {
                 'start': None,
@@ -172,7 +179,8 @@ class FilterQuerySetTest(SimpleTestCase):
                         d=4,
                         sd=datetime.datetime(2020, 1, 1, 15, 58, tzinfo=timezone.utc),
                         ed=datetime.datetime(2020, 1, 1, 17, 2, tzinfo=timezone.utc),
-                        total_time='1 hrs 4 min',
+                        total_time='1 hr 4 mins',
+                        pickup_location='test_location'
                     ),
                     self.SimpleRide(
                         datetime.datetime(2020, 1, 1, 12, tzinfo=timezone.utc),
@@ -180,7 +188,8 @@ class FilterQuerySetTest(SimpleTestCase):
                         d=107,
                         sd=datetime.datetime(2020, 1, 1, 11, 58, tzinfo=timezone.utc),
                         ed=datetime.datetime(2020, 1, 1, 13, 32, tzinfo=timezone.utc),
-                        total_time='1 hrs 34 min',
+                        total_time='1 hr 34 mins',
+                        pickup_location=None,
                     ),
                     self.SimpleRide(
                         datetime.datetime(2020, 1, 1, 9, tzinfo=timezone.utc),
@@ -188,7 +197,8 @@ class FilterQuerySetTest(SimpleTestCase):
                         d=4,
                         sd=datetime.datetime(2020, 1, 1, 8, 58, tzinfo=timezone.utc),
                         ed=datetime.datetime(2020, 1, 1, 9, 47, tzinfo=timezone.utc),
-                        total_time='49 min',
+                        total_time='49 mins',
+                        pickup_location=None,
                     ),
                     self.SimpleRide(
                         datetime.datetime(2020, 1, 1, 11, tzinfo=timezone.utc),
@@ -196,7 +206,8 @@ class FilterQuerySetTest(SimpleTestCase):
                         d=4,
                         sd=datetime.datetime(2020, 1, 1, 10, 58, tzinfo=timezone.utc),
                         ed=datetime.datetime(2020, 1, 1, 11, 32, tzinfo=timezone.utc),
-                        total_time='34 min',
+                        total_time='34 mins',
+                        pickup_location=None,
                     ),
                 ],
             },
@@ -211,14 +222,16 @@ class FilterQuerySetTest(SimpleTestCase):
                         d=4,
                         sd=datetime.datetime(2020, 1, 1, 10, 58, tzinfo=timezone.utc),
                         ed=datetime.datetime(2020, 1, 1, 11, 32, tzinfo=timezone.utc),
-                        total_time='34 min',
+                        total_time='34 mins',
+                        pickup_location=None,
                     ),
                 ]
             }
         ]
         for t in tests:
             @mock.patch('website.ride_utils.getTimeDistanceVectors', return_value=td_vecs)
-            def actual(self):
+            @mock.patch('website.ride_utils.getPickupLocations', return_value=pickup_infos)
+            def actual(patch0, patch1):
                 return filterQuerySet(rides, t['start'], t['end'], t['max_range'], '')
             actual_rides = actual()
             self.assertTrue(len(t['expected']) == len(actual_rides))
