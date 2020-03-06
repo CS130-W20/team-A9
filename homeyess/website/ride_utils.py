@@ -189,12 +189,15 @@ def getTimes(vec, interview_datetime):
 
     :param vec: the timedistance vector
     :type vec: vector where each element is a tuple of form (time in minutes, distance in miles)
+    :param interview_datetime: the time and date of the interview
+    :type interview_datetime: DateTime
     :return: start_datetime (when volunteer leaves house),
         pickup_datetime (when volunteer picks up homeless),
         end_datetime (when volunteer arrives back at their house),
         total_time_string (total amount of time as a formatted string)
-    :rtype: int, int, int, str
+    :rtype: DateTime, DateTime, DateTime, string
     '''
+
     pickup_datetime = interview_datetime - timedelta(minutes=vec[1][0])
     start_datetime = pickup_datetime - timedelta(minutes=vec[0][0])
     times = [time for (time, _) in vec]
