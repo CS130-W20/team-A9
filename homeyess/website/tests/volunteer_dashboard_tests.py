@@ -2,10 +2,10 @@ import datetime
 
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
-from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 from website.models import Ride
+
 
 class VolunteerDashboardTest(TestCase):
 
