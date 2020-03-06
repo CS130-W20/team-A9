@@ -1,15 +1,13 @@
 """
 homeyess/website/forms.py
 """
-from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
-from .models import Profile, JobPost, Ride
-from .fields import *
 from django.forms import ModelForm, Form
-from django.db import models
-from django.urls import reverse
+
+from .fields import *
+from .models import Profile, JobPost, Ride
+
 
 class SignUpForm(UserCreationForm):
     '''SignUpForm for users, companies, and volunteers

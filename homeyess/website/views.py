@@ -1,30 +1,24 @@
 '''
 homeyess/website/views.py
 '''
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Profile, Ride, JobPost
-from django.views.generic.edit import CreateView, UpdateView
-from django.views.generic import ListView
-from .forms import SignUpForm, RideRequestForm, PostJobForm, RideSearchFilterForm, UserTypeForm, JobBoardFilterForm
-from website import job_utils
-from .models import Profile, Ride, JobPost
-from datetime import datetime
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import user_passes_test, login_required
-from django.utils.decorators import method_decorator
-from .decorators import is_homeless, is_volunteer, is_company
-import requests
-from homeyess.settings import GOOGLE_MAPS_API_KEY
-
-import functools
-from django.conf import settings
-import math
-from django.core.serializers.json import DjangoJSONEncoder
 import json
+
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.models import User
+from django.core.serializers.json import DjangoJSONEncoder
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.decorators import method_decorator
+from django.views.generic.edit import CreateView, UpdateView
+from homeyess.settings import GOOGLE_MAPS_API_KEY
+from website import job_utils
+
+from .decorators import is_homeless, is_volunteer, is_company
+from .forms import SignUpForm, RideRequestForm, PostJobForm, RideSearchFilterForm, UserTypeForm, JobBoardFilterForm
+from .models import Profile, Ride, JobPost
 from .ride_utils import *
+
 
 def index(request):
     '''Renders the index / home page
