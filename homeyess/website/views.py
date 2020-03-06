@@ -166,7 +166,7 @@ def volunteer(request, user):
     total_time = 0
     for ride in finished_rides:
         time = ride.end_datetime - ride.start_datetime
-        total_time += time.minute
+        total_time += time.seconds // 60
 
     total_time = getTimeString(total_time)
     context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides, 'total_time': total_time}
