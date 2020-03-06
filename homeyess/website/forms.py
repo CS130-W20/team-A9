@@ -39,7 +39,7 @@ class SignUpForm(UserCreationForm):
         field_order.append('password2')
         self.fields['email'] = BootstrapEmailField(max_length=254, required=False, help_text='Optional.')
         field_order.append('email')
-        self.fields['phone'] = BootstrapRegexField(regex='\d{3}-\d{3}-\d{4}', required=False, help_text='Optional.', label="Phone Number (###-###-####)", error_messages={'invalid': 'Incorrect phone number format'})
+        self.fields['phone'] = BootstrapRegexField(regex='\d{10}', required=False, help_text='Optional.', label="Phone Number (##########)", error_messages={'invalid': 'Incorrect phone number format'})
         field_order.append('phone')
         if user_type == 'V':
             self.fields['car_plate'] = BootstrapCharField(max_length=8, required=False, label="License Plate Number")
