@@ -6,6 +6,7 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 /homeyess/homeyess - project settings (database, urls, packages)  
 /homeyess/website - code for the website including views, models  
 /homeyess/website/tests - unit tests, etc.
+/homeyess/website/static - static files (images, css) for templates  
 /homeyess/templates - html templates
 /homeyess/docs/source - documentation (sphinx) settings
 /homeyess/docs/build/html - contains docstrings rendered in html
@@ -16,7 +17,7 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 3) run $ virtualenv env
 4) run $ source env/bin/activate
 5) run $ pip3 install -r requirements.txt
-6) set environment variables: SECRET_KEY, DB_NAME, DB_HOST, DB_PASSWORD, DB_USER, DB_PORT  
+6) set environment variables: SECRET_KEY, DB_NAME, DB_HOST, DB_PASSWORD, DB_USER, DB_PORT, GOOGLE_MAPS_API_KEY, TWILIO_AUTH_TOKEN, TWILIO_ACCOUNT_SID  
 7) run the app on localhost $ python3 manage.py runserver (ctrl-c to exit)
 
 ## Testing
