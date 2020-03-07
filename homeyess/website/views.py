@@ -28,7 +28,7 @@ def index(request):
     :return: the rendered index page using the index.html template
     :rtype: HttpResponse
     """
-    return render(request, 'index.html')
+    return render(request, "index.html")
 
 def signup(request, user_type):
     """Renders the signup page specific to the type of user
@@ -40,37 +40,38 @@ def signup(request, user_type):
     :return: the rendered SignUpForm or a redirect to homepage
     :rtype: HttpResponse
     """
-    if user_type == 'homeless':
-        user_type = 'H'
-    elif user_type == 'volunteer':
-        user_type = 'V'
-    elif user_type == 'company':
-        user_type = 'C'
+    if user_type == "homeless":
+        user_type = "H"
+    elif user_type == "volunteer":
+        user_type = "V"
+    elif user_type == "company":
+        user_type = "C"
     else:
         return HttpResponse(status=404)
-    if request.method == 'POST':
+    if request.method == "POST":
         form = SignUpForm(request.POST, user_type=user_type)
         if form.is_valid():
             user = form.save()
             user.refresh_from_db()
-            user.last_name = form.cleaned_data.get('last_name')
-            user.profile.phone = form.cleaned_data.get('phone')
-            user.profile.car_plate = form.cleaned_data.get('car_plate', None)
-            user.profile.car_make = form.cleaned_data.get('car_make', None)
-            user.profile.car_model = form.cleaned_data.get('car_model', None)
+            if "last_name" in form.cleaned_data:
+                user.last_name = form.cleaned_data.get("last_name", None)
+            user.profile.phone = form.cleaned_data.get("phone")
+            user.profile.car_plate = form.cleaned_data.get("car_plate", None)
+            user.profile.car_make = form.cleaned_data.get("car_make", None)
+            user.profile.car_model = form.cleaned_data.get("car_model", None)
             user.profile.total_volunteer_minutes = 0
-            user.profile.home_address = form.cleaned_data.get('home_address', None)
+            user.profile.home_address = form.cleaned_data.get("home_address", None)
             user.profile.user_type = user_type
             user.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
+            username = form.cleaned_data.get("username")
+            raw_password = form.cleaned_data.get("password1")
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('/')
+            return redirect("/")
     else:
         form = SignUpForm(user_type=user_type)
 
-    return render(request, 'registration/signup.html', {'form': form})
+    return render(request, "registration/signup.html", {"form": form})
 
 def user_type(request):
     """Renders the page that asks what type of user you are to direct you to the correct signup form
@@ -80,21 +81,21 @@ def user_type(request):
     :return: the rendered form to ask your user type
     :rtype: HttpResponse
     """
-    if request.method == 'POST':
+    if request.method == "POST":
         form = UserTypeForm(request.POST)
         if form.is_valid():
-            user_type = form.cleaned_data.get('user_type')
-            if user_type == 'H':
-                return redirect('signup/homeless/')
-            if user_type == 'C':
-                return redirect('signup/company/')
+            user_type = form.cleaned_data.get("user_type")
+            if user_type == "H":
+                return redirect("signup/homeless/")
+            if user_type == "C":
+                return redirect("signup/company/")
             else:
-                return redirect('signup/volunteer/')
+                return redirect("signup/volunteer/")
     else:
         form = UserTypeForm()
-    return render(request, 'registration/user_type.html', {'form': form})
+    return render(request, "registration/user_type.html", {"form": form})
 
-@login_required(login_url='accounts/login/')
+@login_required(login_url="accounts/login/")
 def dashboard(request):
     """Renders the dashboard page for all users
 
@@ -107,13 +108,13 @@ def dashboard(request):
 
     if user.profile.user_type == "V":
         return volunteer(request, user)
-    elif user.profile.user_type == 'H':
+    elif user.profile.user_type == "H":
         return homeless(request, user)
-    elif user.profile.user_type == 'C':
+    elif user.profile.user_type == "C":
         return company(request, user)
     return HttpResponse(status=404)
 
-@user_passes_test(is_homeless, login_url='/')
+@user_passes_test(is_homeless, login_url="/")
 def homeless(request, user):
     """Renders the dashboard page for homeless users
 
@@ -125,12 +126,13 @@ def homeless(request, user):
     :rtype: HttpResponse
     """
 
-    unconfirmed_rides = Ride.objects.filter(homeless = user.profile, volunteer = None, interview_datetime__gt = pytz.utc.localize(datetime.now())).order_by('-interview_datetime')
-    confirmed_rides = Ride.objects.filter(homeless = user.profile, interview_datetime__gt = pytz.utc.localize(datetime.now())).exclude(volunteer = None).order_by('-interview_datetime')
-    context = {'user': user, 'unconfirmed_rides': unconfirmed_rides, 'confirmed_rides': confirmed_rides}
-    return render(request, 'dashboard/homeless.html', context)
 
-@user_passes_test(is_company, login_url='/')
+    unconfirmed_rides = Ride.objects.filter(homeless = user.profile, volunteer = None, interview_datetime__gt = pytz.utc.localize(datetime.now())).order_by("-interview_datetime")
+    confirmed_rides = Ride.objects.filter(homeless = user.profile, interview_datetime__gt = pytz.utc.localize(datetime.now())).exclude(volunteer = None).order_by("-interview_datetime")
+    context = {"user": user, "unconfirmed_rides": unconfirmed_rides, "confirmed_rides": confirmed_rides}
+    return render(request, "dashboard/homeless.html", context)
+
+@user_passes_test(is_company, login_url="/")
 def company(request, user):
     """Renders the dashboard page for company users
 
@@ -141,11 +143,11 @@ def company(request, user):
     :return: the rendered dashboard page for the user using the company.html template
     :rtype: HttpResponse
     """
-    job_posts = JobPost.objects.filter(company=user.profile).order_by('-created')
-    context = {'user': user, 'job_posts': job_posts}
-    return render(request, 'dashboard/company.html', context)
+    job_posts = JobPost.objects.filter(company=user.profile).order_by("-created")
+    context = {"user": user, "job_posts": job_posts}
+    return render(request, "dashboard/company.html", context)
 
-@user_passes_test(is_volunteer, login_url='/')
+@user_passes_test(is_volunteer, login_url="/")
 def volunteer(request, user):
     """Renders the dashboard page for volunteer users
 
@@ -156,18 +158,19 @@ def volunteer(request, user):
     :return: the rendered dashboard page for the user using the volunteer.html template
     :rtype: HttpResponse
     """
-    confirmed_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__gt = pytz.utc.localize(datetime.now())).order_by('-interview_datetime')
-    finished_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__lte = pytz.utc.localize(datetime.now())).order_by('-interview_datetime')
+
+    confirmed_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__gt = pytz.utc.localize(datetime.now())).order_by("-interview_datetime")
+    finished_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__lte = pytz.utc.localize(datetime.now())).order_by("-interview_datetime")
     total_time = 0
     for ride in finished_rides:
         time = ride.end_datetime - ride.start_datetime
         total_time += time.seconds // 60
 
     total_time = getTimeString(total_time)
-    context = {'user': user, 'confirmed_rides': confirmed_rides, 'finished_rides': finished_rides, 'total_time': total_time}
-    return render(request, 'dashboard/volunteer.html', context)
+    context = {"user": user, "confirmed_rides": confirmed_rides, "finished_rides": finished_rides, "total_time": total_time}
+    return render(request, "dashboard/volunteer.html", context)
 
-@user_passes_test(is_homeless, login_url='/')
+@user_passes_test(is_homeless, login_url="/")
 def job_board(request):
     """Renders the job board page for homeless users to view jobs
 
@@ -176,11 +179,11 @@ def job_board(request):
     :return: the rendered job board page using the job_board.html template
     :rtype: HttpResponse
     """
-    job_posts = JobPost.objects.all().order_by('-created')
+    job_posts = JobPost.objects.all().order_by("-created")
 
     # Extract the information we want here:
-    location = request.GET.get('location', None)
-    job_title = request.GET.get('job_title', None)
+    location = request.GET.get("location", None)
+    job_title = request.GET.get("job_title", None)
 
     # Let the query function extract the jobs we care about:
     jobs = job_utils.filterQuerySet(
@@ -189,15 +192,15 @@ def job_board(request):
         job_title)
 
     context = {}
-    context['form'] = JobBoardFilterForm(initial={
-        'location': request.GET.get('location', None),
-        'job_title': request.GET.get('job_title', None),
+    context["form"] = JobBoardFilterForm(initial={
+        "location": request.GET.get("location", None),
+        "job_title": request.GET.get("job_title", None),
     })
-    context['job_posts'] = jobs
+    context["job_posts"] = jobs
 
-    return render(request, 'jobs/job_board.html', context)
+    return render(request, "jobs/job_board.html", context)
 
-@user_passes_test(is_homeless, login_url='/')
+@user_passes_test(is_homeless, login_url="/")
 def job_detail(request, job_id):
     """Renders the job detail page to see more information on a job from the job board
 
@@ -211,9 +214,9 @@ def job_detail(request, job_id):
     job = JobPost.objects.filter(pk=job_id).first()
     if not job:
         return HttpResponse(status=404)
-    return render(request, 'jobs/job_detail.html', {'job': job})
+    return render(request, "jobs/job_detail.html", {"job": job})
 
-@method_decorator(user_passes_test(is_homeless, login_url='/'), name='dispatch')
+@method_decorator(user_passes_test(is_homeless, login_url="/"), name="dispatch")
 class RequestRideCreate(CreateView):
     """Object used to render the ride request creation view
 
@@ -224,7 +227,7 @@ class RequestRideCreate(CreateView):
     :param queryset: the queryable attributes of the form
     :type queryset: QuerySet
     """
-    template_name = 'rides/request_ride.html'
+    template_name = "rides/request_ride.html"
     form_class = RideRequestForm
     queryset = Ride.objects.all()
 
@@ -237,27 +240,27 @@ class RequestRideCreate(CreateView):
         :rtype: boolean
         """
         form.instance.homeless = Profile.objects.get(user=self.request.user)
-        self.success_url = 'dashboard'
+        self.success_url = "dashboard"
 
         return super(RequestRideCreate, self).form_valid(form)
 
-@user_passes_test(lambda a: is_homeless(a) or is_volunteer(a), login_url='/')
+@user_passes_test(lambda a: is_homeless(a) or is_volunteer(a), login_url="/")
 def view_ride(request, ride_id):
     """Renders the view that allows people experiencing homelessness to view a specific ride request
     he/she filled out, so that they can review and potentially edit the form
 
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
-    :param ride_id: The ride request post's idea
+    :param ride_id: The ride request post"s idea
     :type ride_id: int
     """
     ride_request = get_object_or_404(Ride, id=ride_id)
-    context = {'ride_request': ride_request}
-    return render(request, 'rides/view_ride.html', context)
+    context = {"ride_request": ride_request}
+    return render(request, "rides/view_ride.html", context)
 
-@method_decorator(user_passes_test(is_homeless, login_url='/'), name='dispatch')
+@method_decorator(user_passes_test(is_homeless, login_url="/"), name="dispatch")
 class RequestRideEdit(UpdateView):
-    """Object used to render the request form's update view
+    """Object used to render the request form"s update view
 
     :param template_name: the name of the template used to render the view
     :type template_name: string
@@ -266,7 +269,7 @@ class RequestRideEdit(UpdateView):
     :param queryset: the queryable attributes of the form
     :type queryset: QuerySet
     """
-    template_name = 'rides/request_ride.html'
+    template_name = "rides/request_ride.html"
     form_class = RideRequestForm
     queryset = Ride.objects.all()
 
@@ -277,9 +280,8 @@ class RequestRideEdit(UpdateView):
         :rtype: Ride
         """
         id_ = self.kwargs.get("ride_id")
-        self.success_url = '/view-ride/' + str(id_)
+        self.success_url = "/view-ride/" + str(id_)
         return get_object_or_404(Ride, id=id_)
-
 
     def get_context_data(self, **kwargs):
         """Generates the context data for the html template
@@ -288,7 +290,7 @@ class RequestRideEdit(UpdateView):
         :rtype: dict
         """
         context = super().get_context_data(**kwargs)
-        context['update'] = True
+        context["update"] = True
         return context
 
     def form_valid(self, form):
@@ -307,7 +309,7 @@ class RequestRideEdit(UpdateView):
 
         return HttpResponseRedirect(self.get_success_url())
 
-@user_passes_test(is_homeless, login_url='/')
+@user_passes_test(is_homeless, login_url="/")
 def delete_ride(request, ride_id):
     """Endpoint to delete a ride request
 
@@ -325,9 +327,9 @@ def delete_ride(request, ride_id):
         homeless_id = instance.homeless.id
         user = User.objects.get(pk=homeless_id)
         instance.delete()
-    return redirect('dashboard')
+    return redirect("dashboard")
 
-@user_passes_test(is_volunteer, login_url='/')
+@user_passes_test(is_volunteer, login_url="/")
 def cancel_ride(request, ride_id):
     """Endpoint to unconfirm a ride request (unmatch a volunteer from the ride)
 
@@ -348,10 +350,10 @@ def cancel_ride(request, ride_id):
         instance.end_datetime = None
         instance.save()
 
-    return redirect('dashboard')
+    return redirect("dashboard")
 
 
-@user_passes_test(is_company, login_url='/')
+@user_passes_test(is_company, login_url="/")
 def edit_job(request, job_id):
     """Renders the editjob form on GET; processes the editjob form on POST
 
@@ -359,48 +361,48 @@ def edit_job(request, job_id):
     :type request: HttpRequest
     :param job_id: The primary key used to index the specific job we are editing
     :type job_id: int
-    :return: the rendered JobForm or a redirect to the company's dashboard
+    :return: the rendered JobForm or a redirect to the company"s dashboard
     :rtype: HttpResponse
     """
     job_post = JobPost.objects.get(pk=job_id)
-    if request.method == 'POST':
-        if 'delete' in request.POST:
+    if request.method == "POST":
+        if "delete" in request.POST:
             job_post.delete()
         else:
             form = PostJobForm(request.POST, instance=job_post)
             if form.is_valid():
                 form.save()
             else:
-                return render(request, 'jobs/edit_job.html', {'form': form})
+                return render(request, "jobs/edit_job.html", {"form": form})
 
-        return redirect('dashboard')
+        return redirect("dashboard")
     else:
         form = PostJobForm(instance=job_post)
 
-    return render(request, 'jobs/edit_job.html', {'form': form})
+    return render(request, "jobs/edit_job.html", {"form": form})
 
-@user_passes_test(is_company, login_url='/')
+@user_passes_test(is_company, login_url="/")
 def post_job(request):
     """Renders the postjob form on GET; processes the postjob form on POST
 
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
-    :return: the rendered JobForm or a redirect to the company's dashboard
+    :return: the rendered JobForm or a redirect to the company"s dashboard
     :rtype: HttpResponse
     """
-    if request.method == 'POST':
+    if request.method == "POST":
         form = PostJobForm(request.POST)
         if form.is_valid():
             user = Profile.objects.get(pk=request.user.id)
             job_post = JobPost(company=user, **form.cleaned_data)
             job_post.save()
-            return redirect('dashboard')
+            return redirect("dashboard")
     else:
         form = PostJobForm()
 
-    return render(request, 'jobs/post_job.html', {'form': form})
+    return render(request, "jobs/post_job.html", {"form": form})
 
-@user_passes_test(is_volunteer, login_url='/')
+@user_passes_test(is_volunteer, login_url="/")
 def ride_board(request):
     """Renders the job board page where homeless users can view jobs and filter jobs
 
@@ -409,10 +411,11 @@ def ride_board(request):
     :return: the rendered ride board
     :rtype: HttpResponse
     """
-    rides = Ride.objects.filter(volunteer=None, interview_datetime__gt = pytz.utc.localize(datetime.now())).order_by('interview_datetime')
-    start_datetime = request.GET.get('start_datetime', None)
-    end_datetime = request.GET.get('end_datetime', None)
-    max_range = request.GET.get('max_range', None)
+
+    rides = Ride.objects.filter(volunteer=None, interview_datetime__gt = pytz.utc.localize(datetime.now())).order_by("interview_datetime"))
+    start_datetime = request.GET.get("start_datetime", None)
+    end_datetime = request.GET.get("end_datetime", None)
+    max_range = request.GET.get("max_range", None)
     profile = Profile.objects.get(user=request.user)
 
     rides = filterQuerySet(
@@ -423,27 +426,27 @@ def ride_board(request):
         profile.home_address)
 
     context = {}
-    context['form'] = RideSearchFilterForm(initial={
-        'start_time': request.GET.get('start_datetime', None),
-        'end_time': request.GET.get('end_datetime', None),
-        'max_range': request.GET.get('max_range', None),
-        'start_address': request.GET.get('start_address', None),
+    context["form"] = RideSearchFilterForm(initial={
+        "start_time": request.GET.get("start_datetime", None),
+        "end_time": request.GET.get("end_datetime", None),
+        "max_range": request.GET.get("max_range", None),
+        "start_address": request.GET.get("start_address", None),
     })
-    context['GOOGLE_MAPS_API_KEY'] = GOOGLE_MAPS_API_KEY
-    context['rides'] = rides
+    context["GOOGLE_MAPS_API_KEY"] = GOOGLE_MAPS_API_KEY
+    context["rides"] = rides
 
 
-    context['rides_json'] = json.dumps(list(getRideDict(ride) for ride in rides), cls=DjangoJSONEncoder)
+    context["rides_json"] = json.dumps(list(getRideDict(ride) for ride in rides), cls=DjangoJSONEncoder)
 
     gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
     home_info = gmaps.geocode(request.user.profile.home_address)
     if home_info:
-        location = home_info[0]['geometry']['location']
-        context['home'] = location
+        location = home_info[0]["geometry"]["location"]
+        context["home"] = location
 
-    return render(request, 'rides/ride_board.html', context=context)
+    return render(request, "rides/ride_board.html", context=context)
 
-@user_passes_test(is_volunteer, login_url='/')
+@user_passes_test(is_volunteer, login_url="/")
 def confirm_ride(request, ride_id):
     """Endpoint to confirm a ride (match volunteer with ride)
 
@@ -465,7 +468,7 @@ def confirm_ride(request, ride_id):
         ride.interview_duration
     )
     if td_vec == None:
-        return redirect('search_rides')
+        return redirect("search_rides")
     ride.distance = getDistance(td_vec)
     times = [time for (time, _) in td_vec]
     ride.start_datetime, ride.pickup_datetime, ride.end_datetime, _ = getTimes(td_vec, ride.interview_datetime)
@@ -473,4 +476,4 @@ def confirm_ride(request, ride_id):
 
     send_message("Your ride request to {} on {} has been matched with a volunteer".format(ride.interview_address, ride.pickup_datetime), homeless_profile)
 
-    return redirect('dashboard')
+    return redirect("dashboard")

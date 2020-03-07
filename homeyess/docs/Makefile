@@ -18,3 +18,11 @@ help:
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+html:
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	sed -i '' s/_static/static/g ./build/html/index.html
+	sed -i '' s/_static/static/g ./build/html/py-modindex.html
+	sed -i '' s/_static/static/g ./build/html/genindex.html
+	sed -i '' s/_static/static/g ./build/html/search.html
+	mv build/html/_static build/html/static

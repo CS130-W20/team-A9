@@ -20,12 +20,12 @@ def getRideDict(ride):
     :rtype: dict
     """
     ride_dict = model_to_dict(ride)
-    ride_dict['d'] = ride.d
-    ride_dict['sd'] = ride.sd
-    ride_dict['ed'] = ride.ed
-    ride_dict['total_time'] = ride.total_time
-    ride_dict['pickup_location'] = ride.pickup_location
-    ride_dict['pickup_address'] = ride.homeless.home_address
+    ride_dict["d"] = ride.d
+    ride_dict["sd"] = ride.sd
+    ride_dict["ed"] = ride.ed
+    ride_dict["total_time"] = ride.total_time
+    ride_dict["pickup_location"] = ride.pickup_location
+    ride_dict["pickup_address"] = ride.homeless.home_address
     return ride_dict
 
 def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
@@ -57,15 +57,16 @@ def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
         else:
             ride.d = getDistance(td_vec)
             ride.sd, _, ride.ed, ride.total_time = getTimes(td_vec, ride.interview_datetime)
+
         ride.pickup_location = pickup_location
 
     rides = [ride for ride in rides if ride.d != None]
     if start_datetime:
-        start_datetime = datetime.strptime(start_datetime, '%Y-%m-%d %H:%M')
+        start_datetime = datetime.strptime(start_datetime, "%Y-%m-%d %H:%M")
         start_datetime = pytz.utc.localize(start_datetime)
         rides = [ride for ride in rides if ride.sd >= start_datetime]
     if end_datetime:
-        end_datetime = datetime.strptime(end_datetime, '%Y-%m-%d %H:%M')
+        end_datetime = datetime.strptime(end_datetime, "%Y-%m-%d %H:%M")
         end_datetime = pytz.utc.localize(end_datetime)
         rides = [ride for ride in rides if ride.ed <= end_datetime]
     if max_range:
@@ -144,16 +145,16 @@ def getTimeDistanceVector(v_start, hp_start, interview_location, interview_durat
         pickup -> volunteer home
     """
 
-    URL = 'https://maps.googleapis.com/maps/api/distancematrix/json'
+    URL = "https://maps.googleapis.com/maps/api/distancematrix/json"
     PARAMS = {
-        'key': GOOGLE_MAPS_API_KEY,
-        'origins': v_start + '|' + hp_start + '|' + interview_location,
-        'destinations': v_start + '|' + hp_start + '|' + interview_location,
+        "key": GOOGLE_MAPS_API_KEY,
+        "origins": v_start + "|" + hp_start + "|" + interview_location,
+        "destinations": v_start + "|" + hp_start + "|" + interview_location,
     }
 
     data = getResponseJson(URL, PARAMS)
 
-    if data['status'] != 'OK':
+    if data["status"] != "OK":
         return None
 
     # we need:
@@ -165,10 +166,10 @@ def getTimeDistanceVector(v_start, hp_start, interview_location, interview_durat
     INDICES = [(0, 1), (1, 2), (2, 1), (1, 0)]
     time_distance_vector = []
     for index0, index1 in INDICES:
-        if data['rows'][index0]['elements'][index1]['status'] != 'OK':
+        if data["rows"][index0]["elements"][index1]["status"] != "OK":
             return None
-        distance_in_meters = data['rows'][index0]['elements'][index1]['distance']['value']
-        time_in_seconds = data['rows'][index0]['elements'][index1]['duration']['value']
+        distance_in_meters = data["rows"][index0]["elements"][index1]["distance"]["value"]
+        time_in_seconds = data["rows"][index0]["elements"][index1]["duration"]["value"]
 
         distance_in_miles = 0.000621371 * distance_in_meters
         time_in_minutes = time_in_seconds / 60
@@ -231,20 +232,20 @@ def getTimeString(mins):
 
     :param mins: the number of minutes
     :type mins: int
-    :return: time string of form 'x hr y min' (hrs or mins if plural)
+    :return: time string of form "x hr y min" (hrs or mins if plural)
     :rtype: string
     """
     s = ""
     hours = mins//60
     m = mins%60
     if hours == 1:
-        s += str(hours) + ' hr '
+        s += str(hours) + " hr "
     elif hours > 1:
-        s += str(hours) + ' hrs '
+        s += str(hours) + " hrs "
     if m == 1:
-        s += str(m) + ' min'
+        s += str(m) + " min"
     else:
-        s += str(m) + ' mins'
+        s += str(m) + " mins"
     return s
 
 def send_message(message, profile):
@@ -252,7 +253,7 @@ def send_message(message, profile):
 
     :param message: the message to send to the user
     :type message: String
-    :param profile: The user's profile
+    :param profile: The user"s profile
     :type profile: Profile
     """
     res = [None, None]
@@ -262,9 +263,9 @@ def send_message(message, profile):
 
     if profile.phone != "":
         client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-        res[0] = client.messages.create(body=message, from_='+12055089181', to=profile.phone)
+        res[0] = client.messages.create(body=message, from_="+12055089181", to=profile.phone)
 
     if profile.user.email != "":
-        res[1] = send_mail('Homeyess Notification', message, 'from@example.com', [profile.user.email], fail_silently=False)
+        res[1] = send_mail("Homeyess Notification", message, "from@example.com", [profile.user.email], fail_silently=False)
 
     return res
