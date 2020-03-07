@@ -2,14 +2,14 @@
 This webapp is a way to connect people experiencing homelessness, companies, and volunteers. Companies can post jobs for homeless people to see. Homeless people can request a ride to / from an interview. They are matched with volunteers to drive them.
 
 ## Directory Structure
-/homeyess - django project  
-/homeyess/homeyess - project settings (database, urls, packages)  
-/homeyess/website - code for the website including views, models  
-/homeyess/website/tests - unit tests, etc  
-/homeyess/website/static - static files (images, css) for templates  
-/homeyess/templates - html templates
-/homeyess/docs/source - documentation (sphinx) settings
-/homeyess/docs/build/html - contains docstrings rendered in html
+/ - django project  
+/homeyess - project settings (database, urls, packages)  
+/website - code for the website including views, models  
+/website/tests - unit tests, etc  
+/website/static - static files (images, css) for templates  
+/templates - html templates
+/docs/source - documentation (sphinx) settings
+/docs/build/html - contains docstrings rendered in html
 
 ## Installation/Run instructions
 1) clone the repo
@@ -36,11 +36,11 @@ website/tests/message_tests.py - test sending messages via twilio and email
 website/tests/map_tests.py - test distance / time calculations used for volunteers to search for rides  
 
 ## Generating Documentation
-1) cd homeyess/docs
+1) cd docs
 2) make html
 
 ## Writing Documentation
-1) vi homeyess/docs/source/index.rst
+1) vi docs/source/index.rst
 2) add directive
 3) write doc strings in the module
 
