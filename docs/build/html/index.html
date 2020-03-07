@@ -1,0 +1,1003 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Welcome to homeyess’s documentation! &#8212; homeyess 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-homeyess-s-documentation">
+<h1>Welcome to homeyess’s documentation!<a class="headerlink" href="#welcome-to-homeyess-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="module-website.models">
+<span id="models"></span><h1>Models<a class="headerlink" href="#module-website.models" title="Permalink to this headline">¶</a></h1>
+<p>homeyess/website/models.py</p>
+<dl class="class">
+<dt id="website.models.JobPost">
+<em class="property">class </em><code class="sig-prename descclassname">website.models.</code><code class="sig-name descname">JobPost</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.models.JobPost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model to store information about a job post</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>company</strong> (<em>User</em>) – the company that made the post</p></li>
+<li><p><strong>created</strong> (<em>Date</em>) – the date the post was created</p></li>
+<li><p><strong>last_edited</strong> (<em>Date</em>) – the date the post was last edited</p></li>
+<li><p><strong>location</strong> (<em>CharField / string</em>) – the location of the job (city, county, etc.)</p></li>
+<li><p><strong>wage</strong> (<em>CharField / string</em>) – how much the job will pay (can be hourly, salary, etc.)</p></li>
+<li><p><strong>hours</strong> (<em>CharField / string</em>) – the time commitment of the job</p></li>
+<li><p><strong>job_title</strong> (<em>CharField / string</em>) – the title of the job (e.g. janitor)</p></li>
+<li><p><strong>short_summary</strong> (<em>CharField / string</em>) – a short summary of the job description</p></li>
+<li><p><strong>description</strong> (<em>Text / string</em>) – the job description (should include instruction to apply)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="exception">
+<dt id="website.models.JobPost.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#website.models.JobPost.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="website.models.JobPost.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#website.models.JobPost.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="website.models.Profile">
+<em class="property">class </em><code class="sig-prename descclassname">website.models.</code><code class="sig-name descname">Profile</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.models.Profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model to store information about a user</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>User</em>) – the authentication object containing username, password, email (optional), first / last name</p></li>
+<li><p><strong>phone</strong> (<em>(</em><em>optional</em><em>) </em><em>CharField / string</em>) – the user’s phone number</p></li>
+<li><p><strong>user_type</strong> (<a class="reference internal" href="#website.models.Profile.UserType" title="website.models.Profile.UserType"><em>UserType</em></a>) – the type of user (volunteer, homeless, company)</p></li>
+<li><p><strong>car_plate</strong> (<em>(</em><em>optional</em><em>) </em><em>CharField / string</em>) – the license plate number of the volunteer’s car (only required for volunteer)</p></li>
+<li><p><strong>car_make</strong> (<em>(</em><em>optional</em><em>) </em><em>CharField / string</em>) – the make of the volunteer’s car (only required for volunteer)</p></li>
+<li><p><strong>car_model</strong> (<em>(</em><em>optional</em><em>) </em><em>CharField / string</em>) – the model of the volunteer’s car (only required for volunteer)</p></li>
+<li><p><strong>total_volunteer_minutes</strong> (<em>int</em>) – the total amount of time a volunteer has volunteered</p></li>
+<li><p><strong>home_address</strong> (<em>CharField / string</em>) – home address (only required for volunteer)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="exception">
+<dt id="website.models.Profile.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#website.models.Profile.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="website.models.Profile.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#website.models.Profile.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="website.models.Profile.UserType">
+<em class="property">class </em><code class="sig-name descname">UserType</code><a class="headerlink" href="#website.models.Profile.UserType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enum to represent types of users: Volunteer, Homeless, Company</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="website.models.Ride">
+<em class="property">class </em><code class="sig-prename descclassname">website.models.</code><code class="sig-name descname">Ride</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.models.Ride" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model to store information about a ride request. Contains start / end time and location, the homeless person, and a volunteer if the ride has already been confirmed.
+Note that the object should be created when a ride request is made and altered when the request is updated (by homeless) or confirmed (by user).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>homeless</strong> (<em>User</em>) – the user who requested the ride</p></li>
+<li><p><strong>volunteer</strong> (<em>(</em><em>optional</em><em>) </em><em>User</em>) – the user who volunteered to give the ride</p></li>
+<li><p><strong>interview_datetime</strong> (<em>DateTime</em>) – the date and time of the interview</p></li>
+<li><p><strong>interview_duration</strong> (<em>int</em>) – the time in minutes that the interview should last</p></li>
+<li><p><strong>interview_address</strong> (<em>CharField / string</em>) – the address of the interview</p></li>
+<li><p><strong>interview_company</strong> (<em>CharField / string</em>) – the company hosting the interview</p></li>
+<li><p><strong>start_datetime</strong> (<em>DateTime</em>) – the time the volunteer leaves their house</p></li>
+<li><p><strong>pickup_datetime</strong> (<em>DateTime</em>) – the date and time the homeless person should be picked up for their interview</p></li>
+<li><p><strong>end_datetime</strong> (<em>DateTime</em>) – the time the volunteer arrives back at their house</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="exception">
+<dt id="website.models.Ride.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#website.models.Ride.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="website.models.Ride.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#website.models.Ride.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="website.models.Ride.get_absolute_url">
+<code class="sig-name descname">get_absolute_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#website.models.Ride.get_absolute_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path to view a specific ride request that was just created/edited</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string of the path to view the created/modified ride request</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="website.models.Ride.get_fields">
+<code class="sig-name descname">get_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#website.models.Ride.get_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of attributes of the Ride object, used for the ViewRideForm template</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of tuples that contain (field_name, field_value)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[(string, string)]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-website.views">
+<span id="views"></span><h1>Views<a class="headerlink" href="#module-website.views" title="Permalink to this headline">¶</a></h1>
+<p>homeyess/website/views.py</p>
+<dl class="class">
+<dt id="website.views.RequestRideCreate">
+<em class="property">class </em><code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">RequestRideCreate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideCreate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object used to render the ride request creation view</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>template_name</strong> (<em>string</em>) – the name of the template used to render the view</p></li>
+<li><p><strong>form_class</strong> (<em>ModelFormMetaclass</em>) – the form that specifies what data needs to be input</p></li>
+<li><p><strong>queryset</strong> (<em>QuerySet</em>) – the queryable attributes of the form</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="website.views.RequestRideCreate.form_class">
+<code class="sig-name descname">form_class</code><a class="headerlink" href="#website.views.RequestRideCreate.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#website.forms.RideRequestForm" title="website.forms.RideRequestForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">website.forms.RideRequestForm</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="website.views.RequestRideCreate.form_valid">
+<code class="sig-name descname">form_valid</code><span class="sig-paren">(</span><em class="sig-param">form</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideCreate.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the form has valid inputs. Assigns homeless user to ride.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>form</strong> (<a class="reference internal" href="#website.forms.RideRequestForm" title="website.forms.RideRequestForm"><em>RideRequestForm</em></a>) – the form used to create the ride</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether the form has valid inputs</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="website.views.RequestRideEdit">
+<em class="property">class </em><code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">RequestRideEdit</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideEdit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object used to render the request form’s update view</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>template_name</strong> (<em>string</em>) – the name of the template used to render the view</p></li>
+<li><p><strong>form_class</strong> (<em>ModelFormMetaclass</em>) – the form that specifies what data needs to be input</p></li>
+<li><p><strong>queryset</strong> (<em>QuerySet</em>) – the queryable attributes of the form</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="website.views.RequestRideEdit.form_class">
+<code class="sig-name descname">form_class</code><a class="headerlink" href="#website.views.RequestRideEdit.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#website.forms.RideRequestForm" title="website.forms.RideRequestForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">website.forms.RideRequestForm</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="website.views.RequestRideEdit.form_valid">
+<code class="sig-name descname">form_valid</code><span class="sig-paren">(</span><em class="sig-param">form</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideEdit.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the form has valid inputs. Assigns homeless user to ride.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>form</strong> (<a class="reference internal" href="#website.forms.RideRequestForm" title="website.forms.RideRequestForm"><em>RideRequestForm</em></a>) – the form used to create the ride</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether the form has valid inputs</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="website.views.RequestRideEdit.get_context_data">
+<code class="sig-name descname">get_context_data</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideEdit.get_context_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the context data for the html template</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>data to be displayed in the template</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="website.views.RequestRideEdit.get_object">
+<code class="sig-name descname">get_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideEdit.get_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the ride object associated with the update or 404 if none</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the ride object or 404</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#website.models.Ride" title="website.models.Ride">Ride</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.cancel_ride">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">cancel_ride</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">ride_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.cancel_ride" title="Permalink to this definition">¶</a></dt>
+<dd><p>Endpoint to unconfirm a ride request (unmatch a volunteer from the ride)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>HttpRequest</em>) – the HttpRequest</p></li>
+<li><p><strong>ride_id</strong> (<em>int</em>) – the id of the ride to cancel</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Redirect to user dashboard</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.company">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">company</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.company" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the dashboard page for company users</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user</strong> (<em>User</em>) – the user whose dashboard should be rendered</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered dashboard page for the user using the company.html template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.confirm_ride">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">confirm_ride</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">ride_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.confirm_ride" title="Permalink to this definition">¶</a></dt>
+<dd><p>Endpoint to confirm a ride (match volunteer with ride)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>HttpRequest</em>) – the http request</p></li>
+<li><p><strong>ride_id</strong> (<em>int</em>) – the id of the ride to confirm</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>redirect to dashboard if confirmation successful else the search_rides page</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.dashboard">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">dashboard</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.dashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the dashboard page for all users</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered dashboard page for the user using the homeless.html, company.html, or volunteer.html template which matches the type of the requesting user</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.delete_ride">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">delete_ride</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">ride_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.delete_ride" title="Permalink to this definition">¶</a></dt>
+<dd><p>Endpoint to delete a ride request</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>HttpRequest</em>) – the HttpRequest</p></li>
+<li><p><strong>ride_id</strong> (<em>int</em>) – the id of the ride to delete</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Redirect to user dashboard</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.edit_job">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">edit_job</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">job_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.edit_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the editjob form on GET; processes the editjob form on POST</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>job_id</strong> (<em>int</em>) – The primary key used to index the specific job we are editing</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered JobForm or a redirect to the company’s dashboard</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.homeless">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">homeless</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.homeless" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the dashboard page for homeless users</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user</strong> (<em>User</em>) – the user whose dashboard should be rendered</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered dashboard page for the user using the homeless.html template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.index">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">index</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the index / home page</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered index page using the index.html template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.job_board">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">job_board</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.job_board" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the job board page for homeless users to view jobs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered job board page using the job_board.html template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.job_detail">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">job_detail</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">job_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.job_detail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the job detail page to see more information on a job from the job board</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>job_id</strong> (<em>int</em>) – The id of the job to be viewed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered job detail page using the job_detail.html template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.post_job">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">post_job</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.post_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the postjob form on GET; processes the postjob form on POST</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered JobForm or a redirect to the company’s dashboard</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.ride_board">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">ride_board</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.ride_board" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the job board page where homeless users can view jobs and filter jobs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>HttpRequest</em>) – the http request</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered ride board</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.signup">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">signup</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">user_type</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.signup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the signup page specific to the type of user</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user_type</strong> (<em>string</em>) – the type of user in lowercase (homeless, volunteer, company)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered SignUpForm or a redirect to homepage</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.user_type">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">user_type</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.user_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the page that asks what type of user you are to direct you to the correct signup form</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>HttpRequest</em>) – the http request</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered form to ask your user type</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.view_ride">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">view_ride</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">ride_id</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.view_ride" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the view that allows people experiencing homelessness to view a specific ride request
+he/she filled out, so that they can review and potentially edit the form</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>ride_id</strong> (<em>int</em>) – The ride request post’s idea</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.views.volunteer">
+<code class="sig-prename descclassname">website.views.</code><code class="sig-name descname">volunteer</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.volunteer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the dashboard page for volunteer users</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>HttpRequest</em>) – The http request containing user information or extra arguments</p></li>
+<li><p><strong>user</strong> (<em>User</em>) – the user whose dashboard should be rendered</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the rendered dashboard page for the user using the volunteer.html template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-website.forms">
+<span id="forms"></span><h1>Forms<a class="headerlink" href="#module-website.forms" title="Permalink to this headline">¶</a></h1>
+<p>homeyess/website/forms.py</p>
+<dl class="class">
+<dt id="website.forms.JobBoardFilterForm">
+<em class="property">class </em><code class="sig-prename descclassname">website.forms.</code><code class="sig-name descname">JobBoardFilterForm</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">field_order=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#website.forms.JobBoardFilterForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form to allow homeless people to filter job results</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="website.forms.PostJobForm">
+<em class="property">class </em><code class="sig-prename descclassname">website.forms.</code><code class="sig-name descname">PostJobForm</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">instance=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#website.forms.PostJobForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>PostJobForm for companies to post and edit jobs</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="website.forms.RideRequestForm">
+<em class="property">class </em><code class="sig-prename descclassname">website.forms.</code><code class="sig-name descname">RideRequestForm</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">instance=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#website.forms.RideRequestForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ride Request Form for people experiencing homelessness to request a ride to their interview</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="website.forms.RideSearchFilterForm">
+<em class="property">class </em><code class="sig-prename descclassname">website.forms.</code><code class="sig-name descname">RideSearchFilterForm</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">field_order=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#website.forms.RideSearchFilterForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form to allow volunteers to filter ride requests</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="website.forms.SignUpForm">
+<em class="property">class </em><code class="sig-prename descclassname">website.forms.</code><code class="sig-name descname">SignUpForm</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.forms.SignUpForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>SignUpForm for users, companies, and volunteers</p>
+<dl class="method">
+<dt id="website.forms.SignUpForm.clean">
+<code class="sig-name descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#website.forms.SignUpForm.clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>checks that signups meet proper constraints such as volunteer must have car</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="website.forms.UserTypeForm">
+<em class="property">class </em><code class="sig-prename descclassname">website.forms.</code><code class="sig-name descname">UserTypeForm</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">field_order=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#website.forms.UserTypeForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form to allow users to select the type of user they are in order to be directed to the relevant signup form</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-website.fields">
+<span id="fields"></span><h1>Fields<a class="headerlink" href="#module-website.fields" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="website.fields.BootstrapCharField">
+<em class="property">class </em><code class="sig-prename descclassname">website.fields.</code><code class="sig-name descname">BootstrapCharField</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.fields.BootstrapCharField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form field for strings with bootstrap styling</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="website.fields.BootstrapDateTimeField">
+<em class="property">class </em><code class="sig-prename descclassname">website.fields.</code><code class="sig-name descname">BootstrapDateTimeField</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.fields.BootstrapDateTimeField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form field for datetimes with bootstrap styling</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="website.fields.BootstrapEmailField">
+<em class="property">class </em><code class="sig-prename descclassname">website.fields.</code><code class="sig-name descname">BootstrapEmailField</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.fields.BootstrapEmailField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form field for emails with bootstrap styling</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="website.fields.BootstrapIntegerField">
+<em class="property">class </em><code class="sig-prename descclassname">website.fields.</code><code class="sig-name descname">BootstrapIntegerField</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.fields.BootstrapIntegerField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form field for ints with bootstrap styling</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="website.fields.BootstrapRegexField">
+<em class="property">class </em><code class="sig-prename descclassname">website.fields.</code><code class="sig-name descname">BootstrapRegexField</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.fields.BootstrapRegexField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form field for regex with bootstrap styling</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-website.decorators">
+<span id="decorators"></span><h1>Decorators<a class="headerlink" href="#module-website.decorators" title="Permalink to this headline">¶</a></h1>
+<p>homeyess/website/decorators.py</p>
+<dl class="function">
+<dt id="website.decorators.is_company">
+<code class="sig-prename descclassname">website.decorators.</code><code class="sig-name descname">is_company</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#website.decorators.is_company" title="Permalink to this definition">¶</a></dt>
+<dd><p>checks whether the user is a company</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user</strong> (<em>User</em>) – the user to check</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether the user is a company</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.decorators.is_homeless">
+<code class="sig-prename descclassname">website.decorators.</code><code class="sig-name descname">is_homeless</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#website.decorators.is_homeless" title="Permalink to this definition">¶</a></dt>
+<dd><p>checks whether the user is a homeless user</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user</strong> (<em>User</em>) – the user to check</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether the user is a homeless user</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.decorators.is_user_type">
+<code class="sig-prename descclassname">website.decorators.</code><code class="sig-name descname">is_user_type</code><span class="sig-paren">(</span><em class="sig-param">user</em>, <em class="sig-param">user_type</em><span class="sig-paren">)</span><a class="headerlink" href="#website.decorators.is_user_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>checks whether the user is of the type user_type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>User</em>) – the user to check</p></li>
+<li><p><strong>user_type</strong> (<em>string</em>) – the type of user (‘V’, ‘H’, ‘C’)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether the user is of the type user_type</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.decorators.is_volunteer">
+<code class="sig-prename descclassname">website.decorators.</code><code class="sig-name descname">is_volunteer</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#website.decorators.is_volunteer" title="Permalink to this definition">¶</a></dt>
+<dd><p>checks whether the user is a volunteer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user</strong> (<em>User</em>) – the user to check</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether the user is a volunteer</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-website.ride_utils">
+<span id="ride-utility-functions"></span><h1>Ride Utility Functions<a class="headerlink" href="#module-website.ride_utils" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="website.ride_utils.filterQuerySet">
+<code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">filterQuerySet</code><span class="sig-paren">(</span><em class="sig-param">rides</em>, <em class="sig-param">start_datetime</em>, <em class="sig-param">end_datetime</em>, <em class="sig-param">max_range</em>, <em class="sig-param">v_start</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.filterQuerySet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters a list of rides given filters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rides</strong> (<em>iterable of Rides</em>) – the rides to filter</p></li>
+<li><p><strong>start_datetime</strong> (<em>(</em><em>optional</em><em>) </em><em>datetime</em>) – the time the volunteer can start driving</p></li>
+<li><p><strong>end_datetime</strong> (<em>(</em><em>optional</em><em>) </em><em>datetime</em>) – the time the volunteer must be done driving</p></li>
+<li><p><strong>max_range</strong> (<em>(</em><em>optional</em><em>) </em><em>int</em>) – the max in miles the volunteer is willing to drive</p></li>
+<li><p><strong>v_start</strong> (<em>string</em>) – home address of volunteer</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the list of rides that obeys the filters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>iterable of Rides</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.ride_utils.getDistance">
+<code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">getDistance</code><span class="sig-paren">(</span><em class="sig-param">vec</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.getDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the total distance from a timedistance vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vec</strong> (<em>vector where each element is a tuple of form</em><em> (</em><em>time in minutes</em><em>, </em><em>distance in miles</em><em>)</em>) – the timedistance vector</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>total distance in miles</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.ride_utils.getResponseJson">
+<code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">getResponseJson</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">params</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.getResponseJson" title="Permalink to this definition">¶</a></dt>
+<dd><p>makes a GET request and returns the json response</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>string</em>) – the url</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – the params associated with the request</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the http response</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.ride_utils.getRideDict">
+<code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">getRideDict</code><span class="sig-paren">(</span><em class="sig-param">ride</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.getRideDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts ride to a dictionary to use in the templates</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ride</strong> (<a class="reference internal" href="#website.models.Ride" title="website.models.Ride"><em>Ride</em></a>) – the ride</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary version of the ride with extra fields (d: distance, sd: start_datetime, ed: end_datetime, total_time, pickup_location, pickup_address)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.ride_utils.getTimeDistanceVector">
+<code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">getTimeDistanceVector</code><span class="sig-paren">(</span><em class="sig-param">v_start</em>, <em class="sig-param">hp_start</em>, <em class="sig-param">interview_location</em>, <em class="sig-param">interview_duration</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.getTimeDistanceVector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a time and distance information for the ride</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v_start</strong> (<em>string</em>) – home address of volunteer</p></li>
+<li><p><strong>hp_start</strong> (<em>string</em>) – pickup address of homeless person</p></li>
+<li><p><strong>interview_location</strong> (<em>string</em>) – address of interview</p></li>
+<li><p><strong>interview_duration</strong> (<em>int</em>) – how long the interveriw will last (minutes)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>vector where each element is a tuple (minutes, miles)
+Elements in order are:
+volunteer -&gt; homeless pickup,
+pickup -&gt; interview,
+(interview_duration, 0),
+interview -&gt; pickup,
+pickup -&gt; volunteer home</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.ride_utils.getTimeDistanceVectors">
+<code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">getTimeDistanceVectors</code><span class="sig-paren">(</span><em class="sig-param">rides</em>, <em class="sig-param">v_start</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.getTimeDistanceVectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets time and distance information for all rides concurrently</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rides</strong> (<em>iterable of rides</em>) – rides to get timedistance vectors for</p></li>
+<li><p><strong>v_start</strong> (<em>string</em>) – home address of volunteer</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>vector of timedistance vectors in same order as the rides</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>vector of timedistance vectors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.ride_utils.getTimeString">
+<code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">getTimeString</code><span class="sig-paren">(</span><em class="sig-param">mins</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.getTimeString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates time string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mins</strong> (<em>int</em>) – the number of minutes</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>time string of form ‘x hr y min’ (hrs or mins if plural)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.ride_utils.getTimes">
+<code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">getTimes</code><span class="sig-paren">(</span><em class="sig-param">vec</em>, <em class="sig-param">interview_datetime</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.getTimes" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the time information from a timedistance vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vec</strong> (<em>vector where each element is a tuple of form</em><em> (</em><em>time in minutes</em><em>, </em><em>distance in miles</em><em>)</em>) – the timedistance vector</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>start_datetime (when volunteer leaves house),
+pickup_datetime (when volunteer picks up homeless),
+end_datetime (when volunteer arrives back at their house),
+total_time_string (total amount of time as a formatted string)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int, int, int, str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.ride_utils.send_message">
+<code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">send_message</code><span class="sig-paren">(</span><em class="sig-param">message</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.send_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends texts and emails to people</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>String</em>) – the message to send to the user</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="#website.models.Profile" title="website.models.Profile"><em>Profile</em></a>) – The user’s profile</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-website.job_utils">
+<span id="job-utility-functions"></span><h1>Job Utility Functions<a class="headerlink" href="#module-website.job_utils" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="website.job_utils.filterQuerySet">
+<code class="sig-prename descclassname">website.job_utils.</code><code class="sig-name descname">filterQuerySet</code><span class="sig-paren">(</span><em class="sig-param">jobs</em>, <em class="sig-param">location</em>, <em class="sig-param">job_title</em><span class="sig-paren">)</span><a class="headerlink" href="#website.job_utils.filterQuerySet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters the list of jobs based on location and job title specified</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>jobs</strong> (<em>list</em>) – The list of all jobs we are filtering</p></li>
+<li><p><strong>location</strong> (<em>(</em><em>optional</em><em>) </em><em>string</em>) – A location used to filter certain jobs</p></li>
+<li><p><strong>job_title</strong> (<em>(</em><em>optional</em><em>) </em><em>string</em>) – Job title provided by user to filter certain jobs</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The list of all jobs that were found based on the filter</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">homeyess</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, team-a9.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
