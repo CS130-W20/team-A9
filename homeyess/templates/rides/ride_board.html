@@ -35,20 +35,6 @@ function addMarkers() {
     }));
 
  	rides_data = JSON.parse(myJSONList);
- //     var rides_list = (("{{rides|safe}}").replace(/&(l|g|quo)t;/g, function(a,b){
- //            return {
- //                l   : '<',
- //                g   : '>',
- //                quo : '"'
- //            }[b];
- //        }));
-
-	// rides_list = rides_list.replace(/u'/g, '\'');
-	// rides_list = rides_list.replace(/'/g, '\"');
-
-	// console.log(rides_list);
-	// rides_json = JSON.parse(rides_list);
-
 	var i;
     for (i=0; i<rides_data.length; i++) {
 		addRideMarker(rides_data[i]);
@@ -89,7 +75,6 @@ function addRideMarker(ride) {
         + "Company: " + ride.interview_company,
     });
     google.maps.event.addListener(marker, 'click', function() {
-        //window.location.href = this.url;
         this['infowindow'].open(map, this);
     });
 	google.maps.event.addListener(marker, 'mouseover', function() {
@@ -110,9 +95,17 @@ function addRideMarker(ride) {
 	<h1>
 		Volunteer To Drive
 	</h1>
-	<form method="get" style="text-align: center">
-    	{{ form }}
-    	<button class="btn btn-primary" type="submit">Apply Filters</button>
+	<form class="flex-container" method="get" style="text-align: center; margin-left: 120px; margin-right: 100px;">
+		{% for field in form.visible_fields %}
+		<div class="flex-container">
+    		<div style="margin-right: 15px;">{{field.label_tag}}</div>
+    		{% if field.help_text %}
+          	<small class="form-text text-muted">{{ field.help_text }}</small>
+        	{% endif %}
+    		<div>{{field}}</div>
+    	</div>
+      	{% endfor %}
+    	<div><button class="btn btn-primary" type="submit">Apply Filters</button></div>
   	</form>
   	<br>
 	<div class="flex-container" style="margin-left: 100px; margin-right: 100px; min-height: 400px;">
@@ -130,7 +123,7 @@ function addRideMarker(ride) {
 			    	<td>
 			    		<div>
 			    			<div class="flex-container">
-			    				<div class="flex-container-vertical" style="margin-left:0px">
+			    				<div class="flex-container-vertical">
 			    					<h5>Time: {{ ride.sd }} - {{ ride.ed }} ({{ ride.total_time }})
 			    					<div>Distance: {{ ride.d }} miles</div>
 								    <div>Pickup Address: {{ ride.homeless.home_address }}</div>
