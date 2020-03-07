@@ -46,8 +46,10 @@ def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
     """
     # get all td_vecs concurrently
     td_vecs = getTimeDistanceVectors(rides, v_start)
+    pickup_locations = getPickupLocations(rides)
+    start = datetime.now()
 
-    for ride, td_vec in zip(rides, td_vecs):
+    for ride, td_vec, pickup_location in zip(rides, td_vecs, pickup_locations):
         if td_vec == None:
             ride.d = None
             ride.sd = None
@@ -55,15 +57,7 @@ def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
         else:
             ride.d = getDistance(td_vec)
             ride.sd, _, ride.ed, ride.total_time = getTimes(td_vec, ride.interview_datetime)
-
-        #set pickup lat/long
-        gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
-        pickup_info = gmaps.geocode(ride.homeless.home_address)
-        if pickup_info:
-            location = pickup_info[0]['geometry']['location']
-            ride.pickup_location = location
-        else:
-            ride.pickup_location = None
+        ride.pickup_location = pickup_location
 
     rides = [ride for ride in rides if ride.d != None]
     if start_datetime:
@@ -79,6 +73,33 @@ def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
         rides = [ride for ride in rides if ride.d <= max_range]
 
     return rides
+
+def getPickupLocations(rides):
+    ''' gets time and distance information for all rides concurrently
+
+    :param rides: rides to get pickup_locations for
+    :type rides: iterable of rides
+    :return: vector of pickup location coordinates
+    :type: vector of strings
+    '''
+    # perform all gmaps calls concurrently
+    with ThreadPoolExecutor() as executor:
+        futures = [executor.submit(getPickupLocation,ride) for ride in rides]
+    return [future.result() for future in as_completed(futures)]
+
+def getPickupLocation(ride):
+    ''' gets time and distance information for all rides concurrently
+
+    :param ride: ride to get pickup location for
+    :type ride: iterable of rides
+    :return: pickup location coordinates of the ride
+    :type: string
+    '''
+    gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
+    pickup_info = gmaps.geocode(ride.homeless.home_address)
+    if pickup_info:
+        return pickup_info[0]['geometry']['location']
+    return None
 
 def getTimeDistanceVectors(rides, v_start):
     """ gets time and distance information for all rides concurrently
