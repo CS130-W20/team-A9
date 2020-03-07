@@ -20,6 +20,7 @@ def getRideDict(ride):
     :rtype: dict
     """
     ride_dict = model_to_dict(ride)
+    ride_dict["pk"] = ride.pk
     ride_dict["d"] = ride.d
     ride_dict["sd"] = ride.sd
     ride_dict["ed"] = ride.ed
