@@ -251,7 +251,7 @@ def view_ride(request, ride_id):
 
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
-    :param ride_id: The ride request post"s idea
+    :param ride_id: The ride request post's idea
     :type ride_id: int
     """
     ride_request = get_object_or_404(Ride, id=ride_id)
@@ -260,7 +260,7 @@ def view_ride(request, ride_id):
 
 @method_decorator(user_passes_test(is_homeless, login_url="/"), name="dispatch")
 class RequestRideEdit(UpdateView):
-    """Object used to render the request form"s update view
+    """Object used to render the request form's update view
 
     :param template_name: the name of the template used to render the view
     :type template_name: string
@@ -361,7 +361,7 @@ def edit_job(request, job_id):
     :type request: HttpRequest
     :param job_id: The primary key used to index the specific job we are editing
     :type job_id: int
-    :return: the rendered JobForm or a redirect to the company"s dashboard
+    :return: the rendered JobForm or a redirect to the company's dashboard
     :rtype: HttpResponse
     """
     job_post = JobPost.objects.get(pk=job_id)
@@ -387,7 +387,7 @@ def post_job(request):
 
     :param request: The http request containing user information or extra arguments
     :type request: HttpRequest
-    :return: the rendered JobForm or a redirect to the company"s dashboard
+    :return: the rendered JobForm or a redirect to the company's dashboard
     :rtype: HttpResponse
     """
     if request.method == "POST":

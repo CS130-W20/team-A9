@@ -14,15 +14,15 @@ class Profile(models.Model):
 
     :param user: the authentication object containing username, password, email (optional), first / last name
     :type user: User
-    :param phone: the user"s phone number
+    :param phone: the user's phone number
     :type phone: (optional) CharField / string
     :param user_type: the type of user (volunteer, homeless, company)
     :type user_type: UserType
-    :param car_plate: the license plate number of the volunteer"s car (only required for volunteer)
+    :param car_plate: the license plate number of the volunteer's car (only required for volunteer)
     :type car_plate: (optional) CharField / string
-    :param car_make: the make of the volunteer"s car (only required for volunteer)
+    :param car_make: the make of the volunteer's car (only required for volunteer)
     :type car_make: (optional) CharField / string
-    :param car_model: the model of the volunteer"s car (only required for volunteer)
+    :param car_model: the model of the volunteer's car (only required for volunteer)
     :type car_model: (optional) CharField / string
     :param total_volunteer_minutes: the total amount of time a volunteer has volunteered
     :type total_volunteer_minutes: int
