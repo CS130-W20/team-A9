@@ -98,7 +98,7 @@ function addRideMarker(ride) {
 	<form class="flex-container" method="get" style="text-align: center; margin-left: 120px; margin-right: 100px;">
 		{% for field in form.visible_fields %}
 		<div class="flex-container">
-    		<div style="margin-right: 15px;">{{field.label_tag}}</div>
+    		<div style="margin-right: 15px; padding-top: 7px;">{{field.label_tag}}</div>
     		{% if field.help_text %}
           	<small class="form-text text-muted">{{ field.help_text }}</small>
         	{% endif %}

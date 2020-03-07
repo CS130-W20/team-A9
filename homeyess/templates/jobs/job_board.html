@@ -11,10 +11,23 @@
 	<h1>
 		Jobs
 	</h1>
-	<form method="get" style="text-align: center">
+	<form class="flex-container" method="get" style="text-align: center; margin-left: 120px; width: 50%;">
+		{% for field in form.visible_fields %}
+		<div class="flex-container">
+    		<div style="margin-right: 15px; padding-top: 7px;">{{field.label_tag}}</div>
+    		{% if field.help_text %}
+          	<small class="form-text text-muted">{{ field.help_text }}</small>
+        	{% endif %}
+    		<div>{{field}}</div>
+    	</div>
+      	{% endfor %}
+    	<div><button class="btn btn-primary" type="submit">Apply Filters</button></div>
+  	</form>
+
+	<!-- <form method="get" style="text-align: center">
     	{{ form }}
     	<button type="submit" class="btn-primary">Apply Filters</button>
-  	</form>
+  	</form> -->
 	<br>
 	<div class="flex-container" style="margin-left: 100px; margin-right: 100px; min-height: 400px;">
 		<div style="flex:1;">
@@ -25,14 +38,14 @@
 					</div>
 				{% else %}
 					<table style="width: 100%; margin: 15px;">
-						<tr style="color:#4285F4">
+						<tr>
 							<th></th>
-							<th style="padding-bottom: 5px;">Posted</th>
-							<th style="padding-bottom: 5px;">Title</th>
-							<th style="padding-bottom: 5px;">Company</th>
-							<th style="padding-bottom: 5px;">Location</th>
-							<th style="padding-bottom: 5px;">Wage</th>
-							<th style="padding-bottom: 5px;">Description</th>
+							<th style="padding-left: 15px; padding-bottom: 5px;">Posted</th>
+							<th style="padding-left: 15px; padding-bottom: 5px;">Title</th>
+							<th style="padding-left: 15px; padding-bottom: 5px;">Company</th>
+							<th style="padding-left: 15px; padding-bottom: 5px;">Location</th>
+							<th style="padding-left: 15px; padding-bottom: 5px;">Wage</th>
+							<th style="padding-left: 15px; padding-bottom: 5px;">Description</th>
 						</tr>
 						{% for job in job_posts %}
 							<tr>

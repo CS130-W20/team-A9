@@ -222,7 +222,7 @@ def getTimeString(mins):
         s += str(hours) + ' hrs '
     if m == 1:
         s += str(m) + ' min'
-    elif m > 0:
+    else:
         s += str(m) + ' mins'
     return s
 
