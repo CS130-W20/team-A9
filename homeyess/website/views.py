@@ -124,8 +124,9 @@ def homeless(request, user):
     :return: the rendered dashboard page for the user using the homeless.html template
     :rtype: HttpResponse
     """
-    unconfirmed_rides = Ride.objects.filter(homeless = user.profile, volunteer = None, interview_datetime__gt = datetime.now()).order_by('-interview_datetime')
-    confirmed_rides = Ride.objects.filter(homeless = user.profile, interview_datetime__gt = datetime.now()).exclude(volunteer = None).order_by('-interview_datetime')
+
+    unconfirmed_rides = Ride.objects.filter(homeless = user.profile, volunteer = None, interview_datetime__gt = pytz.utc.localize(datetime.now())).order_by('-interview_datetime')
+    confirmed_rides = Ride.objects.filter(homeless = user.profile, interview_datetime__gt = pytz.utc.localize(datetime.now())).exclude(volunteer = None).order_by('-interview_datetime')
     context = {'user': user, 'unconfirmed_rides': unconfirmed_rides, 'confirmed_rides': confirmed_rides}
     return render(request, 'dashboard/homeless.html', context)
 
@@ -155,8 +156,8 @@ def volunteer(request, user):
     :return: the rendered dashboard page for the user using the volunteer.html template
     :rtype: HttpResponse
     """
-    confirmed_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__gt = datetime.now()).order_by('-interview_datetime')
-    finished_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__lte = datetime.now()).order_by('-interview_datetime')
+    confirmed_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__gt = pytz.utc.localize(datetime.now())).order_by('-interview_datetime')
+    finished_rides = Ride.objects.filter(volunteer = user.profile, interview_datetime__lte = pytz.utc.localize(datetime.now())).order_by('-interview_datetime')
     total_time = 0
     for ride in finished_rides:
         time = ride.end_datetime - ride.start_datetime
