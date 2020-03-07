@@ -53,7 +53,8 @@ def signup(request, user_type):
         if form.is_valid():
             user = form.save()
             user.refresh_from_db()
-            user.last_name = form.cleaned_data.get("last_name")
+            if "last_name" in form.cleaned_data:
+                user.last_name = form.cleaned_data.get("last_name", None)
             user.profile.phone = form.cleaned_data.get("phone")
             user.profile.car_plate = form.cleaned_data.get("car_plate", None)
             user.profile.car_make = form.cleaned_data.get("car_make", None)
