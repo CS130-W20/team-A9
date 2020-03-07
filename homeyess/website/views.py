@@ -412,7 +412,7 @@ def ride_board(request):
     :rtype: HttpResponse
     """
 
-    rides = Ride.objects.filter(volunteer=None, interview_datetime__gt = pytz.utc.localize(datetime.now())).order_by("interview_datetime"))
+    rides = Ride.objects.filter(volunteer=None, interview_datetime__gt = pytz.utc.localize(datetime.now())).order_by("interview_datetime")
     start_datetime = request.GET.get("start_datetime", None)
     end_datetime = request.GET.get("end_datetime", None)
     max_range = request.GET.get("max_range", None)
