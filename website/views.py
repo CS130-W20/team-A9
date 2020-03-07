@@ -95,7 +95,7 @@ def user_type(request):
         form = UserTypeForm()
     return render(request, "registration/user_type.html", {"form": form})
 
-@login_required(login_url="accounts/login/")
+@login_required(login_url="/")
 def dashboard(request):
     """Renders the dashboard page for all users
 
