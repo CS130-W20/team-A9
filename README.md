@@ -1,7 +1,7 @@
 # HomeYess
 This webapp is a way to connect people experiencing homelessness, companies, and volunteers. Companies can post jobs for homeless people to see. Homeless people can request a ride to / from an interview. They are matched with volunteers to drive them.
 
-# View Production Site
+## View Production Site
 The website is currently in production at https://homeyess-270403.appspot.com/
 
 ## Directory Structure
