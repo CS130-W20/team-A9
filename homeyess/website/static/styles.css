@@ -1,3 +1,6 @@
+body {
+  font-family: "Trebuchet MS";
+}
 
 .flex-container {
    display: flex;
@@ -29,7 +32,6 @@
 }
 h1 {
    text-align: center;
-   font-family: "Century Gothic";
    font-size: 75px;
    margin: 25px;
 }
@@ -38,7 +40,6 @@ h2 {
 }
 h3 {
    text-align: center;
-   font-family: "Raleway", "Times New Roman", Times, serif;
    margin-bottom: 25px;
 }
 tr:first-child {
