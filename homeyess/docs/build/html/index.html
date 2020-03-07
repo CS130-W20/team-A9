@@ -253,7 +253,7 @@ Note that the object should be created when a ride request is made and altered w
 
 <dl class="method">
 <dt id="website.views.RequestRideEdit.get_context_data">
-<code class="sig-name descname">get_context_data</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideEdit.get_context_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_context_data</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideEdit.get_context_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the context data for the html template</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -776,6 +776,40 @@ he/she filled out, so that they can review and potentially edit the form</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="website.ride_utils.getPickupLocation">
+<code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">getPickupLocation</code><span class="sig-paren">(</span><em class="sig-param">ride</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.getPickupLocation" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets time and distance information for all rides concurrently</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ride</strong> (<em>iterable of rides</em>) – ride to get pickup location for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pickup location coordinates of the ride</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.ride_utils.getPickupLocations">
+<code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">getPickupLocations</code><span class="sig-paren">(</span><em class="sig-param">rides</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.getPickupLocations" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets time and distance information for all rides concurrently</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rides</strong> (<em>iterable of rides</em>) – rides to get pickup_locations for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>vector of pickup location coordinates</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>vector of strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="website.ride_utils.getResponseJson">
 <code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">getResponseJson</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">params</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.getResponseJson" title="Permalink to this definition">¶</a></dt>
 <dd><p>makes a GET request and returns the json response</p>
@@ -883,7 +917,10 @@ pickup -&gt; volunteer home</p>
 <dd><p>gets the time information from a timedistance vector</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>vec</strong> (<em>vector where each element is a tuple of form</em><em> (</em><em>time in minutes</em><em>, </em><em>distance in miles</em><em>)</em>) – the timedistance vector</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vec</strong> (<em>vector where each element is a tuple of form</em><em> (</em><em>time in minutes</em><em>, </em><em>distance in miles</em><em>)</em>) – the timedistance vector</p></li>
+<li><p><strong>interview_datetime</strong> (<em>DateTime</em>) – the time and date of the interview</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>start_datetime (when volunteer leaves house),
@@ -892,7 +929,7 @@ end_datetime (when volunteer arrives back at their house),
 total_time_string (total amount of time as a formatted string)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>int, int, int, str</p>
+<dd class="field-odd"><p>DateTime, DateTime, DateTime, string</p>
 </dd>
 </dl>
 </dd></dl>
