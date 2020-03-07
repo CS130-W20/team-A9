@@ -68,10 +68,12 @@ function addHomeMarker() {
 
 function addRideMarker(ride) {
 	var point = new google.maps.LatLng(ride.pickup_location.lat, ride.pickup_location.lng);
+	var url = "confirm_ride/" + ride.pk;
 	var marker = new google.maps.Marker({
         position: point,
         map: map,
        	label: ride.total_time,
+       	url: url,
     });
 
 	sd = new Date(ride.sd);
@@ -86,18 +88,20 @@ function addRideMarker(ride) {
         + "Interview Time: " + interview_datetime.toLocaleDateString("en-US") + "<br>"
         + "Interview Duration: " + ride.interview_duration + " minutes<br>"
         + "Interview Address: " + ride.interview_address + "<br>"
-        + "Company: " + ride.interview_company,
+        + "Company: " + ride.interview_company + "<br>" 
+        + "<div style='text-align: center;'><b>Click to confirm</b></div>",
     });
     google.maps.event.addListener(marker, 'click', function() {
-        //window.location.href = this.url;
-        this['infowindow'].open(map, this);
+        window.location.href = this.url;
+       	this['infowindow'].open(map, this);
     });
 	google.maps.event.addListener(marker, 'mouseover', function() {
         this['infowindow'].open(map, this);
 	});
 	google.maps.event.addListener(marker, 'mouseout', function() {
-        this['infowindow'].close(map, this);
+		this['infowindow'].close(map, this);
     });
+
 }
 </script>
 
