@@ -14,8 +14,9 @@ class BootstrapIntegerField(forms.IntegerField):
     """Form field for ints with bootstrap styling
     """
     def __init__(self, *args, **kwargs):
+
         if "widget" not in kwargs:
-            kwargs["widget"] = forms.NumberInput(attrs={"class": FORM_CLASS})
+            kwargs["widget"] = forms.NumberInput(attrs={"class": FORM_CLASS, "min": 0})
         super(BootstrapIntegerField, self).__init__(**kwargs)
 
 class BootstrapDateTimeField(forms.DateTimeField):
