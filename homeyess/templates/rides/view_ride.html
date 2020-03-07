@@ -29,6 +29,18 @@
 		<div class="col-md-4 offset-md-2">Pickup Time:</div>
 		<div class="col-md-4">{{ ride_request.pickup_datetime }}</div>
 	</div>
+	<div class="row justify-content-center">
+		<div class="col-md-4 offset-md-2">Car Make: </div>
+		<div class="col-md-4">{{ ride_request.volunteer.car_make }}</div>
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-md-4 offset-md-2">Car Model: </div>
+		<div class="col-md-4">{{ ride_request.volunteer.car_model }}</div>
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-md-4 offset-md-2">License Plate: </div>
+		<div class="col-md-4">{{ ride_request.volunteer.car_plate }}</div>
+	</div>
 	{% endif %}
 	{% if user.profile.user_type == 'V' %}
 	<div class="row justify-content-center">

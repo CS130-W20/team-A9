@@ -21,7 +21,7 @@ function initialize() {
 	  zoom: 12,
 	  mapTypeId: google.maps.MapTypeId.ROADMAP
 	});
-	addHomeMarker();
+	//addHomeMarker();
 	google.maps.event.addListenerOnce(map, 'tilesloaded', addMarkers);
 }
 function addMarkers() {
@@ -51,13 +51,14 @@ function addHomeMarker() {
   		},
     });
 }
-
 function addRideMarker(ride) {
 	var point = new google.maps.LatLng(ride.pickup_location.lat, ride.pickup_location.lng);
+	var url = "confirm_ride/" + ride.pk;
 	var marker = new google.maps.Marker({
         position: point,
         map: map,
        	label: ride.total_time,
+       	url: url,
     });
 
 	sd = new Date(ride.sd);
@@ -72,16 +73,18 @@ function addRideMarker(ride) {
         + "Interview Time: " + interview_datetime.toLocaleDateString("en-US") + "<br>"
         + "Interview Duration: " + ride.interview_duration + " minutes<br>"
         + "Interview Address: " + ride.interview_address + "<br>"
-        + "Company: " + ride.interview_company,
+        + "Company: " + ride.interview_company + "<br><br>" 
+        + "<div style='text-align: center;'><a href=" + url + "><button class='btn btn-primary'>Confirm this ride</button></a></div>",
     });
+    var opened = false;
     google.maps.event.addListener(marker, 'click', function() {
-        this['infowindow'].open(map, this);
-    });
-	google.maps.event.addListener(marker, 'mouseover', function() {
-        this['infowindow'].open(map, this);
-	});
-	google.maps.event.addListener(marker, 'mouseout', function() {
-        this['infowindow'].close(map, this);
+       	if (opened) {
+       		this['infowindow'].close(map, this);
+       	}
+       	else {
+       		this['infowindow'].open(map, this);
+       	}
+       	opened = !opened;
     });
 }
 </script>
@@ -124,7 +127,7 @@ function addRideMarker(ride) {
 			    		<div>
 			    			<div class="flex-container">
 			    				<div class="flex-container-vertical">
-			    					<h5>Time: {{ ride.sd }} - {{ ride.ed }} ({{ ride.total_time }})
+			    					<h5>{{ ride.sd }} - {{ ride.ed }} ({{ ride.total_time }})
 			    					<div>Distance: {{ ride.d }} miles</div>
 								    <div>Pickup Address: {{ ride.homeless.home_address }}</div>
 								    <div>Interview Time: {{ ride.interview_datetime }}</div>

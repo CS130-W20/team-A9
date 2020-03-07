@@ -5,77 +5,77 @@ from website.models import JobPost
 class SignUpFormTest(TestCase):
 
     volunteer_data = {
-        'username': 'susername',
-        'first_name': 'first',
-        'last_name': 'last',
-        'password1': 'hellopie',
-        'password2': 'hellopie',
-        'user_type': 'V',
-        'car_make': 'make',
-        'car_model': 'model',
-        'car_plate': 'a123',
-        'home_address': '123 main st',
+        "username": "susername",
+        "first_name": "first",
+        "last_name": "last",
+        "password1": "hellopie",
+        "password2": "hellopie",
+        "user_type": "V",
+        "car_make": "make",
+        "car_model": "model",
+        "car_plate": "a123",
+        "home_address": "123 main st",
     }
     homeless_data = {
-        'username': 'susername',
-        'first_name': 'first',
-        'last_name': 'last',
-        'password1': 'hellopie',
-        'password2': 'hellopie',
-        'user_type': 'H',
-        'car_make': '',
-        'car_model': '',
-        'car_plate': '',
-        'home_address': 'a',
+        "username": "susername",
+        "first_name": "first",
+        "last_name": "last",
+        "password1": "hellopie",
+        "password2": "hellopie",
+        "user_type": "H",
+        "car_make": "",
+        "car_model": "",
+        "car_plate": "",
+        "home_address": "a",
     }
     company_data = {
-        'username': 'susername',
-        'first_name': 'first',
-        'last_name': '',
-        'password1': 'hellopie',
-        'password2': 'hellopie',
-        'user_type': 'C',
-        'car_make': '',
-        'car_model': '',
-        'car_plate': '',
-        'home_address': '',
+        "username": "susername",
+        "first_name": "first",
+        "last_name": "",
+        "password1": "hellopie",
+        "password2": "hellopie",
+        "user_type": "C",
+        "car_make": "",
+        "car_model": "",
+        "car_plate": "",
+        "home_address": "",
     }
 
     def test_volunteer_success(self):
-        form = SignUpForm(self.volunteer_data.copy(), user_type='V')
+        form = SignUpForm(self.volunteer_data.copy(), user_type="V")
         self.assertTrue(form.is_valid())
 
     def test_volunteer_failure(self):
         d = self.volunteer_data.copy()
-        d['car_make'] = ''
-        form = SignUpForm(d, user_type='V')
+        d["car_make"] = ""
+        form = SignUpForm(d, user_type="V")
         self.assertFalse(form.is_valid())
 
     def test_homeless_success(self):
         d = self.homeless_data.copy()
-        form = SignUpForm(d, user_type='H')
+        form = SignUpForm(d, user_type="H")
         self.assertTrue(form.is_valid())
 
     def test_homeless_failure(self):
         d = self.homeless_data.copy()
-        d['last_name'] = ''
-        form = SignUpForm(d, user_type='H')
+        d["last_name"] = ""
+        form = SignUpForm(d, user_type="H")
         self.assertFalse(form.is_valid())
 
     def test_company_success(self):
         d = self.company_data.copy()
-        form = SignUpForm(d, user_type='C')
+        form = SignUpForm(d, user_type="C")
         self.assertTrue(form.is_valid())
 
 class PostEditJobFormTest(TestCase):
 
     data = {
-        'location': '124 Test Dr.',
-        'wage': '20 usd/hr',
-        'hours': '10 hr/wk',
-        'job_title': 'Janitor',
-        'short_summary': 'This is a short summary',
-        'description': 'This is a longer summary',
+        "location": "124 Test Dr.",
+        "wage": "20 usd/hr",
+        "hours": "10 hr/wk",
+        "job_title": "Janitor",
+        "short_summary": "This is a short summary",
+        "description": "This is a longer summary",
     }
 
     def test_post_job_success(self):
@@ -84,7 +84,7 @@ class PostEditJobFormTest(TestCase):
 
     def test_post_job_failure(self):
         bad_data = self.data.copy()
-        bad_data['location'] = ''
+        bad_data["location"] = ""
         form = PostJobForm(bad_data)
         self.assertFalse(form.is_valid())
 

@@ -42,14 +42,11 @@
 			    	<td>
 			    		<div>
 			    			<div class="flex-container">
-			    				<div class="flex-container-vertical" style="margin-left:0px">
-									<h5>Pickup Time: {{ ride.pickup_datetime }}</h5>
-								    <div>Pickup Address: {{ ride.homeless.home_address }}</div>
-								    <div>Interview Time: {{ ride.interview_datetime }}</div>
-								    <div>Interview Address: {{ ride.interview_address }}</div>
-								    <div>Company: {{ ride.interview_company }}</div>
-								    <div>Candidate Name: {{ ride.homeless.user.first_name }} {{ ride.homeless.user.last_name }}</div>
-								</div>
+                  <div class="flex-container-vertical">
+                    <h5>{{ ride.start_datetime }} - {{ ride.end_datetime }}</h5>
+                    <div>Candidate Name: {{ ride.homeless.user.first_name }}</div>
+                    <div>Company: {{ ride.interview_company }}</div>
+							    </div>
 								<div>
 									<a href="{% url 'view_ride' ride.id %}">Details</a>
 								</div>
@@ -75,12 +72,9 @@
 			    		<div>
 			    			<div class="flex-container">
 			    				<div class="flex-container-vertical">
-							    	<h5>Time: {{ ride.pickup_datetime }} - {{ ride.end_datetime }}</h5>
-							    	<div>Pickup Address: {{ ride.homeless.home_address }}</div>
-							    	<div>Interview Time: {{ ride.interview_datetime }}</div>
-							    	<div>Interview Address: {{ ride.interview_address }}</div>
-							    	<div>Company: {{ ride.interview_company }}</div>
-								    <div>Candidate Name: {{ ride.homeless.user.first_name }} {{ ride.homeless.user.last_name }}</div>
+                    <h5>{{ ride.start_datetime }} - {{ ride.end_datetime }}</h5>
+                    <div>Candidate Name: {{ ride.homeless.user.first_name }}</div>
+                    <div>Company: {{ ride.interview_company }}</div>
 							    </div>
 							    <div>
 							    	<a href="#">Details</a>

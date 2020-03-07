@@ -32,9 +32,9 @@ class Profile(models.Model):
     class UserType(Enum):
         """Enum to represent types of users: Volunteer, Homeless, Company
         """
-        Volunteer = 'V'
-        Homeless = 'H'
-        Company = 'C'
+        Volunteer = "V"
+        Homeless = "H"
+        Company = "C"
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # user contains email, first_name (or comapny name), last_name
@@ -79,7 +79,7 @@ class Ride(models.Model):
         :return: a string of the path to view the created/modified ride request
         :rtype: string
         """
-        return '/ViewRideForm/' + str(self.id)
+        return "/ViewRideForm/" + str(self.id)
 
     def get_fields(self):
         """Returns a list of attributes of the Ride object, used for the ViewRideForm template
@@ -90,8 +90,8 @@ class Ride(models.Model):
         return [(field.name, field.value_to_string(self)) for field in Ride._meta.fields]
 
 
-    homeless = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='ride_homeless_set')
-    volunteer = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='ride_volunteer_set')
+    homeless = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="ride_homeless_set")
+    volunteer = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name="ride_volunteer_set")
     interview_datetime = models.DateTimeField()
     interview_duration = models.IntegerField()
     interview_address = models.CharField(max_length=200)
