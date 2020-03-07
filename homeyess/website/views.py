@@ -13,7 +13,6 @@ from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView
 from homeyess.settings import GOOGLE_MAPS_API_KEY
 from website import job_utils
-import pytz
 
 from .decorators import is_homeless, is_volunteer, is_company
 from .forms import SignUpForm, RideRequestForm, PostJobForm, RideSearchFilterForm, UserTypeForm, JobBoardFilterForm
