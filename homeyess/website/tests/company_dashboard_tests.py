@@ -10,11 +10,11 @@ class CompanyDashboardTest(TestCase):
 
     def setUp(self):
         #companies
-        self.c1_user = User.objects.create_user(username='testcompany1', password='hellopie')
+        self.c1_user = User.objects.create_user(username="testcompany1", password="hellopie")
         self.c1_user.profile.user_type = "C"
         self.c1_user.save()
 
-        self.c2_user = User.objects.create_user(username='testcompany2', password='hellopie')
+        self.c2_user = User.objects.create_user(username="testcompany2", password="hellopie")
         self.c2_user.profile.user_type = "C"
         self.c2_user.save()
 
@@ -23,8 +23,8 @@ class CompanyDashboardTest(TestCase):
 
     def test_get_job_posts(self):
         #test company 1 - has a job post
-        url = reverse("dashboard", kwargs={'user_id': self.c1_user.pk})
-        url = "/dashboard/" + str(self.c1_user.pk) + '/'
+        url = reverse("dashboard", kwargs={"user_id": self.c1_user.pk})
+        url = "/dashboard/" + str(self.c1_user.pk) + "/"
         response = client.get(url)   
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -32,12 +32,12 @@ class CompanyDashboardTest(TestCase):
         #expected jobs posted by company c1_user
         query_expected_response = JobPost.objects.filter(company=self.c1_user.profile)
         expected_response = list(query_expected_response)
-        got_response = list(response.context['job_posts'])
+        got_response = list(response.context["job_posts"])
         self.assertEqual(got_response, expected_response)
 
         #test company 2 - no job posts
-        url = reverse("dashboard", kwargs={'user_id': self.c2_user.pk})
-        url = "/dashboard/" + str(self.c2_user.pk) + '/'
+        url = reverse("dashboard", kwargs={"user_id": self.c2_user.pk})
+        url = "/dashboard/" + str(self.c2_user.pk) + "/"
         response = client.get(url)   
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -45,7 +45,7 @@ class CompanyDashboardTest(TestCase):
         #expected jobs posted by company c2_user
         query_expected_response = JobPost.objects.filter(company=self.c2_user.profile)
         expected_response = list(query_expected_response)
-        got_response = list(response.context['job_posts'])
+        got_response = list(response.context["job_posts"])
         self.assertFalse(got_response)
         self.assertEqual(got_response, expected_response)
         

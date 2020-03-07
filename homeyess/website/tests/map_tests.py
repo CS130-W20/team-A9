@@ -21,7 +21,7 @@ class GetTimesTest(SimpleTestCase):
         expected_pickup = datetime.datetime(2020, 1, 1, 14, 33)
         expected_start = datetime.datetime(2020, 1, 1, 14, 32)
         expected_end = datetime.datetime(2020, 1, 1, 16, 21)
-        expected_total = '1 hr 49 mins'
+        expected_total = "1 hr 49 mins"
         actual_start, actual_pickup, actual_end, actual_total = getTimes(td_vec, interview_datetime)
         self.assertTrue(expected_start == actual_start)
         self.assertTrue(expected_pickup == actual_pickup)
@@ -31,82 +31,82 @@ class GetTimesTest(SimpleTestCase):
 class GetTimeDistanceVectorTest(SimpleTestCase):
     def createElement(self, status, duration, distance):
         return {
-            'status': status,
-            'distance': {
-                'value': distance,
+            "status": status,
+            "distance": {
+                "value": distance,
             },
-            'duration': {
-                'value': duration,
+            "duration": {
+                "value": duration,
             }
         }
 
     def test_get_time_distance_vector(self):
         tests = [
             {
-                'expected': None,
-                'json': {
-                    'status': 'BAD',
+                "expected": None,
+                "json": {
+                    "status": "BAD",
                 },
             },
             {
-                'expected': None,
-                'json': {
-                    'status': 'OK',
-                    'rows': [
+                "expected": None,
+                "json": {
+                    "status": "OK",
+                    "rows": [
                         {
-                            'elements': [
-                                self.createElement('OK', 0, 0),
-                                self.createElement('BAD', 0, 0),
-                                self.createElement('OK', 0, 0),
+                            "elements": [
+                                self.createElement("OK", 0, 0),
+                                self.createElement("BAD", 0, 0),
+                                self.createElement("OK", 0, 0),
                             ],
                         },
                         {
-                            'elements': [
-                                self.createElement('OK', 0, 0),
-                                self.createElement('OK', 0, 0),
-                                self.createElement('OK', 0, 0),
+                            "elements": [
+                                self.createElement("OK", 0, 0),
+                                self.createElement("OK", 0, 0),
+                                self.createElement("OK", 0, 0),
                             ],
                         },
                         {
-                            'elements': [
-                                self.createElement('OK', 0, 0),
-                                self.createElement('OK', 0, 0),
-                                self.createElement('OK', 0, 0),
+                            "elements": [
+                                self.createElement("OK", 0, 0),
+                                self.createElement("OK", 0, 0),
+                                self.createElement("OK", 0, 0),
                             ],
                         },
                     ],
                 }
             },
             {
-                'expected': [
+                "expected": [
                     (1, 2 * 0.000621371),
                     (100, 200 * 0.000621371),
                     (60, 0),
                     (1000, 2000 * 0.000621371),
                     (10, 20 * 0.000621371),
                 ],
-                'json': {
-                    'status': 'OK',
-                    'rows': [
+                "json": {
+                    "status": "OK",
+                    "rows": [
                         {
-                            'elements': [
-                                self.createElement('BAD', 0, 0),
-                                self.createElement('OK', 60, 2),
-                                self.createElement('BAD', 0, 0),
+                            "elements": [
+                                self.createElement("BAD", 0, 0),
+                                self.createElement("OK", 60, 2),
+                                self.createElement("BAD", 0, 0),
                             ],
                         },
                         {
-                            'elements': [
-                                self.createElement('OK', 600, 20),
-                                self.createElement('BAD', 0, 0),
-                                self.createElement('OK', 6000, 200),
+                            "elements": [
+                                self.createElement("OK", 600, 20),
+                                self.createElement("BAD", 0, 0),
+                                self.createElement("OK", 6000, 200),
                             ],
                         },
                         {
-                            'elements': [
-                                self.createElement('BAD', 0, 0),
-                                self.createElement('OK', 60000, 2000),
-                                self.createElement('BAD', 0, 0),
+                            "elements": [
+                                self.createElement("BAD", 0, 0),
+                                self.createElement("OK", 60000, 2000),
+                                self.createElement("BAD", 0, 0),
                             ],
                         },
                     ],
@@ -114,10 +114,10 @@ class GetTimeDistanceVectorTest(SimpleTestCase):
             },
         ]
         for t in tests:
-            @mock.patch('website.ride_utils.getResponseJson', return_value=t['json'])
+            @mock.patch("website.ride_utils.getResponseJson", return_value=t["json"])
             def actual(self):
-                return getTimeDistanceVector('', '', '', 60)
-            self.assertTrue(t['expected'] == actual())
+                return getTimeDistanceVector("", "", "", 60)
+            self.assertTrue(t["expected"] == actual())
 
 class FilterQuerySetTest(SimpleTestCase):
 
@@ -126,23 +126,23 @@ class FilterQuerySetTest(SimpleTestCase):
     class SimpleRide:
         class SimpleHomeless:
             def __init__(self):
-                self.home_address = ''
+                self.home_address = ""
             def __eq__(self, other):
                 return self.__dict__ == other.__dict__
 
         def __init__(self, i_datetime, i_duration, **kwargs):
-            self.interview_address = ''
+            self.interview_address = ""
             self.interview_datetime = i_datetime
             self.interview_duration = i_duration
             self.homeless = self.SimpleHomeless()
-            if 'd' in kwargs:
-                self.d = kwargs['d']
-            if 'ed' in kwargs:
-                self.ed = kwargs['ed']
-            if 'sd' in kwargs:
-                self.sd = kwargs['sd']
-            if 'total_time' in kwargs:
-                self.total_time = kwargs['total_time']
+            if "d" in kwargs:
+                self.d = kwargs["d"]
+            if "ed" in kwargs:
+                self.ed = kwargs["ed"]
+            if "sd" in kwargs:
+                self.sd = kwargs["sd"]
+            if "total_time" in kwargs:
+                self.total_time = kwargs["total_time"]
 
     def test_filter_query_set(self):
         rides = [
@@ -163,17 +163,17 @@ class FilterQuerySetTest(SimpleTestCase):
 
         tests = [
             {
-                'start': None,
-                'end': None,
-                'max_range': None,
-                'expected': [
+                "start": None,
+                "end": None,
+                "max_range": None,
+                "expected": [
                     self.SimpleRide(
                         datetime.datetime(2020, 1, 1, 16, tzinfo=timezone.utc),
                         60,
                         d=4,
                         sd=datetime.datetime(2020, 1, 1, 15, 58, tzinfo=timezone.utc),
                         ed=datetime.datetime(2020, 1, 1, 17, 2, tzinfo=timezone.utc),
-                        total_time='1 hrs 4 min',
+                        total_time="1 hrs 4 min",
                     ),
                     self.SimpleRide(
                         datetime.datetime(2020, 1, 1, 12, tzinfo=timezone.utc),
@@ -181,7 +181,7 @@ class FilterQuerySetTest(SimpleTestCase):
                         d=107,
                         sd=datetime.datetime(2020, 1, 1, 11, 58, tzinfo=timezone.utc),
                         ed=datetime.datetime(2020, 1, 1, 13, 32, tzinfo=timezone.utc),
-                        total_time='1 hrs 34 min',
+                        total_time="1 hrs 34 min",
                     ),
                     self.SimpleRide(
                         datetime.datetime(2020, 1, 1, 9, tzinfo=timezone.utc),
@@ -189,7 +189,7 @@ class FilterQuerySetTest(SimpleTestCase):
                         d=4,
                         sd=datetime.datetime(2020, 1, 1, 8, 58, tzinfo=timezone.utc),
                         ed=datetime.datetime(2020, 1, 1, 9, 47, tzinfo=timezone.utc),
-                        total_time='49 min',
+                        total_time="49 min",
                     ),
                     self.SimpleRide(
                         datetime.datetime(2020, 1, 1, 11, tzinfo=timezone.utc),
@@ -197,31 +197,31 @@ class FilterQuerySetTest(SimpleTestCase):
                         d=4,
                         sd=datetime.datetime(2020, 1, 1, 10, 58, tzinfo=timezone.utc),
                         ed=datetime.datetime(2020, 1, 1, 11, 32, tzinfo=timezone.utc),
-                        total_time='34 min',
+                        total_time="34 min",
                     ),
                 ],
             },
             {
-                'start': '2020-01-01 10:00',
-                'end': '2020-01-01 17:00',
-                'max_range': 100,
-                'expected': [
+                "start": "2020-01-01 10:00",
+                "end": "2020-01-01 17:00",
+                "max_range": 100,
+                "expected": [
                     self.SimpleRide(
                         datetime.datetime(2020, 1, 1, 11, tzinfo=timezone.utc),
                         30,
                         d=4,
                         sd=datetime.datetime(2020, 1, 1, 10, 58, tzinfo=timezone.utc),
                         ed=datetime.datetime(2020, 1, 1, 11, 32, tzinfo=timezone.utc),
-                        total_time='34 min',
+                        total_time="34 min",
                     ),
                 ]
             }
         ]
         for t in tests:
-            @mock.patch('website.ride_utils.getTimeDistanceVectors', return_value=td_vecs)
+            @mock.patch("website.ride_utils.getTimeDistanceVectors", return_value=td_vecs)
             def actual(self):
-                return filterQuerySet(rides, t['start'], t['end'], t['max_range'], '')
+                return filterQuerySet(rides, t["start"], t["end"], t["max_range"], "")
             actual_rides = actual()
-            self.assertTrue(len(t['expected']) == len(actual_rides))
-            for er, ar in zip(t['expected'], actual_rides):
+            self.assertTrue(len(t["expected"]) == len(actual_rides))
+            for er, ar in zip(t["expected"], actual_rides):
                 self.assertTrue(er.__dict__ == ar.__dict__)
