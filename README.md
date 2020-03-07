@@ -6,6 +6,7 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 /homeyess/homeyess - project settings (database, urls, packages)  
 /homeyess/website - code for the website including views, models  
 /homeyess/website/tests - unit tests, etc.
+/homeyess/website/static - static files (images, css) for templates  
 /homeyess/templates - html templates
 /homeyess/docs/source - documentation (sphinx) settings
 /homeyess/docs/build/html - contains docstrings rendered in html
@@ -16,7 +17,7 @@ This webapp is a way to connect people experiencing homelessness, companies, and
 3) run $ virtualenv env
 4) run $ source env/bin/activate
 5) run $ pip3 install -r requirements.txt
-6) set environment variables: SECRET_KEY, DB_NAME, DB_HOST, DB_PASSWORD, DB_USER, DB_PORT  
+6) set environment variables: SECRET_KEY, DB_NAME, DB_HOST, DB_PASSWORD, DB_USER, DB_PORT, GOOGLE_MAPS_API_KEY, TWILIO_AUTH_TOKEN, TWILIO_ACCOUNT_SID  
 7) run the app on localhost $ python3 manage.py runserver (ctrl-c to exit)
 
 ## Testing
@@ -26,11 +27,13 @@ The tests automatically create a test database within rds
 When running Selenium tests for a certain browser, make sure that your browser's WebDriver is installed. FireFox
 should have it built in, but for another browser like Chrome (found [here](https://sites.google.com/a/chromium.org/chromedriver/downloads)), make sure to install it.
 
-website/tests/form_tests.py - test signup form validation, test post / edit jobs 
-website/tests/volunteer_dashboard_tests.py - test volunteer dashboard view is returned and has correct data for upcoming and finished rides
-website/tests/homeless_dashboard_tests.py - test homeless dashboard view is returned and has correct data for unconfirmed and confirmed rides
-website/tests/company_dashboard_tests.py - test company dashboard view is returned and has correct data for job posts
-website/tests/selenium_tests.py - test user interface for signing up (as a Company) and posting a job
+website/tests/form_tests.py - test signup form validation, test post / edit jobs  
+website/tests/volunteer_dashboard_tests.py - test volunteer dashboard view is returned and has correct data for upcoming and finished rides  
+website/tests/homeless_dashboard_tests.py - test homeless dashboard view is returned and has correct data for unconfirmed and confirmed rides  
+website/tests/company_dashboard_tests.py - test company dashboard view is returned and has correct data for job posts  
+website/tests/selenium_tests.py - test user interface for signing up (as a Company) and posting a job  
+website/tests/message_tests.py - test sending messages via twilio and email  
+website/tests/map_tests.py - test distance / time calculations used for volunteers to search for rides  
 
 ## Generating Documentation
 1) cd homeyess/docs
