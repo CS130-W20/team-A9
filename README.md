@@ -28,7 +28,7 @@ Tests can be run with the command `python3 manage.py test website.tests.<filenam
 The tests automatically create a test database within rds
 
 When running Selenium tests for a certain browser, make sure that your browser's WebDriver is installed. FireFox
-should have it built in, but for another browser like Chrome (found [here](https://sites.google.com/a/chromium.org/chromedriver/downloads)), make sure to install it.
+should have it built in, but for another browser like Chrome (found [here](https://sites.google.com/a/chromium.org/chromedriver/downloads)), make sure to install it. When using chromedrive, make sure the executable is located in your $PATH.
 
 /website/tests/form_tests.py - test signup form validation, test post / edit jobs  
 /website/tests/volunteer_dashboard_tests.py - test volunteer dashboard view is returned and has correct data for upcoming and finished rides  
