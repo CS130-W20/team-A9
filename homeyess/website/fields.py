@@ -1,5 +1,4 @@
 from django import forms
-
 FORM_CLASS = 'form-control'
 
 class BootstrapCharField(forms.CharField):
@@ -15,7 +14,7 @@ class BootstrapIntegerField(forms.IntegerField):
     """
     def __init__(self, *args, **kwargs):
         if 'widget' not in kwargs:
-            kwargs['widget'] = forms.NumberInput(attrs={'class': FORM_CLASS})
+            kwargs['widget'] = forms.NumberInput(attrs={'class': FORM_CLASS, 'min': 0})
         super(BootstrapIntegerField, self).__init__(**kwargs)
 
 class BootstrapDateTimeField(forms.DateTimeField):
