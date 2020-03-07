@@ -36,7 +36,7 @@
 				</tr>
 				{% for job in job_posts %}
 			   		<tr>
-						<td style="padding:15px"><a href="{% url 'edit_job' job.id %}">Open</a></td>
+						<td style="padding:15px"><a href="{% url 'edit_job' job.id %}">Details</a></td>
 						<td>{{ job.created }}</td>
 						<td>{{ job.job_title }}</td>
 						<td>{{ job.wage }}</td>
