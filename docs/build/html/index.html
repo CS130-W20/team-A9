@@ -5,17 +5,17 @@
   <head>
     <meta charset="utf-8" />
     <title>Welcome to homeyess’s documentation! &#8212; homeyess 0.0.1 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
+    <link rel="stylesheet" href="static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="static/documentation_options.js"></script>
+    <script src="static/jquery.js"></script>
+    <script src="static/underscore.js"></script>
+    <script src="static/doctools.js"></script>
+    <script src="static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="static/custom.css" type="text/css" />
   
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
@@ -253,7 +253,7 @@ Note that the object should be created when a ride request is made and altered w
 
 <dl class="method">
 <dt id="website.views.RequestRideEdit.get_context_data">
-<code class="sig-name descname">get_context_data</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideEdit.get_context_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_context_data</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#website.views.RequestRideEdit.get_context_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the context data for the html template</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -703,7 +703,7 @@ he/she filled out, so that they can review and potentially edit the form</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>user</strong> (<em>User</em>) – the user to check</p></li>
-<li><p><strong>user_type</strong> (<em>string</em>) – the type of user (‘V’, ‘H’, ‘C’)</p></li>
+<li><p><strong>user_type</strong> (<em>string</em>) – the type of user (“V”, “H”, “C”)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -771,6 +771,40 @@ he/she filled out, so that they can review and potentially edit the form</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.ride_utils.getPickupLocation">
+<code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">getPickupLocation</code><span class="sig-paren">(</span><em class="sig-param">ride</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.getPickupLocation" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets time and distance information for all rides concurrently</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ride</strong> (<em>iterable of rides</em>) – ride to get pickup location for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pickup location coordinates of the ride</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="website.ride_utils.getPickupLocations">
+<code class="sig-prename descclassname">website.ride_utils.</code><code class="sig-name descname">getPickupLocations</code><span class="sig-paren">(</span><em class="sig-param">rides</em><span class="sig-paren">)</span><a class="headerlink" href="#website.ride_utils.getPickupLocations" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets time and distance information for all rides concurrently</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rides</strong> (<em>iterable of rides</em>) – rides to get pickup_locations for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>vector of pickup location coordinates</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>vector of strings</p>
 </dd>
 </dl>
 </dd></dl>
@@ -869,7 +903,7 @@ pickup -&gt; volunteer home</p>
 <dd class="field-odd"><p><strong>mins</strong> (<em>int</em>) – the number of minutes</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>time string of form ‘x hr y min’ (hrs or mins if plural)</p>
+<dd class="field-even"><p>time string of form “x hr y min” (hrs or mins if plural)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>string</p>
@@ -883,7 +917,10 @@ pickup -&gt; volunteer home</p>
 <dd><p>gets the time information from a timedistance vector</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>vec</strong> (<em>vector where each element is a tuple of form</em><em> (</em><em>time in minutes</em><em>, </em><em>distance in miles</em><em>)</em>) – the timedistance vector</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vec</strong> (<em>vector where each element is a tuple of form</em><em> (</em><em>time in minutes</em><em>, </em><em>distance in miles</em><em>)</em>) – the timedistance vector</p></li>
+<li><p><strong>interview_datetime</strong> (<em>DateTime</em>) – the time and date of the interview</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>start_datetime (when volunteer leaves house),
@@ -892,7 +929,7 @@ end_datetime (when volunteer arrives back at their house),
 total_time_string (total amount of time as a formatted string)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>int, int, int, str</p>
+<dd class="field-odd"><p>DateTime, DateTime, DateTime, string</p>
 </dd>
 </dl>
 </dd></dl>
@@ -905,7 +942,7 @@ total_time_string (total amount of time as a formatted string)</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>message</strong> (<em>String</em>) – the message to send to the user</p></li>
-<li><p><strong>profile</strong> (<a class="reference internal" href="#website.models.Profile" title="website.models.Profile"><em>Profile</em></a>) – The user’s profile</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="#website.models.Profile" title="website.models.Profile"><em>Profile</em></a>) – The user”s profile</p></li>
 </ul>
 </dd>
 </dl>
