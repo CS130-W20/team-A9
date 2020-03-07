@@ -9,11 +9,12 @@ class CompanyDashboardTest(TestCase):
         self.PASSWORD= "hellopie"
         self.client = Client()
         #companies
-        self.c1_user = User.objects.create_user(username='testcompany1', password=self.PASSWORD)
+
+        self.c1_user = User.objects.create_user(username="testcompany1", password=self.PASSWORD)
         self.c1_user.profile.user_type = "C"
         self.c1_user.save()
 
-        self.c2_user = User.objects.create_user(username='testcompany2', password=self.PASSWORD)
+        self.c2_user = User.objects.create_user(username="testcompany2", password=self.PASSWORD)
         self.c2_user.profile.user_type = "C"
         self.c2_user.save()
 
@@ -22,6 +23,7 @@ class CompanyDashboardTest(TestCase):
 
     def test_get_job_posts(self):
         #test company 1 - has a job post
+
         self.client.login(username=self.c1_user.username, password=self.PASSWORD)
         url = "/dashboard/"
         response = self.client.get(url)
@@ -31,10 +33,11 @@ class CompanyDashboardTest(TestCase):
         #expected jobs posted by company c1_user
         query_expected_response = JobPost.objects.filter(company=self.c1_user.profile)
         expected_response = list(query_expected_response)
-        got_response = list(response.context['job_posts'])
+        got_response = list(response.context["job_posts"])
         self.assertEqual(got_response, expected_response)
 
         #test company 2 - no job posts
+
         self.client.login(username=self.c2_user.username, password=self.PASSWORD)
         url = "/dashboard/"
         response = self.client.get(url)
@@ -44,6 +47,6 @@ class CompanyDashboardTest(TestCase):
         #expected jobs posted by company c2_user
         query_expected_response = JobPost.objects.filter(company=self.c2_user.profile)
         expected_response = list(query_expected_response)
-        got_response = list(response.context['job_posts'])
+        got_response = list(response.context["job_posts"])
         self.assertFalse(got_response)
         self.assertEqual(got_response, expected_response)

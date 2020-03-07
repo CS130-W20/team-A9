@@ -8,7 +8,7 @@ def is_user_type(user, user_type):
 
     :param user: the user to check
     :type user: User
-    :param user_type: the type of user ('V', 'H', 'C')
+    :param user_type: the type of user ("V", "H", "C")
     :type user_type: string
     :return: whether the user is of the type user_type
     :rtype: boolean
@@ -28,7 +28,7 @@ def is_homeless(user):
     :return: whether the user is a homeless user
     :rtype: boolean
     """
-    return is_user_type(user, 'H')
+    return is_user_type(user, "H")
 
 def is_company(user):
     """checks whether the user is a company
@@ -38,7 +38,7 @@ def is_company(user):
     :return: whether the user is a company
     :rtype: boolean
     """
-    return is_user_type(user, 'C')
+    return is_user_type(user, "C")
 
 def is_volunteer(user):
     """checks whether the user is a volunteer
@@ -48,4 +48,4 @@ def is_volunteer(user):
     :return: whether the user is a volunteer
     :rtype: boolean
     """
-    return is_user_type(user, 'V')
+    return is_user_type(user, "V")
