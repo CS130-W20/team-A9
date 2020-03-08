@@ -48,4 +48,4 @@ should have it built in, but for another browser like Chrome (found [here](https
 3) write doc strings in the module
 
 ## View Documentation
-View the docs at https://cs130-w20.github.io/team-A9/homeyess/docs/build/html/
+View the docs at https://cs130-w20.github.io/team-A9/docs/build/html/
