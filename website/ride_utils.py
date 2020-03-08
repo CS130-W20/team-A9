@@ -48,7 +48,6 @@ def filterQuerySet(rides, start_datetime, end_datetime, max_range, v_start):
     # get all td_vecs concurrently
     td_vecs = getTimeDistanceVectors(rides, v_start)
     pickup_locations = getPickupLocations(rides)
-    start = datetime.now()
 
     for ride, td_vec, pickup_location in zip(rides, td_vecs, pickup_locations):
         if td_vec == None:
@@ -87,7 +86,7 @@ def getPickupLocations(rides):
     # perform all gmaps calls concurrently
     with ThreadPoolExecutor() as executor:
         futures = [executor.submit(getPickupLocation,ride) for ride in rides]
-    return [future.result() for future in as_completed(futures)]
+    return [future.result() for future in futures]
 
 def getPickupLocation(ride):
     ''' gets time and distance information for all rides concurrently
@@ -123,7 +122,7 @@ def getTimeDistanceVectors(rides, v_start):
                 ride.interview_address,
                 ride.interview_duration
             ) for ride in rides]
-    return [future.result() for future in as_completed(futures)]
+    return [future.result() for future in futures]
 
 def getTimeDistanceVector(v_start, hp_start, interview_location, interview_duration):
     """Gets a time and distance information for the ride

@@ -415,7 +415,7 @@ def ride_board(request):
     rides = Ride.objects.filter(volunteer=None, interview_datetime__gt = pytz.utc.localize(datetime.now())).order_by("interview_datetime")
     start_datetime = request.GET.get("start_datetime", None)
     end_datetime = request.GET.get("end_datetime", None)
-    max_range = request.GET.get("max_range", None)
+    max_range = request.GET.get("max_distance", None)
     profile = Profile.objects.get(user=request.user)
 
     rides = filterQuerySet(
@@ -427,9 +427,9 @@ def ride_board(request):
 
     context = {}
     context["form"] = RideSearchFilterForm(initial={
-        "start_time": request.GET.get("start_datetime", None),
-        "end_time": request.GET.get("end_datetime", None),
-        "max_range": request.GET.get("max_range", None),
+        "start_datetime": request.GET.get("start_datetime", None),
+        "end_datetime": request.GET.get("end_datetime", None),
+        "max_distance": request.GET.get("max_distance", None),
         "start_address": request.GET.get("start_address", None),
     })
     context["GOOGLE_MAPS_API_KEY"] = GOOGLE_MAPS_API_KEY
