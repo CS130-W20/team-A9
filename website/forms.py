@@ -100,7 +100,7 @@ class RideRequestForm(ModelForm):
         model = Ride
         fields = ["interview_datetime", "interview_duration", "interview_address", "interview_company"]
 
-    interview_datetime = BootstrapDateTimeField(required=True, help_text="Format YYYY-MM-DD HH:MM:SS")
+    interview_datetime = BootstrapDateTimeField(required=True, help_text="e.g. 2020-09-22 14:00", label="Interview Date and Time")
     interview_duration = BootstrapIntegerField(required=True, help_text="(in minutes)")
     interview_address = BootstrapCharField(max_length=200, required=True)
     interview_company = BootstrapCharField(max_length=100, required=True)
@@ -114,8 +114,8 @@ class JobBoardFilterForm(Form):
 class RideSearchFilterForm(Form):
     """Form to allow volunteers to filter ride requests
     """
-    start_datetime = BootstrapDateTimeField(required=False, widget=forms.DateTimeInput(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD HH:MM'}))
-    end_datetime = BootstrapDateTimeField(required=False, widget=forms.DateTimeInput(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD HH:MM'}))
+    start_datetime = BootstrapDateTimeField(required=False, widget=forms.DateTimeInput(attrs={'class': 'form-control', 'placeholder': '2020-09-22 14:00'}))
+    end_datetime = BootstrapDateTimeField(required=False, widget=forms.DateTimeInput(attrs={'class': 'form-control', 'placeholder': 'e.g. 2020-09-22 20:00'}))
     max_distance = BootstrapIntegerField(required=False)
 
 class UserTypeForm(Form):
