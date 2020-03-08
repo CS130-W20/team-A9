@@ -114,8 +114,8 @@ class JobBoardFilterForm(Form):
 class RideSearchFilterForm(Form):
     """Form to allow volunteers to filter ride requests
     """
-    start_datetime = BootstrapDateTimeField(required=False, widget=forms.DateTimeInput(attrs={'class': 'form-control', 'placeholder': '2020-09-22 14:00'}))
-    end_datetime = BootstrapDateTimeField(required=False, widget=forms.DateTimeInput(attrs={'class': 'form-control', 'placeholder': 'e.g. 2020-09-22 20:00'}))
+    start_datetime = BootstrapDateTimeField(required=False, widget=forms.DateTimeInput(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD HH:MM'}))
+    end_datetime = BootstrapDateTimeField(required=False, widget=forms.DateTimeInput(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD HH:MM'}))
     max_distance = BootstrapIntegerField(required=False)
 
 class UserTypeForm(Form):
