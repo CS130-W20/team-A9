@@ -10,7 +10,7 @@ docutils==0.16
 googlemaps==4.2.0
 idna==2.9
 imagesize==1.2.0
-Jinja2==2.11.1
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 multidict==4.7.5
 packaging==20.1
